@@ -1,0 +1,19 @@
+<resources>
+
+    <string name="app_name">BiljetApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_home">MainActivity</string>
+    <string name="title_activity_menu">MainActivity</string>
+    <string name="title_activity_eventos_proximos">MainActivity</string>
+    <string name="title_activity_mis_eventos">MainActivity</string>
+    <string name="title_activity_nuevo_evento">MainActivity</string>
+    <string name="title_activity_mi_perfil">MainActivity</string>
+    <string name="contentDescription_LogoMenu">Logo Menu Biljet</string>
+    <string name="contentDescription_Icono">Icono</string>
+    <string name="TituloMenu"> Menu Principal </string>
+    <string name="title_activity_mis_amigos">MainActivity</string>
+    <string name="title_activity_amigos">MainActivity</string>
+    <string name="title_activity_nuevo_amigo">MainActivity</string>
+
+</resources>
