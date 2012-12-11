@@ -3,3 +3,6 @@ bin/
 
 # sublime project files
 *.sublime-*
+
+# MAC OS X temp files
+.DS_STORE
