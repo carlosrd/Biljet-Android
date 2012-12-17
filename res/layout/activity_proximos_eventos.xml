@@ -20,7 +20,5 @@
 		android:horizontalSpacing="5dp"
 		android:gravity="center" >
     </GridView>
-    
-    
 
 </LinearLayout>
