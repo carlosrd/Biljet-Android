@@ -6,15 +6,17 @@
     
     <!-- Action Bar -->
 
-	<ViewStub
-      android:id="@+id/menu_settings"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:inflatedId="@+id/menu"
-      android:layout="@layout/header" />
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+	
+	<!-- Menu Principal -->
 	
     <GridView
-        android:id="@+id/gridView1"
+        android:id="@+id/gridViewMenuPrincipal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:numColumns="2" 

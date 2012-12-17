@@ -9,16 +9,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import com.biljet.app.menu.AdaptadorOpcionesMenu;
+import com.biljet.app.menu.HeaderActividades;
 
-public class MenuActivity extends PlantillaMenu {
-
+//public class MenuActivity extends PlantillaMenu {
+public class MenuActivity extends HeaderActividades {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 		
-		cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
-		
+		//cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
+		inicializaVistaHeader(R.drawable.imagen_menu,"Menu Principal", R.drawable.perfil,true);
+		setActionBotonDcho(MiPerfilActivity.class);
 		
 		// ACTION BAR
 		// **************************************************************************************
@@ -39,7 +41,7 @@ public class MenuActivity extends PlantillaMenu {
         // Acoplar el adaptador al GridView
         
 		AdaptadorOpcionesMenu adaptador = new AdaptadorOpcionesMenu(this);
-		GridView menuGrid = (GridView)findViewById(R.id.gridView1);
+		GridView menuGrid = (GridView)findViewById(R.id.gridViewMenuPrincipal);
 		
 		// Setear oyentes OnClick
 		menuGrid.setOnItemClickListener(new OnItemClickListener() {

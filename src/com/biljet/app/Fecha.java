@@ -2,6 +2,8 @@ package com.biljet.app;
 
 public class Fecha {
 	int dia;
+
+
 	int mes;
 	int año;
 	Hora hora;
@@ -11,5 +13,24 @@ public class Fecha {
 		mes = m;
 		año = a;
 		hora = new Hora(h,min);
+	}
+	
+	// GETTERS
+	// ******************************************************************
+	
+	public int getDia() {
+		return dia;
+	}
+
+	public int getMes() {
+		return mes;
+	}
+
+	public int getAño() {
+		return año;
+	}
+
+	public Hora getHora() {
+		return hora;
 	}
 }

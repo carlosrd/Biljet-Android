@@ -5,11 +5,10 @@ import android.view.Menu;
 
 import com.biljet.app.Evento;
 import com.biljet.app.ListaEventos;
-import com.biljet.app.PlantillaMenu;
-import com.biljet.app.ProximosEventosActivity;
 import com.biljet.app.R;
+import com.biljet.app.menu.HeaderActividades;
 
-public class ACDCActivity extends PlantillaMenu{
+public class ACDCActivity extends HeaderActividades {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -19,7 +18,9 @@ public class ACDCActivity extends PlantillaMenu{
         ListaEventos lista = new ListaEventos();
         Evento e = lista.getTablaEventos().get(1);
         
-        cabecera(true, android.R.drawable.ic_menu_revert, ProximosEventosActivity.class, e.getNombre(), false, android.R.drawable.ic_menu_search, ProximosEventosActivity.class);
+        //cabecera(true, android.R.drawable.ic_menu_revert, ProximosEventosActivity.class, e.getNombre(), false, android.R.drawable.ic_menu_search, ProximosEventosActivity.class);
+		inicializaVistaHeader(R.drawable.header_back_button,e.getNombre(), android.R.drawable.ic_menu_search,false);
+		setBotonVolver();
         creaEvento(e.getNombre(), e.getId(), e.getTipo(), e.getLugar(), e.getFecha(), e.getPrecio(), e.getImagen());
     }
 

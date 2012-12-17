@@ -8,4 +8,14 @@ public class Hora {
 		horas = h;
 		minutos = m;
 	}
+
+	public int getHoras() {
+		return horas;
+	}
+
+	public int getMinutos() {
+		return minutos;
+	}
+	
+	
 }
