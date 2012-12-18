@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
     package="com.biljet.app"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -46,6 +47,12 @@
             android:name=".NuevoAmigoActivity"
             android:label="@string/title_activity_nuevo_amigo" >
         </activity>
+
+         <activity
+            android:name=".MisAmigosActivity"
+            android:label="@string/title_activity_mis_amigos" >
+        </activity>
+
         <activity
             android:name=".MisEventosActivity"
             android:label="@string/title_activity_mis_eventos" >
