@@ -1,5 +1,6 @@
 package com.biljet.app;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -54,7 +55,7 @@ public class MenuActivity extends HeaderActividades {
 								case 1: Intent boton1 = new Intent(MenuActivity.this, MisEventosActivity.class);
 										startActivity(boton1);
 										break;
-								case 2: Intent boton2 = new Intent(MenuActivity.this, AmigosActivity.class);
+								case 2: Intent boton2 = new Intent(MenuActivity.this, MisAmigosActivity.class);
 										startActivity(boton2);
 										break;
 							}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Biljet App</string>
@@ -11,15 +11,15 @@
     <string name="title_activity_seccion1">Seccion1</string>
     <string name="title_activity_home">MainActivity</string>
     <string name="title_activity_menu">MainActivity</string>
-    <string name="title_activity_eventos_proximos">MainActivity</string>
+    <string name="title_activity_eventos_proximos">Eventos_prox</string>
     <string name="title_activity_mis_eventos">MainActivity</string>
     <string name="title_activity_nuevo_evento">MainActivity</string>
     <string name="title_activity_mi_perfil">MainActivity</string>
-    <string name="title_activity_mis_amigos">MainActivity</string>
+    <string name="title_activity_mis_amigos">BilJet App</string>
     <string name="title_activity_amigos">MainActivity</string>
     <string name="title_activity_nuevo_amigo">MainActivity</string>
     <string name="title_activity_prueba">MainActivity</string>
-    <string name="title_activity_proximos_eventos">MainActivity</string>
+    <string name="title_activity_proximos_eventos">Proximos_eventos</string>
     <string name="title_activity_evento">MainActivity</string>
     <string name="title_activity_evento_jessie_j">MainActivity</string>
     <string name="title_activity_acdc">MainActivity</string>
