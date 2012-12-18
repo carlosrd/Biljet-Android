@@ -1,18 +1,21 @@
 package com.biljet.app;
 
-import com.biljet.app.R.drawable;
-
 import android.os.Bundle;
 import android.view.Menu;
 
-public class AmigosActivity extends PlantillaMenu {
+import com.biljet.app.menu.HeaderActividades;
+
+public class AmigosActivity extends HeaderActividades {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amigos);
         
-        cabecera(true, drawable.home, MenuActivity.class, "Amigos", true, R.drawable.nuevoamigo, NuevoAmigoActivity.class);
+        //cabecera(true, drawable.home, MenuActivity.class, "Amigos", true, R.drawable.nuevoamigo, NuevoAmigoActivity.class);
+		inicializaVistaHeader(R.drawable.header_back_button,"Amigos", R.drawable.nuevoamigo,true);
+		setBotonVolver();
+		setActionBotonDcho(NuevoAmigoActivity.class);
 		
     }
 

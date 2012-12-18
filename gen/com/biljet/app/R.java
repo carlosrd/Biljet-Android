@@ -34,25 +34,27 @@ public final class R {
         public static final int perfil=0x7f02000e;
     }
     public static final class id {
-        public static final int gridView1=0x7f080003;
-        public static final int gridView2=0x7f080004;
-        public static final int idBotonDos=0x7f080009;
-        public static final int idBotonUno=0x7f080006;
-        public static final int imageView1=0x7f08000e;
-        public static final int menu=0x7f080001;
-        public static final int menuImagen_icono=0x7f08000a;
-        public static final int menuTitulo_opcion=0x7f08000b;
-        public static final int menu_settings=0x7f080000;
+        public static final int actionBar=0x7f080000;
+        public static final int gridView2=0x7f080005;
+        public static final int gridViewMenuPrincipal=0x7f080004;
+        public static final int header=0x7f080001;
+        public static final int headerBotonDcho=0x7f08000a;
+        public static final int headerBotonIzq=0x7f080007;
+        public static final int headerTextoPpal=0x7f080008;
+        public static final int imageView1=0x7f08000f;
+        public static final int menu=0x7f080003;
+        public static final int menuImagen_icono=0x7f08000b;
+        public static final int menuTitulo_opcion=0x7f08000c;
+        public static final int menu_settings=0x7f080014;
         public static final int menu_settings1=0x7f080002;
-        public static final int panelIconLeft=0x7f080005;
-        public static final int panelIconRight=0x7f080008;
-        public static final int textView1=0x7f08000c;
-        public static final int textView2=0x7f08000d;
-        public static final int textView3=0x7f08000f;
-        public static final int textView4=0x7f080010;
-        public static final int textView5=0x7f080011;
-        public static final int textView6=0x7f080012;
-        public static final int txtHeading=0x7f080007;
+        public static final int panelBotonDcho=0x7f080009;
+        public static final int panelBotonIzq=0x7f080006;
+        public static final int textView1=0x7f08000d;
+        public static final int textView2=0x7f08000e;
+        public static final int textView3=0x7f080010;
+        public static final int textView4=0x7f080011;
+        public static final int textView5=0x7f080012;
+        public static final int textView6=0x7f080013;
     }
     public static final class layout {
         public static final int activity_a_c_d_c=0x7f030000;
@@ -123,7 +125,9 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
+        /**  ESTILO TEXTO HEADER SECCIONES 
+         */
+        public static final int HeaderText=0x7f060002;
         public static final int HomeButton=0x7f060003;
-        public static final int heading_text=0x7f060002;
     }
 }

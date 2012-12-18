@@ -8,21 +8,24 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-import com.biljet.app.R.drawable;
 import com.biljet.app.menu.AdaptadorOpcionesEvento;
+import com.biljet.app.menu.HeaderActividades;
 
 import eventos.ACDCActivity;
 import eventos.EventoJessieJActivity;
 
-public class ProximosEventosActivity extends PlantillaMenu {
+public class ProximosEventosActivity extends HeaderActividades {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proximos_eventos);
 
-        cabecera(true, drawable.home, MenuActivity.class, "Proximos Eventos", true, android.R.drawable.ic_menu_search, ProximosEventosActivity.class);
-
+        //cabecera(true, drawable.home, MenuActivity.class, "Proximos Eventos", true, android.R.drawable.ic_menu_search, ProximosEventosActivity.class);
+		inicializaVistaHeader(R.drawable.header_back_button,"Proximos Eventos", android.R.drawable.ic_menu_search,true);
+		setBotonVolver();
+		setActionBotonDcho(ProximosEventosActivity.class);
+		
         AdaptadorOpcionesEvento adaptador = new AdaptadorOpcionesEvento(this);
         GridView menuEventos = (GridView)findViewById(R.id.gridView2);
         

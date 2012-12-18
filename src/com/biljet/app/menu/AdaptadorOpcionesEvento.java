@@ -1,10 +1,5 @@
 package com.biljet.app.menu;
 
-import com.biljet.app.Evento;
-import com.biljet.app.ListaEventos;
-import com.biljet.app.R;
-import com.biljet.app.R.drawable;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.biljet.app.R;
+import com.biljet.app.R.drawable;
 
 public class AdaptadorOpcionesEvento extends ArrayAdapter<OpcionEvento> {
 		
