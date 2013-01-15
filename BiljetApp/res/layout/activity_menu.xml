@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:orientation="vertical" >
+    
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+	
+	<!-- Menu Principal -->
+	
+    <GridView
+        android:id="@+id/gridViewMenuPrincipal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:numColumns="2" 
+		android:stretchMode="columnWidth" 
+		android:horizontalSpacing="5dp"
+		android:gravity="center" >
+    </GridView>
+    
+    
+
+</LinearLayout>
