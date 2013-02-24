@@ -9,30 +9,30 @@ ANDROID & GIT
 	siguientes archivos y carpetas (el resto los genera Eclipse automaticamente) 
 	que se encuentren en la raíz. 
 	
-	Nombre							Tipo					Ubicación
+	Nombre				Tipo					Ubicación
 	----------------------------------------------------------------------------
-	- assets						Carpeta					CaptureActivity
-	- src							Carpeta					Ambos
-	- libs							Carpeta					Ambos
-	- res							Carpeta					Ambos
-	- AndroidManifest				Archivo					Ambos
-	- proguard-project				Archivo					Biljet
-	- project.properties			Archivo					Ambos
-	- ant.properties				Archivo					CaptureActivity
-	- build							Archivo					CaptureActivity
-	- proguard-android-optimize		Archivo					CaptureActivity
+	- assets			Carpeta					CaptureActivity
+	- src				Carpeta					Ambos
+	- libs				Carpeta					Ambos
+	- res				Carpeta					Ambos
+	- AndroidManifest		Archivo					Ambos
+	- proguard-project		Archivo					Biljet
+	- project.properties		Archivo					Ambos
+	- ant.properties		Archivo					CaptureActivity
+	- build				Archivo					CaptureActivity
+	- proguard-android-optimize	Archivo					CaptureActivity
 	
 	
 	> NUNCA se subirán los siguientes archivos o carpetas:
 	
-		Nombre							Tipo					Ubicación
+		Nombre			Tipo					Ubicación
 	----------------------------------------------------------------------------
-	- .metadata						Carpeta					Ambos
-	- .settings						Carpeta					Ambos
-	- bin							Carpeta					Ambos
-	- gen							Carpeta					Ambos
-	- .classpath					Archivo					Ambos
-	- .project						Archivo					Ambos
+	- .metadata			Carpeta					Ambos
+	- .settings			Carpeta					Ambos
+	- bin				Carpeta					Ambos
+	- gen				Carpeta					Ambos
+	- .classpath			Archivo					Ambos
+	- .project			Archivo					Ambos
 	
 	> Comprobar cuando hagais "git add" que no se incluyen estos archivos en la 
 	subida y que los que subís, sean SOLO los modificados (esto ultimo es facil, 
