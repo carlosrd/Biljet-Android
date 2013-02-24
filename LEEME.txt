@@ -1,0 +1,65 @@
+===============================================================================
+ANDROID & GIT
+===============================================================================
+
+	1. ARCHIVOS NECESARIOS Y NO NECESARIOS EN GIT
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	> Cuando se sube un proyecto Android a Git, SOLO es necesario subir los 
+	siguientes archivos y carpetas (el resto los genera Eclipse automaticamente) 
+	que se encuentren en la raíz. 
+	
+	Nombre							Tipo					Ubicación
+	----------------------------------------------------------------------------
+	- assets						Carpeta					CaptureActivity
+	- src							Carpeta					Ambos
+	- libs							Carpeta					Ambos
+	- res							Carpeta					Ambos
+	- AndroidManifest				Archivo					Ambos
+	- proguard-project				Archivo					Biljet
+	- project.properties			Archivo					Ambos
+	- ant.properties				Archivo					CaptureActivity
+	- build							Archivo					CaptureActivity
+	- proguard-android-optimize		Archivo					CaptureActivity
+	
+	
+	> NUNCA se subirán los siguientes archivos o carpetas:
+	
+		Nombre							Tipo					Ubicación
+	----------------------------------------------------------------------------
+	- .metadata						Carpeta					Ambos
+	- .settings						Carpeta					Ambos
+	- bin							Carpeta					Ambos
+	- gen							Carpeta					Ambos
+	- .classpath					Archivo					Ambos
+	- .project						Archivo					Ambos
+	
+	> Comprobar cuando hagais "git add" que no se incluyen estos archivos en la 
+	subida y que los que subís, sean SOLO los modificados (esto ultimo es facil, 
+	porque Git se da cuenta de cuales son, pero comprobar con "git status" que 
+	se cumple los criterios anteriores)
+	
+	2. IMPORTAR LOS PROYECTOS A ECLIPSE
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	Una vez descargados los proyectos con git ("git clone" la primera vez y "git
+	pull" las siguientes), para importar los proyectos:
+	
+		1 - NO copiar los proyectos manualmente en el workspace; es decir, dejar
+			la carpeta del workspace totalmente vacía. (Esto evitará el error de 
+			que el proyecto a importar solapa (overlapps) con otro)
+		
+		2 - En Eclipse, en el panel de proyectos, 
+			boton derecho > Import... > Android > Existing Android Code Into Workspace
+			
+		3 - Seleccionar como "Root directory" la carpeta donde hayais descargado 
+			los proyectos desde el repositorio (NO es la carpeta del workspace actual
+			de Eclipse)
+		
+		4 - Seleccionar los 2 proyectos y marcar la casilla "Copy projects into workspace"
+		
+		5 - Finish y dejarle un poco de tiempo para precompilar (saldrán errores que 
+			enseguida desaparecerán). El resultado final es los 2 proyectos importados
+			sin errores. (CaptureActivity contendrá "warnings"; ignorarlos)
+			
+	
