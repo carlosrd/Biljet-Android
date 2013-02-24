@@ -1,7 +1,0 @@
-# cache for current jar dependecy. DO NOT EDIT.
-# format is <lastModified> <length> <SHA-1> <path>
-# Encoding is UTF-8
-1358249870000 453663 830f79be23fbb7fbfb33a3dd954527ebd15c220a C:\hlocal\IS\ws2\BiljetApp\libs\core.jar
-1357308711989 453663 830f79be23fbb7fbfb33a3dd954527ebd15c220a C:\hlocal\IS\ws2\CaptureActivity\libs\core.jar
-1358249870000 385685 48c94ae70fa65718b382098237806a5909bb096e C:\hlocal\IS\ws2\BiljetApp\libs\android-support-v4.jar
-1357855963610 385685 48c94ae70fa65718b382098237806a5909bb096e C:\hlocal\IS\ws2\CaptureActivity\libs\android-support-v4.jar
