@@ -61,5 +61,44 @@ ANDROID & GIT
 		5 - Finish y dejarle un poco de tiempo para precompilar (saldrán errores que 
 			enseguida desaparecerán). El resultado final es los 2 proyectos importados
 			sin errores. (CaptureActivity contendrá "warnings"; ignorarlos)
-			
+	
+	
+	3. COMANDOS BASICOS EN GIT
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	// BASICOS
+	// ------------------------------------------
+
+	- Clonar un repositorio (la primera vez nada mas)
+		git clone [url]
+
+	- Descargar ultimos cambios desde el repo	
+		git pull origin [rama]
+
+	- Añadir archivos al control de git (Asi si hay cambios en estos, git lo detectara) 
+		git add [ruta/archivos]
+
+	- Confirmar cambios (nuevos archivos añadidos)
+		git commit -m "[Texto del mensaje]"
+
+	- Confirmar cambios (archivos modificados o borrados
+		git commit -a -m "[Texto del mensaje]"
+
+	- Enviar cambios al servidor (repo)
+		git push origin rama
+
+	// RAMAS
+	// -------------------------------------------
+
+	- Cambiar rama (local) 
+		git checkout [rama]
+
+	- Crear rama y cambiar a dicha rama (Se convierte en remota cuando hagamos "push")
+		git checkout -b [rama]
+
+	- Borrar rama local
+		git branch -d [rama]
+
+	- Borrar rama remota (repo)
+		git push origin :[rama]	
 	
