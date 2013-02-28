@@ -209,7 +209,6 @@
   </LinearLayout>
 
   <TextView android:id="@+id/status_view"
-      		android:gravity="bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
