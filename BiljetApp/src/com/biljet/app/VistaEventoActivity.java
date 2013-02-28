@@ -2,12 +2,14 @@ package com.biljet.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biljet.adaptadores.HeaderActividades;
 
@@ -73,6 +75,25 @@ public class VistaEventoActivity extends HeaderActividades {
 		txtInfo.setText(bundleDatos.getString("INFO"));
 	}
 
+	// Metodo para recoger los resultados de leer el QR
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		   if (requestCode == 0) {
+		      if (resultCode == RESULT_OK) {
+		         String contents = intent.getStringExtra("SCAN_RESULT");
+		         String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+		         // Handle successful scan
+	             Toast toast = Toast.makeText(this, "Contenido:" + contents + " Formato:" + format , Toast.LENGTH_LONG);
+	             toast.setGravity(Gravity.TOP, 25, 500);
+	             toast.show();
+		      } else if (resultCode == RESULT_CANCELED) {
+		         // Handle cancel
+	             Toast toast = Toast.makeText(this, "! : Escaneo cancelado", Toast.LENGTH_LONG);
+	             toast.setGravity(Gravity.TOP, 25, 500);
+	             toast.show();
+		      }
+		   }
+		}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

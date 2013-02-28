@@ -1,7 +1,10 @@
 package com.biljet.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +58,33 @@ public class MenuActivity extends HeaderActividades {
 		menuGrid.setAdapter(adaptador);
 	}	
 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				builder.setMessage("¿Seguro que deseas salir?");
+				builder.setTitle("Biljet");
+				builder.setIcon(android.R.drawable.ic_dialog_info);
+				builder.setCancelable(false);
+				builder.setPositiveButton("Sí",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								finish();
+								System.exit(RESULT_OK);
+							}
+						});
+				builder.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+				break;
+		}
+		AlertDialog alert = builder.create();
+		alert.show();
+		return true;
+	}
+	
 	// TECLA SUBMENU / BOTON ···
 	// **************************************************************************************
 	
