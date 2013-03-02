@@ -142,6 +142,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     //showHelpOnFirstLaunch();
+    
+    // Añadido para que no muestre el texto por defecto en la vista
+    statusView = (TextView) findViewById(R.id.status_view); 
+    statusView.setVisibility(View.GONE);
+    
   }
 
   
@@ -728,7 +733,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
     statusView.setText(R.string.msg_default_status);
-    statusView.setVisibility(View.VISIBLE);
+   // statusView.setVisibility(View.VISIBLE);
+    //Añadida para que no muestre el texto por defecto
+    statusView.setVisibility(View.GONE);
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;
   }
