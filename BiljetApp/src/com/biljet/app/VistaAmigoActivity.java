@@ -21,7 +21,7 @@ public class VistaAmigoActivity extends HeaderActividades {
 
 		ImageView imagenAmigo = (ImageView)findViewById(R.id.vistaAmigo_ImagenAmigo);	
 		
-		imagenAmigo.setImageResource(bundleDatos.getInt("Imagen"));		
+		imagenAmigo.setImageResource(bundleDatos.getInt("Imagen"));	
 		imagenAmigo.setScaleType(ImageView.ScaleType.CENTER);
 	
 		TextView txtNombre = (TextView)findViewById(R.id.vistaAmigo_TxtNombre);

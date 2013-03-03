@@ -7,14 +7,16 @@
 
     <!--
          MisEventosActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
+
     -->
     <string name="vista_MisEventos_TxtEventosIr"> > Eventos a los que voy: </string>
     <string name="vista_MisEventos_TxtSelecciona"> > ¿Que eventos quieres mostrar?</string>
 
     <!--
          VistaEventoActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
+
     -->
 
     <string name="vistaEvento_LabelLugar">Lugar: </string>
@@ -35,7 +37,8 @@
     
     <!--
          Descripcion de Contenido para Imagenes
-    	 ***********************************************************************
+    	 ***********************************************************************
+
     -->
     <string name="contentDescription_LogoMenu">logo_biljet</string>
     <string name="contentDescription_Icono">boton_icono</string>
@@ -45,7 +48,8 @@
 
     <!--
           Titulos Actividades
-    	  **********************************************************************
+    	  **********************************************************************
+
     -->
     <string name="title_activity_mi_perfil">Biljet - Mi Perfil</string>
     <string name="title_activity_proximos_eventos">Biljet - Proximos Eventos</string>
@@ -55,4 +59,18 @@
     <string name="title_activity_vista_evento">Biljet - Detalles del Evento</string>
     <string name="title_activity_vista_amigo">VistaAmigoActivity</string>
 
+    <!--
+         MiPerfilActivity
+    	 ***********************************************************************
+    -->    
+    <string name="perfil_ciudad">Ciudad: </string>
+    <string name="perfil_biografia">Biografía: </string>
+    <string name="perfil_events_follow">Eventos a los que sigo: </string>
+    <string name="perfil_events_organized">Eventos que organizo: </string>    
+    <string name="perfil_events_signup">Eventos a los que voy: </string>
+    <string name="perfil_twitter">Twitter: </string>    
+    <string name="perfil_facebook">Facebook: </string>
+    <string name="perfil_last_login">Última visita el día: </string>
+    
+    
 </resources>
