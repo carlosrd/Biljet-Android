@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BiljetApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+
+    <!--
+         MisEventosActivity
+    	 ***********************************************************************
+    -->
+    <string name="vista_MisEventos_TxtEventosIr"> > Eventos a los que voy: </string>
+    <string name="vista_MisEventos_TxtSelecciona"> > ¿Que eventos quieres mostrar?</string>
+
+    <!--
+         VistaEventoActivity
+    	 ***********************************************************************
+    -->
+
+    <string name="vistaEvento_LabelLugar">Lugar: </string>
+    <string name="vistaEvento_LabelFecha">Fecha: </string>
+    <string name="vistaEvento_LabelPrecio">Precio: </string>
+    <string name="vistaEvento_LabelNumInvitados">Personas que asisten: </string>
+    <string name="vistaEvento_LabelAforo">Aforo Total: </string>
+    <string name="vistaEvento_LabelInfo">Info: </string>
+    <string name="vistaEvento_LabelBtnLeerQr"> Leer lista de invitados</string>
+    
+    <!--
+         VistaAmigoActivity  TODO
+    	 ***********************************************************************
+    -->    
+      
+    <string name="vistaAmigo_LabelCiudad">Ciudad: </string>
+    <string name="vistaAmigo_LabelBiografia">Biografía: </string>
+    
+    <!--
+         Descripcion de Contenido para Imagenes
+    	 ***********************************************************************
+    -->
+    <string name="contentDescription_LogoMenu">logo_biljet</string>
+    <string name="contentDescription_Icono">boton_icono</string>
+    <string name="contentDescription_Avatar">avatar_amigo</string>
+    <string name="contentDescription_BotonNext">boton_next</string>
+    <string name="contentDescription_ImagenEvento">imagen_evento</string>
+
+    <!--
+          Titulos Actividades
+    	  **********************************************************************
+    -->
+    <string name="title_activity_mi_perfil">Biljet - Mi Perfil</string>
+    <string name="title_activity_proximos_eventos">Biljet - Proximos Eventos</string>
+    <string name="title_activity_mis_eventos">Biljet - Mis Eventos</string>
+    <string name="title_activity_mis_amigos">Biljet - Mis Amigos</string>
+    <string name="title_activity_nuevo_evento">Biljet - Crear Nuevo Evento</string>
+    <string name="title_activity_vista_evento">Biljet - Detalles del Evento</string>
+    <string name="title_activity_vista_amigo">VistaAmigoActivity</string>
+
+</resources>

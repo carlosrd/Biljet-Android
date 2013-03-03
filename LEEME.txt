@@ -1,0 +1,19 @@
+
+================
+Biljet Ver. 0
+================
+
+Esta primera version contiene una estructura minima del proyecto.
+
+	- Menu principal con GridView
+	- Lista de Eventos y de Amigos con ListView
+	- Header de las secciones con ViewStub
+
+================
+Biljet Ver. 1
+================
+
+Esta segunda version contiene:
+
+	- Vista amigos mejorada
+	- Lector de QR integrado (no implementado para leer los propios)
