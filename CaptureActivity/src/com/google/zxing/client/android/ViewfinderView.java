@@ -100,20 +100,18 @@ public final class ViewfinderView extends View {
     canvas.drawRect(0, frame.bottom + 1, width, height, paint);
 
     // XXX TEXTO ROTADO
-    int x = frame.top-22;
-    int y = frame.height() / 2 + frame.top;
+    int x = frame.top-100;
+    int y = frame.height() / 2  + frame.top;
     
-    paint.setColor(Color.GRAY);
+    paint.setColor(Color.WHITE);
+    paint.setStyle(Paint.Style.FILL);
     paint.setTextSize(20);
     String rotatedtext = "Enfoca el codigo QR aquí dentro:";
 
     // Draw bounding rect before rotating text:
 
     Rect rect = new Rect();
-    
     paint.getTextBounds(rotatedtext, 0, rotatedtext.length(), rect);
-    paint.setColor(Color.WHITE);
-    paint.setStyle(Paint.Style.FILL);
     
     canvas.rotate(-90, x + rect.exactCenterX(),y + rect.exactCenterY());
     canvas.drawText(rotatedtext, x, y, paint);
