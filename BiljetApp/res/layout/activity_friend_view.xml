@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+
+	<LinearLayout 
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical" >
+	
+
+		<ImageView
+		    android:id="@+id/friendView_Avatar"		    
+		    android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	    	android:layout_margin="5dp"
+	    	android:layout_gravity="center_vertical"
+		    android:contentDescription="@string/contentDescription_Avatar" />
+		
+		<TextView
+		    android:id="@+id/friendView_TxtName"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" 
+		    android:textColor="#000033"
+		    android:textAppearance="?android:attr/textAppearanceLarge"
+		    />
+		
+		<TextView
+		    android:id="@+id/friendView_LabelCity"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="#000066"
+		    android:text="@string/friendView_LabelCity" />
+	
+		<TextView 
+		    android:id="@+id/friendView_TxtCity"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" />
+		
+		<TextView
+		    android:id="@+id/friendView_LabelBio"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textColor="#000066"
+		    android:text="@string/friendView_LabelBio" />
+	
+		<TextView
+		    android:id="@+id/friendView_TxtBio"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" />					
+	</LinearLayout>
+	
+</LinearLayout>

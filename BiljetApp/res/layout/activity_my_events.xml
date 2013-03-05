@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+    android:orientation="vertical"
+    android:scrollbars="vertical" >
+    
+    <!-- Action Bar -->
+    
+	<ViewStub 
+	  	android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+	
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="#0B0B61" >
+
+        <TextView
+            android:id="@+id/myEvents_TxtSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:text="@string/myEvents_TxtSelect"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+        
+    </RelativeLayout>
+
+	<Spinner
+	    android:id="@+id/spinner_MyEvents"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" />
+
+	<ListView 
+	    android:id="@+id/list_MyEvents"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"  />
+
+</LinearLayout>
+
