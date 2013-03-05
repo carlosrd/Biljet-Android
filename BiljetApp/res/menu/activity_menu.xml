@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item 
-        android:id="@+id/subMenuConfigBotonAcercaDe" 
+        android:id="@+id/subMenuConfigButtonAbout" 
         android:title="Acerca De ..."></item>
     <item 
-        android:id="@+id/subMenuConfigBotonSalir" 
+        android:id="@+id/subMenuConfigButtonExit" 
         android:title="Salir"></item>
 </menu>

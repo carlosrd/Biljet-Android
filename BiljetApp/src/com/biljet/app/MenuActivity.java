@@ -13,11 +13,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.biljet.adaptadores.AdaptadorOpcionesMenu;
-import com.biljet.adaptadores.HeaderActividades;
+import com.biljet.adapters.ActivitiesHeader;
+import com.biljet.adapters.MenuOptionsAdapter;
 
 
-public class MenuActivity extends HeaderActividades {
+public class MenuActivity extends ActivitiesHeader {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,15 +26,15 @@ public class MenuActivity extends HeaderActividades {
 		// ACTION BAR
 		// **************************************************************************************
 		//cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
-		inicializaVistaHeader(R.drawable.imagen_menu,"Menu Principal", R.drawable.perfil,true);
-		setActionBotonDcho(MiPerfilActivity.class);
+		createHeaderView(R.drawable.imagen_menu,"Menu Principal", R.drawable.perfil,true);
+		setRightButtonAction(MyProfileActivity.class);
 		
         
         // GRID VIEW
 		// **************************************************************************************
         // Acoplar el adaptador al GridView
         
-		AdaptadorOpcionesMenu adaptador = new AdaptadorOpcionesMenu(this);
+		MenuOptionsAdapter adaptador = new MenuOptionsAdapter(this);
 		GridView menuGrid = (GridView)findViewById(R.id.gridViewMenuPrincipal);
 		
 		// Setear oyentes OnClick
@@ -42,13 +42,13 @@ public class MenuActivity extends HeaderActividades {
 						public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 						//Acciones necesarias al hacer click
 							switch(position){
-								case 0: Intent boton0 = new Intent(MenuActivity.this, ProximosEventosActivity.class);
+								case 0: Intent boton0 = new Intent(MenuActivity.this, UpcomingEventsActivity.class);
 										startActivity(boton0);
 										break;
-								case 1: Intent boton1 = new Intent(MenuActivity.this, MisEventosActivity.class);
+								case 1: Intent boton1 = new Intent(MenuActivity.this, MyEventsActivity.class);
 										startActivity(boton1);
 										break;
-								case 2: Intent boton2 = new Intent(MenuActivity.this, MisAmigosActivity.class);
+								case 2: Intent boton2 = new Intent(MenuActivity.this, MyFriendsActivity.class);
 										startActivity(boton2);
 										break;
 							}
@@ -100,10 +100,10 @@ public class MenuActivity extends HeaderActividades {
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-	        case R.id.subMenuConfigBotonAcercaDe:
+	        case R.id.subMenuConfigButtonAbout:
 	        	Toast.makeText(this,"Aqui explicamos en que consiste la aplicación",Toast.LENGTH_SHORT).show(); 
 	        	break;
-		    case R.id.subMenuConfigBotonSalir: 
+		    case R.id.subMenuConfigButtonExit: 
 		    	finish();
 		    	break;
 	    }

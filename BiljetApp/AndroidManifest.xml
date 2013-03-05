@@ -33,30 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.biljet.app.MiPerfilActivity"
-            android:label="@string/title_activity_mi_perfil" >
-        </activity>
-        <activity
-            android:name="com.biljet.app.ProximosEventosActivity"
-            android:label="@string/title_activity_proximos_eventos" >
-        </activity>
-        <activity
-            android:name="com.biljet.app.MisEventosActivity"
-            android:label="@string/title_activity_mis_eventos" >
-        </activity>
-        <activity
-            android:name="com.biljet.app.MisAmigosActivity"
-            android:label="@string/title_activity_mis_amigos" >
-        </activity>
-        <activity
-            android:name="com.biljet.app.NuevoEventoActivity"
-            android:label="@string/title_activity_nuevo_evento" >
-        </activity>
-        <activity
-            android:name="com.biljet.app.VistaEventoActivity"
-            android:label="@string/title_activity_vista_evento" >
-        </activity>
 
         <!-- Informacion para el intent SCAN del QR -->
         <activity
@@ -79,8 +55,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.biljet.app.VistaAmigoActivity"
-            android:label="@string/title_activity_vista_amigo" >
+            android:name="com.biljet.app.MyFriendsActivity"
+            android:label="@string/title_activity_my_friends" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.FriendViewActivity"
+            android:label="@string/title_activity_friend_view" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.MyProfileActivity"
+            android:label="@string/title_activity_my_profile" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.UpcomingEventsActivity"
+            android:label="@string/title_activity_upcoming_events" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.EventViewActivity"
+            android:label="@string/title_activity_event_view" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.MyEventsActivity"
+            android:label="@string/title_activity_my_events" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.NewEventActivity"
+            android:label="@string/title_activity_new_event" >
         </activity>
     </application>
 
