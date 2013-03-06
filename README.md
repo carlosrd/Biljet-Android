@@ -5,7 +5,8 @@ The following is short description about this directory
 
 BiljetApp is the mobile extension for the web site: Biljet. This site provides services and tools to manage events and control the access to them with systems as QR codes
 
-This project is being developed by a group of students from Universidad Complutense de Madrid for Ingeniería del Software (Software Enginnering) subject
+This Open Source project is being developed by a group of students from Universidad Complutense de Madrid for Ingeniería del Software (Software Enginnering) subject
+
 ## General Requirements
 
 You'll need a few additional software to compile/run the project
