@@ -136,7 +136,5 @@ public class MyProfileActivity extends ActivitiesHeader {
 	    sampleEvents.add(Event2);
 	    
 	    return sampleEvents;
-    }
-    
+    }   
 }
-

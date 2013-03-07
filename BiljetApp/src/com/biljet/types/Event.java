@@ -17,7 +17,8 @@ public class Event {
 	String eventInfo;			// Información detallada del evento
 	int score;				// valoración del evento sobre 10
 	
-	// Constructora
+	// Constructoras
+	public Event(){	} //Constructora sin parámetros 
 	public Event(String name, int id, int image, String eventType, String site, Date date, int price, int confirmedPeople,
 			int capacity, String nameCreator, String eventInfo, int score){
 		
@@ -138,6 +139,5 @@ public class Event {
 		this.score = score;
 	}
 
-	
-	
+		
 }// DatosEvento
