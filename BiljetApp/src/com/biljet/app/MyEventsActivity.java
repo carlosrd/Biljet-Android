@@ -61,22 +61,26 @@ public class MyEventsActivity extends ActivitiesHeader {
 							
 							Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
 							
-							Bundle dataBundle = new Bundle();
-							
-							//En realidad creo que se le puede pasar el tipo Event usand (ya lo probaremos)
-							dataBundle.putInt("IMAGE-URL", sampleEventsToGo.get(eventId).getImage());
-							dataBundle.putString("NAME", sampleEventsToGo.get(eventId).getName());
-							dataBundle.putString("EVENT_TYPE", sampleEventsToGo.get(eventId).getEventType());
-							dataBundle.putString("SITE", sampleEventsToGo.get(eventId).getSite());
-							dataBundle.putInt("PRICE", sampleEventsToGo.get(eventId).getPrice());
-							dataBundle.putInt("CONFIRMED_PEOPLE", sampleEventsToGo.get(eventId).getConfirmedPeople());
-							dataBundle.putInt("CAPACITY", sampleEventsToGo.get(eventId).getCapacity());
-							dataBundle.putString("INFO", sampleEventsToGo.get(eventId).getEventInfo());
-							
-							dataBundle.putBoolean("OWN?", isOwn);
-							
-							eventIntent.putExtras(dataBundle);
+//							Bundle dataBundle = new Bundle();
+//							
+//							//En realidad creo que se le puede pasar el tipo Event usand (ya lo probaremos)
+//							dataBundle.putInt("IMAGE-URL", sampleEventsToGo.get(eventId).getImage());
+//							dataBundle.putString("NAME", sampleEventsToGo.get(eventId).getName());
+//							dataBundle.putString("EVENT_TYPE", sampleEventsToGo.get(eventId).getEventType());
+//							dataBundle.putString("SITE", sampleEventsToGo.get(eventId).getSite());
+//							dataBundle.putInt("PRICE", sampleEventsToGo.get(eventId).getPrice());
+//							dataBundle.putInt("CONFIRMED_PEOPLE", sampleEventsToGo.get(eventId).getConfirmedPeople());
+//							dataBundle.putInt("CAPACITY", sampleEventsToGo.get(eventId).getCapacity());
+//							dataBundle.putString("INFO", sampleEventsToGo.get(eventId).getEventInfo());
+//							
+//							dataBundle.putBoolean("OWN?", isOwn);
+//							
+//							eventIntent.putExtras(dataBundle);
 					
+							Event e= sampleEventsToGo.get(eventId);
+							eventIntent.putExtra("event",e);
+							eventIntent.putExtra("OWN?", isOwn);
+							
 							startActivity(eventIntent);
 										
 							}

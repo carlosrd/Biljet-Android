@@ -43,22 +43,26 @@ public class MyFriendsActivity extends ActivitiesHeader {
 			//Acciones necesarias al hacer click
 				Intent friendIntent = new Intent(MyFriendsActivity.this, FriendViewActivity.class);
 				
-				Bundle dataBundle = new Bundle();
-				
-				//En realidad creo que se le puede pasar el tipo Evento usand (ya lo probaremos)
-				int i = 0;
-					i = i++; 
-				/*int img = itemsFriend.get(idFriend).getRutaImagen();
-				String name = itemsFriend.get(idFriend).getNombre();
-				String city = itemsFriend.get(idFriend).getCiudad();
-				*/
-				dataBundle.putInt("Avatar", itemsFriend.get(idFriend).getImagePath());
-				dataBundle.putString("Name", itemsFriend.get(idFriend).getName());
-				dataBundle.putString("City", itemsFriend.get(idFriend).getCity());	
-				dataBundle.putString("Bio", itemsFriend.get(idFriend).getBio());	
-				
-				friendIntent.putExtras(dataBundle);
+//				Bundle dataBundle = new Bundle();
+//				
+//				//En realidad creo que se le puede pasar el tipo Evento usand (ya lo probaremos)
+//				int i = 0;
+//					i = i++; 
+//				/*int img = itemsFriend.get(idFriend).getRutaImagen();
+//				String name = itemsFriend.get(idFriend).getNombre();
+//				String city = itemsFriend.get(idFriend).getCiudad();
+//				*/
+//				dataBundle.putInt("Avatar", itemsFriend.get(idFriend).getImagePath());
+//				dataBundle.putString("Name", itemsFriend.get(idFriend).getName());
+//				dataBundle.putString("City", itemsFriend.get(idFriend).getCity());	
+//				dataBundle.putString("Bio", itemsFriend.get(idFriend).getBio());	
+//				
+//				friendIntent.putExtras(dataBundle);
 		
+
+				Friend friend= itemsFriend.get(idFriend);
+				friendIntent.putExtra("friend",friend);
+
 				startActivity(friendIntent);
 							
 				}

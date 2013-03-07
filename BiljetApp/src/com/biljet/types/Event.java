@@ -1,7 +1,10 @@
 package com.biljet.types;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Event {
+
+public class Event implements Parcelable{
 
 	// Event Data
 	String name;
@@ -138,6 +141,62 @@ public class Event {
 		this.score = score;
 	}
 
+	//---------------------------Metodos de parcelable-----------------------------------------//
 	
-	
+		public Event(Parcel in)
+		{
+			readFromParcel(in);
+		}
+		
+		@Override
+		public int describeContents() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) 
+		{
+			dest.writeString(name);
+			dest.writeInt(id);
+			dest.writeInt(image);
+			dest.writeString(eventType);
+			dest.writeString(site);
+			dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
+			dest.writeInt(price);
+			dest.writeInt(confirmedPeople);
+			dest.writeInt(capacity);
+			dest.writeString(nameCreator);
+			dest.writeString(eventInfo);
+			dest.writeInt(score);
+
+		}
+
+		private void readFromParcel(Parcel in) 
+		{
+			name=in.readString();
+			id=in.readInt();
+			image=in.readInt();
+			eventType=in.readString();
+			site=in.readString();
+			date=in.readParcelable(Date.class.getClassLoader());
+			price=in.readInt();
+			confirmedPeople=in.readInt();
+			capacity=in.readInt();
+			nameCreator=in.readString();
+			eventInfo=in.readString();
+			score=in.readInt();
+			// si hay objetos de una clase hay que hacer un CREATOR.
+		}
+		
+		public static final Parcelable.Creator<Event> CREATOR
+	    = new Parcelable.Creator<Event>() {
+	        public Event createFromParcel(Parcel in) {
+	            return new Event(in);
+	        }
+	 
+	        public Event[] newArray(int size) {
+	            return new Event[size];
+	        }
+	    };	
 }// DatosEvento
