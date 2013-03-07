@@ -1,6 +1,9 @@
 package com.biljet.types;
 
-public class Friend {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Friend implements Parcelable{
 
 	protected long id;
 	protected int avatar;
@@ -69,7 +72,46 @@ public class Friend {
 	this.bio = bio;
 	}
 
-	
+	//---------------------------Metodos de parcelable-----------------------------------------//
 
+		public Friend(Parcel in)
+		{
+			readFromParcel(in);
+		}
+		
+		@Override
+		public int describeContents() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
+		private void readFromParcel(Parcel in) {
+			// TODO Auto-generated method stub
+			id=in.readLong();
+			avatar=in.readInt();
+			name=in.readString();
+			city=in.readString();
+			bio=in.readString();		
+		}
 
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			// TODO Auto-generated method stub
+			dest.writeLong(id);
+			dest.writeInt(avatar);
+			dest.writeString(name);
+			dest.writeString(city);
+			dest.writeString(bio);
+		}
+		
+		public static final Parcelable.Creator<Friend> CREATOR
+	    = new Parcelable.Creator<Friend>() {
+	        public Friend createFromParcel(Parcel in) {
+	            return new Friend(in);
+	        }
+	 
+	        public Friend[] newArray(int size) {
+	            return new Friend[size];
+	        }
+	    };
 }

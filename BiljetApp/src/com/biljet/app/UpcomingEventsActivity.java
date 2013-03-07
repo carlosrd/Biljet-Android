@@ -45,20 +45,24 @@ public class UpcomingEventsActivity extends ActivitiesHeader {
 							
 							Intent intentEvent = new Intent(UpcomingEventsActivity.this, EventViewActivity.class);
 							
-							Bundle dataBundle = new Bundle();
+//							Bundle dataBundle = new Bundle();
+//							
+//							//En realidad creo que se le puede pasar el tipo Event usand (ya lo probaremos)
+//							dataBundle.putInt("IMAGE-URL", itemsEvent.get(idEvent).getImage());
+//							dataBundle.putString("NAME", itemsEvent.get(idEvent).getName());
+//							dataBundle.putString("EVENT_TYPE", itemsEvent.get(idEvent).getEventType());
+//							dataBundle.putString("SITE", itemsEvent.get(idEvent).getSite());
+//							dataBundle.putInt("PRICE", itemsEvent.get(idEvent).getPrice());
+//							dataBundle.putInt("CONFIRMED_PEOPLE", itemsEvent.get(idEvent).getConfirmedPeople());
+//							dataBundle.putInt("CAPACITY", itemsEvent.get(idEvent).getCapacity());
+//							dataBundle.putString("INFO", itemsEvent.get(idEvent).getEventInfo());
+//							
+//							intentEvent.putExtras(dataBundle);
 							
-							//En realidad creo que se le puede pasar el tipo Event usand (ya lo probaremos)
-							dataBundle.putInt("IMAGE-URL", itemsEvent.get(idEvent).getImage());
-							dataBundle.putString("NAME", itemsEvent.get(idEvent).getName());
-							dataBundle.putString("EVENT_TYPE", itemsEvent.get(idEvent).getEventType());
-							dataBundle.putString("SITE", itemsEvent.get(idEvent).getSite());
-							dataBundle.putInt("PRICE", itemsEvent.get(idEvent).getPrice());
-							dataBundle.putInt("CONFIRMED_PEOPLE", itemsEvent.get(idEvent).getConfirmedPeople());
-							dataBundle.putInt("CAPACITY", itemsEvent.get(idEvent).getCapacity());
-							dataBundle.putString("INFO", itemsEvent.get(idEvent).getEventInfo());
+							Event e= itemsEvent.get(idEvent);
+							intentEvent.putExtra("event",e);
+							intentEvent.putExtra("OWN?", false);
 							
-							intentEvent.putExtras(dataBundle);
-					
 							startActivity(intentEvent);
 										
 							}

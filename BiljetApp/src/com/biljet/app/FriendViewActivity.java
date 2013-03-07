@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.biljet.adapters.ActivitiesHeader;
+import com.biljet.types.Friend;
 
 public class FriendViewActivity extends ActivitiesHeader {
 
@@ -14,25 +15,41 @@ public class FriendViewActivity extends ActivitiesHeader {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_view);
 		
-		Bundle bundleDatos = getIntent().getExtras();
+//		Bundle bundleDatos = getIntent().getExtras();
+//		
+//		createHeaderView(R.drawable.header_back_button,"Amigo: "+bundleDatos.getString("Name"), R.drawable.perfil,false);
+//		setBackButton();	
+		Friend fr = getIntent().getParcelableExtra("friend");
 		
-		createHeaderView(R.drawable.header_back_button,"Amigo: "+bundleDatos.getString("Name"), R.drawable.perfil,false);
-		setBackButton();	
-
+		createHeaderView(R.drawable.header_back_button,"Amigo: "+fr.getName()/*bundleDatos.getString("Name")*/, R.drawable.perfil,false);
+		setBackButton();
+		
+		
 		ImageView imagenAmigo = (ImageView)findViewById(R.id.friendView_Avatar);	
+//		
+//		imagenAmigo.setImageResource(bundleDatos.getInt("Avatar"));	
+//		imagenAmigo.setScaleType(ImageView.ScaleType.CENTER);
+//	
+//		TextView txtNombre = (TextView)findViewById(R.id.friendView_TxtName);
+//		txtNombre.setText(bundleDatos.getString("Name"));
+//			
+//		TextView txtLugar = (TextView)findViewById(R.id.friendView_TxtCity);
+//		txtLugar.setText(bundleDatos.getString("City"));	
+//		
+//		TextView txtBiografia = (TextView)findViewById(R.id.friendView_TxtBio);
+//		txtBiografia.setText(bundleDatos.getString("Bio"));
 		
-		imagenAmigo.setImageResource(bundleDatos.getInt("Avatar"));	
+		imagenAmigo.setImageResource(fr.getImagePath());		
 		imagenAmigo.setScaleType(ImageView.ScaleType.CENTER);
 	
 		TextView txtNombre = (TextView)findViewById(R.id.friendView_TxtName);
-		txtNombre.setText(bundleDatos.getString("Name"));
+		txtNombre.setText(fr.getName());
 			
 		TextView txtLugar = (TextView)findViewById(R.id.friendView_TxtCity);
-		txtLugar.setText(bundleDatos.getString("City"));	
+		txtLugar.setText(fr.getCity());	
 		
 		TextView txtBiografia = (TextView)findViewById(R.id.friendView_TxtBio);
-		txtBiografia.setText(bundleDatos.getString("Bio"));
-		
+		txtBiografia.setText(fr.getBio());	
 	}
 
 	@Override
