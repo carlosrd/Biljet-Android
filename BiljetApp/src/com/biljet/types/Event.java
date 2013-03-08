@@ -13,16 +13,23 @@ public class Event implements Parcelable{
 	String eventType;
 	String site;
 	Date date;
-	int price;					// price de la entrada
+	float price;					// price de la entrada
 	int confirmedPeople;		// número de personas que van a asistir
 	int capacity;				// Número de entradas totales (disponibles: capacity - confirmedPeople
-	String nameCreator;			// name del Creator
+	
+	// Duracion del evento
+	int length_days;			
+	int length_hours;
+	int length_minutes;
+
+	String nameCreator;			// Nombre del Creator
 	String eventInfo;			// Información detallada del evento
 	int score;				// valoración del evento sobre 10
 	
 	// Constructora
-	public Event(String name, int id, int image, String eventType, String site, Date date, int price, int confirmedPeople,
-			int capacity, String nameCreator, String eventInfo, int score){
+	public Event(String name, int id, int image, String eventType, 
+				 String site, Date date, int length_days, int length_hours, int length_minutes,
+				 int price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
 		
 		this.name = name;
 		this.id = id;
@@ -30,6 +37,9 @@ public class Event implements Parcelable{
 		this.eventType = eventType;
 		this.site = site;
 		this.date = date;
+		this.length_days = length_days;
+		this.length_hours = length_hours;
+		this.length_minutes = length_minutes;
 		this.price = price;
 		this.confirmedPeople = confirmedPeople;
 		this.capacity = capacity;
@@ -66,7 +76,7 @@ public class Event implements Parcelable{
 		return date;
 	}
 
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
@@ -88,6 +98,18 @@ public class Event implements Parcelable{
 
 	public int getScore() {
 		return score;
+	}
+
+	public int getLength_days() {
+		return length_days;
+	}
+
+	public int getLength_hours() {
+		return length_hours;
+	}
+
+	public int getLength_minutes() {
+		return length_minutes;
 	}
 
 	// SETTERS
@@ -117,7 +139,7 @@ public class Event implements Parcelable{
 		this.date = date;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -141,6 +163,21 @@ public class Event implements Parcelable{
 		this.score = score;
 	}
 
+	public void setEventType(String eventType) {
+		this.eventType = eventType;
+	}
+
+	public void setLength_days(int length_days) {
+		this.length_days = length_days;
+	}
+
+	public void setLength_hours(int length_hours) {
+		this.length_hours = length_hours;
+	}
+
+	public void setLength_minutes(int length_minutes) {
+		this.length_minutes = length_minutes;
+	}
 	//---------------------------Metodos de parcelable-----------------------------------------//
 	
 		public Event(Parcel in)
@@ -163,7 +200,10 @@ public class Event implements Parcelable{
 			dest.writeString(eventType);
 			dest.writeString(site);
 			dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
-			dest.writeInt(price);
+			dest.writeInt(length_days);
+			dest.writeInt(length_hours);
+			dest.writeInt(length_minutes);
+			dest.writeFloat(price);
 			dest.writeInt(confirmedPeople);
 			dest.writeInt(capacity);
 			dest.writeString(nameCreator);
@@ -174,18 +214,21 @@ public class Event implements Parcelable{
 
 		private void readFromParcel(Parcel in) 
 		{
-			name=in.readString();
-			id=in.readInt();
-			image=in.readInt();
-			eventType=in.readString();
-			site=in.readString();
-			date=in.readParcelable(Date.class.getClassLoader());
-			price=in.readInt();
-			confirmedPeople=in.readInt();
-			capacity=in.readInt();
-			nameCreator=in.readString();
-			eventInfo=in.readString();
-			score=in.readInt();
+			name = in.readString();
+			id = in.readInt();
+			image  =  in.readInt();
+			eventType = in.readString();
+			site = in.readString();
+			date = in.readParcelable(Date.class.getClassLoader());
+			length_days = in.readInt();
+			length_hours = in.readInt();
+			length_minutes = in.readInt();
+			price = in.readFloat();
+			confirmedPeople = in.readInt();
+			capacity = in.readInt();
+			nameCreator = in.readString();
+			eventInfo = in.readString();
+			score = in.readInt();
 			// si hay objetos de una clase hay que hacer un CREATOR.
 		}
 		

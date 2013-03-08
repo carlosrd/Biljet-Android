@@ -105,8 +105,8 @@ public class MyProfileActivity extends ActivitiesHeader {
     private ArrayList<Event> addEventsFollow(){
 	    ArrayList<Event> sampleEvents = new ArrayList<Event>();
 	    
-	    Event Event1 = new Event("Event al que voy 1",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30), 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event2 = new Event("Event al que voy 2",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45), 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
+	    Event Event1 = new Event("Event al que voy 1",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,0,0, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event2 = new Event("Event al que voy 2",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
 	
 		sampleEvents.add(Event1);
 	    sampleEvents.add(Event2);
@@ -117,8 +117,8 @@ public class MyProfileActivity extends ActivitiesHeader {
     private ArrayList<Event> addEventsOrganized(){
 	    ArrayList<Event> sampleEvents = new ArrayList<Event>();
 	    
-	    Event Event1 = new Event("Event que organizo 1",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30), 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event2 = new Event("Event que organizo 2",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45), 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
+	    Event Event1 = new Event("Event que organizo 1",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,0,0, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event2 = new Event("Event que organizo 2",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
 	
 		sampleEvents.add(Event1);
 	    sampleEvents.add(Event2);
@@ -129,8 +129,8 @@ public class MyProfileActivity extends ActivitiesHeader {
     private ArrayList<Event> addEventsSignup(){
 	    ArrayList<Event> sampleEvents = new ArrayList<Event>();
 	    
-	    Event Event1 = new Event("Event que sigo 1",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30), 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event2 = new Event("Event que sigo 2",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45), 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
+	    Event Event1 = new Event("Event que sigo 1",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,0,0, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event2 = new Event("Event que sigo 2",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
 	
 		sampleEvents.add(Event1);
 	    sampleEvents.add(Event2);

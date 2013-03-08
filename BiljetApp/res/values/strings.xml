@@ -21,6 +21,7 @@
 
     <string name="eventView_LabelSite">Lugar: </string>
     <string name="eventView_LabelDate">Fecha: </string>
+    <string name="eventView_LabelLength">Duración aprox: </string>
     <string name="eventView_LabelPrice">Precio: </string>
     <string name="eventView_LabelConfirmedPeople">Personas que asisten: </string>
     <string name="eventView_LabelCapacity">Aforo Total: </string>

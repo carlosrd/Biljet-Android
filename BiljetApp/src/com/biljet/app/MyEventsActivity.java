@@ -128,8 +128,8 @@ public class MyEventsActivity extends ActivitiesHeader {
 	    
     	ArrayList<Event> sampleItems = new ArrayList<Event>();
 	     
-	    Event Event1 = new Event("Concierto Jessie J",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30), 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event2 = new Event("Cumpleaños Hugo",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45), 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
+	    Event Event1 = new Event("Concierto Jessie J",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event2 = new Event("Cumpleaños Hugo",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
 
 		sampleItems.add(Event1);
 	    sampleItems.add(Event2);
@@ -141,7 +141,7 @@ public class MyEventsActivity extends ActivitiesHeader {
 	    
     	ArrayList<Event> sampleItems = new ArrayList<Event>();
 	     
-		Event Event1 = new Event("Cine Forum",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
+		Event Event1 = new Event("Cine Forum",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 0,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
 	    
 		sampleItems.add(Event1);
 		

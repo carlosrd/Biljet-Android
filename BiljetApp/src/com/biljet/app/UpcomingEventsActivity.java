@@ -75,10 +75,10 @@ public class UpcomingEventsActivity extends ActivitiesHeader {
 	    
     	ArrayList<Event> sampleEvents = new ArrayList<Event>();
 	     
-	    Event Event1 = new Event("Concierto ACDC",1 ,R.drawable.acdc_evento ,"Concierto", "Valladolid", new Date(8,12,2012,22,00), 40, 30, 200, "Empresa1 Conciertos", "Concierto de ACDC en Madrid a las 22:00, ¡ No te lo pierdas!", 6);
-		Event Event2 = new Event("Concierto Jessie J",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30), 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event3 = new Event("Cumpleaños Hugo",3 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45), 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
-		Event Event4 = new Event("Cine Forum",4 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
+	    Event Event1 = new Event("Concierto ACDC",1 ,R.drawable.acdc_evento ,"Concierto", "Valladolid", new Date(8,12,2012,22,00),0,3,15, 40, 30, 200, "Empresa1 Conciertos", "Concierto de ACDC en Madrid a las 22:00, ¡ No te lo pierdas!", 6);
+		Event Event2 = new Event("Concierto Jessie J",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event3 = new Event("Cumpleaños Hugo",3 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
+		Event Event4 = new Event("Cine Forum",4 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00),2,0,0, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
 	    
 		sampleEvents.add(Event1);
 	    sampleEvents.add(Event2);

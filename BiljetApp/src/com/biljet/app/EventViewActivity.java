@@ -25,7 +25,7 @@ public class EventViewActivity extends ActivitiesHeader {
 //		createHeaderView(R.drawable.header_back_button,"Evento: "+dataBundle.getString("NAME"), R.drawable.perfil,false);
 //		setBackButton();
 
-		Event e= getIntent().getParcelableExtra("event");
+		Event e = getIntent().getParcelableExtra("event");
 
 		createHeaderView(R.drawable.header_back_button,"Evento: "+e.getName()/*dataBundle.getString("NAME")*/, R.drawable.perfil,false);
 		setBackButton();
@@ -80,14 +80,14 @@ public class EventViewActivity extends ActivitiesHeader {
 //		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
 //		txtInfo.setText(dataBundle.getString("INFO"));
 		
-		ImageView imagenEvento = (ImageView)findViewById(R.id.eventView_Image);
-		imagenEvento.setImageResource(e.getImage());
-		imagenEvento.setScaleType(ImageView.ScaleType.CENTER);
+		ImageView eventImage = (ImageView)findViewById(R.id.eventView_Image);
+		eventImage.setImageResource(e.getImage());
+		eventImage.setScaleType(ImageView.ScaleType.CENTER);
 	
-		Button botonLeerQR = (Button)findViewById(R.id.eventView_Button_ReadQR);
+		Button buttonReadQR = (Button)findViewById(R.id.eventView_Button_ReadQR);
 		if (getIntent().getBooleanExtra("OWN?", true)){
-			botonLeerQR.setVisibility(View.VISIBLE);
-	        botonLeerQR.setOnClickListener(new OnClickListener() {
+			buttonReadQR.setVisibility(View.VISIBLE);
+	        buttonReadQR.setOnClickListener(new OnClickListener() {
 		        							   public void onClick(View arg0) {
 		        								   // Intent para lanzar el lector de QR
 		        								   Intent intent = new Intent("com.biljet.app.SCAN");
@@ -97,39 +97,52 @@ public class EventViewActivity extends ActivitiesHeader {
 	        							   });
 			}
 		else
-			botonLeerQR.setVisibility(View.INVISIBLE);
+			buttonReadQR.setVisibility(View.INVISIBLE);
 		
-		TextView txtNombre = (TextView)findViewById(R.id.eventView_TxtName);
-		txtNombre.setText(e.getName());
+		TextView txtName = (TextView)findViewById(R.id.eventView_TxtName);
+		txtName.setText(e.getName());
 	
-		TextView txtTipo = (TextView)findViewById(R.id.eventView_TxtEventType);
-		txtTipo.setText(e.getEventType());
+		TextView txtEventType = (TextView)findViewById(R.id.eventView_TxtEventType);
+		txtEventType.setText(e.getEventType());
 		
-		TextView txtLugar = (TextView)findViewById(R.id.eventView_TxtSite);
-		txtLugar.setText(e.getSite());
+		TextView txtSite = (TextView)findViewById(R.id.eventView_TxtSite);
+		txtSite.setText(e.getSite());
 	
-		TextView txtFecha = (TextView)findViewById(R.id.eventView_TxtDate);
-		String auxFecha= e.getDate().toString();
-		auxFecha = auxFecha+"";
-		txtFecha.setText(auxFecha);
+		TextView txtDate = (TextView)findViewById(R.id.eventView_TxtDate);
+		String auxDate= e.getDate().toString();
+		auxDate = auxDate+"";
+		txtDate.setText(auxDate);
 		
-		TextView txtPrecio = (TextView)findViewById(R.id.eventView_TxtPrice);
-		int auxInt = e.getPrice();
-		String auxString = auxInt+"";
-		txtPrecio.setText(auxString);
+		TextView txtLength = (TextView)findViewById(R.id.eventView_TxtLength);
+		String auxString = "";
+		int auxInt = e.getLength_days();
+		if (auxInt > 0)
+			auxString = auxInt+" días ";
+		auxInt = e.getLength_hours();
+		if (auxInt > 0)
+			auxString += auxInt+" h ";
+		auxInt = e.getLength_minutes();
+		if (auxInt > 0)
+			auxString += auxInt+" min. ";
+		if (auxString.equals(""))
+			auxString = "Indeterminado";
+		txtLength.setText(auxString);
 		
-		TextView txtInvitados = (TextView)findViewById(R.id.eventView_TxtConfirmedPeople);
+		TextView txtPrice = (TextView)findViewById(R.id.eventView_TxtPrice);
+		float auxFloat = e.getPrice();
+		auxString = auxFloat+" €";
+		txtPrice.setText(auxString);
+		
+		TextView txtGuests = (TextView)findViewById(R.id.eventView_TxtConfirmedPeople);
 		auxInt = e.getConfirmedPeople();
 		auxString = auxInt+"";
-		txtInvitados.setText(auxString);
+		txtGuests.setText(auxString);
 
-		
-		TextView txtAforo = (TextView)findViewById(R.id.eventView_TxtCapacity);
+		TextView txtCapacity = (TextView)findViewById(R.id.eventView_TxtCapacity);
 		auxInt = e.getCapacity();
 		auxString = auxInt+"";
-		txtAforo.setText(auxString);
+		txtCapacity.setText(auxString);
 
-		
 		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
 		txtInfo.setText(e.getEventInfo());
 	}

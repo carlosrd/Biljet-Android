@@ -42,14 +42,14 @@ public class FriendViewActivity extends ActivitiesHeader {
 		imagenAmigo.setImageResource(fr.getImagePath());		
 		imagenAmigo.setScaleType(ImageView.ScaleType.CENTER);
 	
-		TextView txtNombre = (TextView)findViewById(R.id.friendView_TxtName);
-		txtNombre.setText(fr.getName());
+		TextView txtName = (TextView)findViewById(R.id.friendView_TxtName);
+		txtName.setText(fr.getName());
 			
-		TextView txtLugar = (TextView)findViewById(R.id.friendView_TxtCity);
-		txtLugar.setText(fr.getCity());	
+		TextView txtSite = (TextView)findViewById(R.id.friendView_TxtCity);
+		txtSite.setText(fr.getCity());	
 		
-		TextView txtBiografia = (TextView)findViewById(R.id.friendView_TxtBio);
-		txtBiografia.setText(fr.getBio());	
+		TextView txtBio = (TextView)findViewById(R.id.friendView_TxtBio);
+		txtBio.setText(fr.getBio());	
 	}
 
 	@Override

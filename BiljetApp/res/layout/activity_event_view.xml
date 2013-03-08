@@ -15,98 +15,127 @@
         android:layout_height="60dip" />
 	
 	<!-- Vista Evento -->
-
-	<LinearLayout 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-	    
-		<ImageView
-		    android:id="@+id/eventView_Image"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_margin="5dp"
-		    android:layout_gravity="center_vertical"
-		    android:contentDescription="@string/contentDescription_ImageEvent" />
-
-		<Button
-		    android:id="@+id/eventView_Button_ReadQR"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_margin="20dp"
-		    android:text="@string/eventView_LabelBtnReadQR" />
-
-	</LinearLayout>
-	
-		<TextView
-		    android:id="@+id/eventView_TxtName"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
-		<TextView
-		    android:id="@+id/eventView_TxtEventType"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
+    <ScrollView android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    	<LinearLayout 
+		    android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:scrollbars="vertical" >
+        
+			<LinearLayout 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal" >
+			    
+				<ImageView
+				    android:id="@+id/eventView_Image"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_margin="5dp"
+				    android:layout_gravity="center_vertical"
+				    android:contentDescription="@string/contentDescription_ImageEvent" />
 		
-		<TextView
-		    android:id="@+id/eventView_LabelSite"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/eventView_LabelSite" />
-		<TextView
-		    android:id="@+id/eventView_TxtSite"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
+				<Button
+				    android:id="@+id/eventView_Button_ReadQR"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_margin="20dp"
+				    android:text="@string/eventView_LabelBtnReadQR" />
 		
-		<TextView
-		    android:id="@+id/eventView_LabelDate"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/eventView_LabelDate" />
-		
-		<TextView
-		    android:id="@+id/eventView_TxtDate"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
-		
-		<TextView
-		    android:id="@+id/eventView_LabelPrice"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/eventView_LabelPrice" />
-		<TextView
-		    android:id="@+id/eventView_TxtPrice"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
-		
-		<TextView
-		    android:id="@+id/eventView_LabelConfirmedPeople"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/eventView_LabelConfirmedPeople"/>
-		
-		<TextView
-		    android:id="@+id/eventView_TxtConfirmedPeople"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
+			</LinearLayout>
+			
+				<TextView
+				    android:id="@+id/eventView_TxtName"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" 
+				    android:textSize="20sp" />
+				<TextView
+				    android:id="@+id/eventView_TxtEventType"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" 
+				    android:textSize="16sp"/>
 				
-		<TextView
-		    android:id="@+id/eventView_LabelCapacity"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/eventView_LabelCapacity" />
-		<TextView
-		    android:id="@+id/eventView_TxtCapacity"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
-		
-		<TextView
-		    android:id="@+id/eventView_LabelInfo"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/eventView_LabelInfo"/>
-		<TextView
-		    android:id="@+id/eventView_TxtInfo"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
-
+				<TextView
+				    android:id="@+id/eventView_LabelSite"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelSite" />
+				<TextView
+				    android:id="@+id/eventView_TxtSite"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+				
+				<TextView
+				    android:id="@+id/eventView_LabelDate"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelDate" />
+				
+				<TextView
+				    android:id="@+id/eventView_TxtDate"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+				
+				<TextView
+				    android:id="@+id/eventView_LabelLength"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelLength" />
+				
+				<TextView
+				    android:id="@+id/eventView_TxtLength"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+				
+				<TextView
+				    android:id="@+id/eventView_LabelPrice"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelPrice" />
+				<TextView
+				    android:id="@+id/eventView_TxtPrice"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+				
+				<TextView
+				    android:id="@+id/eventView_LabelConfirmedPeople"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelConfirmedPeople"/>
+				
+				<TextView
+				    android:id="@+id/eventView_TxtConfirmedPeople"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+						
+				<TextView
+				    android:id="@+id/eventView_LabelCapacity"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelCapacity" />
+				
+				<TextView
+				    android:id="@+id/eventView_TxtCapacity"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+				
+				<TextView
+				    android:id="@+id/eventView_LabelInfo"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textStyle="bold"
+				    android:text="@string/eventView_LabelInfo"/>
+				<TextView
+				    android:id="@+id/eventView_TxtInfo"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" />
+		</LinearLayout>
+	</ScrollView>
 </LinearLayout>
