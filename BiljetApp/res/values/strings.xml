@@ -71,6 +71,28 @@
     <string name="myProfile_LabelTwitter">Twitter: </string>
     <string name="myProfile_LabelFacebook">Facebook: </string>
     <string name="myProfile_LabelLast_login">Última visita el día: </string>
+    
+	<!--
+         NewEventActivity
+    	 ***********************************************************************
 
+    -->	
+    
+	<string name="newEvent_LabelName">Nombre del evento: </string>    
+    <string name="newEvent_LabelEventType">"Tipo:"</string>    
+    <string name="newEvent_LabelSite">"Lugar:"</string>
+    <string name="newEvent_LabelPrice">"Precio:"</string>    
+    <string name="newEvent_LabelLength">"Duración aproximada:"</string>
+		<string name="newEvent_LabelLengthDays">"Días:"</string>
+		<string name="newEvent_LabelLengthHours">"Horas"</string>
+		<string name="newEvent_LabelLengthMinutes">"Min:"</string>
+    <string name="newEvent_LabelCapacity">"Aforo:"</string>
+    <string name="newEvent_LabelInfo">"Observaciones:"</string>    
+    <string name="newEvent_LabelDate">"Fecha:"</string>
+	<string name="newEvent_LabelTime">"Hora:"</string>		
+	<string name="newEvent_ButtonSetDate">"Set date" </string>
+	<string name="newEvent_ButtonSetTime">"Set time" </string>		
+	<string name="newEvent_ButtonCreateEvent">"Crear" </string>
+	<string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
 
 </resources>
