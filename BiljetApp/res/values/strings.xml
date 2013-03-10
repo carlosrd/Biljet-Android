@@ -7,13 +7,22 @@
     <string name="action_settings">Settings</string>
 
     <!--
-         MisEventosActivity
+         MyEventsActivity
     	 ***********************************************************************
     -->
 
     <string name="myEvents_TxtEventsToGo"> > Eventos a los que voy: </string>
     <string name="myEvents_TxtSelect"> > ¿Que eventos quieres mostrar?</string>
+   
+    <!--
+         CalendarViewActivity
+    	 ***********************************************************************
+    -->
 
+    <string name="calendarView_ButtonPrevious"> &lt;&lt; </string>
+    <string name="calendarView_MonthText"> dfsd </string>
+    <string name="calendarView_ButtonNext"> >> </string>
+    
     <!--
          eventViewActivity
     	 ***********************************************************************
@@ -30,7 +39,7 @@
 
     <!--
          VistaAmigoActivity  TODO
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="friendView_LabelCity">Ciudad: </string>
@@ -38,7 +47,7 @@
 
     <!--
          Descripcion de Contenido para Imagenes
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="contentDescription_LogoMenu">logo_biljet</string>
@@ -49,7 +58,7 @@
 
     <!--
           Titulos Actividades
-    	  **********************************************************************
+    	  **********************************************************************
     -->
     <string name="title_activity_my_friends">Biljet - Mis Amigos</string>
     <string name="title_activity_friend_view">Biljet - Detalles Amigo</string>
@@ -60,7 +69,7 @@
     <string name="title_activity_new_event">Biljet - Crear Nuevo Evento</string>
     <!--
          MyProfileActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="myProfile_LabelCity">Ciudad: </string>
@@ -71,6 +80,6 @@
     <string name="myProfile_LabelTwitter">Twitter: </string>
     <string name="myProfile_LabelFacebook">Facebook: </string>
     <string name="myProfile_LabelLast_login">Última visita el día: </string>
-
+    <string name="title_activity_calendar_view">CalendarViewActivity</string>
 
 </resources>

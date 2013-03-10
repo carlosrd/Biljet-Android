@@ -18,9 +18,9 @@ public class MenuOptionsAdapter extends ArrayAdapter<MenuOption> {
 		private static MenuOption[] options =
 				new MenuOption[]{
 				new MenuOption("Prox Eventos",android.R.drawable.ic_menu_today),
-				new MenuOption("Mis Eventos",android.R.drawable.ic_menu_my_calendar),
+				new MenuOption("Mis Eventos",android.R.drawable.ic_menu_agenda),
 				new MenuOption("Amigos", R.drawable.amigos),
-				new MenuOption("Sección 4",android.R.drawable.ic_menu_set_as),
+				new MenuOption("Calendario",android.R.drawable.ic_menu_my_calendar),
 				new MenuOption("Sección 5",android.R.drawable.ic_menu_crop)};
 		
 

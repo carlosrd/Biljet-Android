@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+
+	<!-- Month Viewfinder -->
+	
+	<RelativeLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >
+	   
+	   <!-- Button Previous -->
+	   
+	   <LinearLayout 
+   			android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="left">
+		    
+		    <Button
+		    	android:id="@+id/calendarView_ButtonPrevious"
+		    	style="?android:attr/buttonStyleSmall"
+		    	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:gravity="left"
+		    	android:text="@string/calendarView_ButtonPrevious" />
+		    
+		</LinearLayout>
+
+	   	<!-- Month Text -->
+	   	
+	    <TextView
+	        android:id="@+id/calendarView_LabelMonth"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_toRightOf="@id/calendarView_ButtonPrevious"
+			android:text="@string/calendarView_MonthText"
+			android:gravity="center_horizontal"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	   	<!-- Button Next -->
+	    
+	    <LinearLayout 
+   			android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="right"
+		    android:layout_toRightOf="@+id/calendarView_LabelMonth" >
+		    
+		    <Button
+		    	android:id="@+id/calendarView_ButtonNext"
+		    	style="?android:attr/buttonStyleSmall"
+		    	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:gravity="right"
+		    	android:text="@string/calendarView_ButtonNext" />
+		    
+	    </LinearLayout>
+	    
+	</RelativeLayout>
+
+	<GridView
+	    android:id="@+id/calendarView_gridCalendar"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:numColumns="7" >
+	</GridView>
+	
+</LinearLayout>
