@@ -63,6 +63,10 @@ public class SearchActivity extends ActivitiesHeader {
 		return true;
 	}
 	
+	/**
+	 * method who fills the listView depending c's value
+	 * @param c
+	 */
 	private void filled(char c){
 		switch(c){
 		
@@ -113,6 +117,10 @@ public class SearchActivity extends ActivitiesHeader {
 			
 	}
 	
+	/**
+	 * method who fills the event list or friend list depending c's value
+	 * @param c
+	 */
 	private void searchList(char c){		
 		
 		switch(c){
@@ -143,6 +151,13 @@ public class SearchActivity extends ActivitiesHeader {
 		}// switch
 	}
 	
+
+	/**
+	 * method which filters events whose name match with s
+	 * @param s
+	 * @param eventsList
+	 * @return
+	 */
 	private ArrayList<Event> filterEvents(String s, ArrayList<Event> eventsList){
 		ArrayList<Event> resultado = new ArrayList<Event>();
 		
@@ -153,6 +168,12 @@ public class SearchActivity extends ActivitiesHeader {
 		return resultado;
 	}// filterEvents
 	
+	/**
+	 * method which filters events whose name match with s
+	 * @param s
+	 * @param friendsList
+	 * @return
+	 */
 	private ArrayList<Friend> filterFriends(String s, ArrayList<Friend> friendsList){
 		ArrayList<Friend> resultado = new ArrayList<Friend>();
 		
