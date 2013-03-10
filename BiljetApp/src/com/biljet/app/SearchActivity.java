@@ -25,10 +25,7 @@ public class SearchActivity extends ActivitiesHeader {
 	
 	// ATRIBUTOS
  	// **************************************************************************************
-	   
-	//final ArrayList<Event> searchEvents = new ArrayList<Event>();
-	//final ArrayList<Friend> searchFriends = new ArrayList<Friend>();
-	
+
 	ArrayList<Event> eventsArray = new ArrayList<Event>();
 	ArrayList<Friend> friendsArray = new ArrayList<Friend>();
 	
@@ -130,7 +127,6 @@ public class SearchActivity extends ActivitiesHeader {
 				ArrayList<Event> eventsList = getEvents();
 				eventsArray = filterEvents(ev,eventsList);	// Rellenamos la lista de eventos con los eventos encontrados
 
-				Toast.makeText(this, ev,Toast.LENGTH_SHORT).show();
 				break;
 				
 			// buscar amigos
@@ -142,8 +138,7 @@ public class SearchActivity extends ActivitiesHeader {
 				
 				ArrayList<Friend> friendsList = getFriends();
 				friendsArray = filterFriends(am,friendsList);	// Rellenamos la lista de amigos con los amigos encontrados			
-				
-				Toast.makeText(this, am,Toast.LENGTH_SHORT).show();
+
 				break;
 		}// switch
 	}
