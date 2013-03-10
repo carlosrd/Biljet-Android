@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.biljet.adapters.ActivitiesHeader;
+import com.biljet.adapters.FriendsAdapter;
 import com.biljet.adapters.UpcomingEventsAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
@@ -28,7 +29,8 @@ public class SearchActivity extends ActivitiesHeader {
 	//final ArrayList<Event> searchEvents = new ArrayList<Event>();
 	//final ArrayList<Friend> searchFriends = new ArrayList<Friend>();
 	
-	ArrayList<Event> pruebaEventos = new ArrayList<Event>();
+	ArrayList<Event> eventsArray = new ArrayList<Event>();
+	ArrayList<Friend> friendsArray = new ArrayList<Friend>();
 	
 	EditText filterText;
 	
@@ -49,7 +51,7 @@ public class SearchActivity extends ActivitiesHeader {
 						   Bundle b = getIntent().getExtras();
 						   char c = b.getChar("amigo_evento");
 						   searchList(c);
-						   filled();
+						   filled(c);
 					   }
 				   });
 		
@@ -64,28 +66,54 @@ public class SearchActivity extends ActivitiesHeader {
 		return true;
 	}
 	
-	private void filled(){
+	private void filled(char c){
+		switch(c){
 		
-		UpcomingEventsAdapter adapter = new UpcomingEventsAdapter(this, pruebaEventos);
-	       ListView eventList = (ListView)findViewById(R.id.list);
-	        
-	        eventList.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> a, View v, int idEvent, long id) {
-				//Acciones necesarias al hacer click
-					
-					Intent intentEvent = new Intent(SearchActivity.this, EventViewActivity.class);
-					
-					Event e = pruebaEventos.get(idEvent);					
-					intentEvent.putExtra("event",e);
-					intentEvent.putExtra("OWN?", false);
+			// buscar eventos
+			case 'e':
+				UpcomingEventsAdapter adapterEvent = new UpcomingEventsAdapter(this, eventsArray);
+				ListView eventList = (ListView)findViewById(R.id.list);
+			    
+			    eventList.setOnItemClickListener(new OnItemClickListener() {
+					public void onItemClick(AdapterView<?> a, View v, int idEvent, long id) {
+					//Acciones necesarias al hacer click
+			
+						Intent intentEvent = new Intent(SearchActivity.this, EventViewActivity.class);
 						
-					startActivity(intentEvent);
+						Event e = eventsArray.get(idEvent);					
+						intentEvent.putExtra("event",e);
+						intentEvent.putExtra("OWN?", false);
+						
+						startActivity(intentEvent);
 								
 					}
 				});
+			
+			    eventList.setAdapter(adapterEvent);
+			    break;
+	
+			case 'a':
+				
+		        FriendsAdapter adapterFriends = new FriendsAdapter(this, friendsArray);
+		        ListView friendList = (ListView)findViewById(R.id.list);
+				
+		        friendList.setOnItemClickListener(new OnItemClickListener() {
+					public void onItemClick(AdapterView<?> a, View v, int idFriend, long id) {
+					//Acciones necesarias al hacer click
+						Intent intentFriend = new Intent(SearchActivity.this, FriendViewActivity.class);
 
-	        eventList.setAdapter(adapter);
-	        
+						Friend friend= friendsArray.get(idFriend);
+						intentFriend.putExtra("friend",friend);
+
+						startActivity(intentFriend);
+									
+						}
+					});
+		        
+		        friendList.setAdapter(adapterFriends);
+				break;
+		}// switch
+			
 	}
 	
 	private void searchList(char c){		
@@ -97,18 +125,25 @@ public class SearchActivity extends ActivitiesHeader {
 				
 				//cogemos el nombre del evento que el usuario ha escogido
 				filterText = (EditText) findViewById(R.id.filterText);
-				String s = filterText.getText().toString();
+				String ev = filterText.getText().toString();
 				
 				ArrayList<Event> eventsList = getEvents();
-				pruebaEventos = filterEvents(s,eventsList);	// Rellenamos la lista de eventos con los eventos encontrados
+				eventsArray = filterEvents(ev,eventsList);	// Rellenamos la lista de eventos con los eventos encontrados
 
-				Toast.makeText(this, s,Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, ev,Toast.LENGTH_SHORT).show();
 				break;
-				
 				
 			// buscar amigos
 			case 'a':
-				Toast.makeText(this,"Buscar amigos",Toast.LENGTH_SHORT).show(); 
+				
+				//cogemos el nombre del amigo que el usuario ha escogido
+				filterText = (EditText) findViewById(R.id.filterText);
+				String am = filterText.getText().toString();
+				
+				ArrayList<Friend> friendsList = getFriends();
+				friendsArray = filterFriends(am,friendsList);	// Rellenamos la lista de amigos con los amigos encontrados			
+				
+				Toast.makeText(this, am,Toast.LENGTH_SHORT).show();
 				break;
 		}// switch
 	}
@@ -123,12 +158,21 @@ public class SearchActivity extends ActivitiesHeader {
 		return resultado;
 	}// filterEvents
 	
+	private ArrayList<Friend> filterFriends(String s, ArrayList<Friend> friendsList){
+		ArrayList<Friend> resultado = new ArrayList<Friend>();
+		
+		for(Friend f:friendsList)		
+			if(f.getName().equals(s))	
+				resultado.add(f);
+		
+		return resultado;
+	}// filterFriends	
 	
 	private ArrayList<Event> getEvents(){
 		ArrayList<Event> sampleItems = new ArrayList<Event>();
-		Event Event1 = new Event("Concierto Jessie J",1 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event2 = new Event("Cumpleaños Hugo",2 ,R.drawable.jessie_j_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
-		Event Event3 = new Event("ho",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 0,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
+		Event Event1 = new Event("acdc",1 ,R.drawable.acdc_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event2 = new Event("jj",2 ,R.drawable.acdc_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
+		Event Event3 = new Event("jj",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 0,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
 	    
 		sampleItems.add(Event1);
 	    sampleItems.add(Event2);
@@ -139,9 +183,9 @@ public class SearchActivity extends ActivitiesHeader {
 	
 	private ArrayList<Friend> getFriends(){
 		ArrayList<Friend> Samples = new ArrayList<Friend>();
-	     Samples.add(new Friend(1, "Alan Turing", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
+	     Samples.add(new Friend(1, "alan", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
 	     Samples.add(new Friend(2, "Albert Einstein", "Ulm", R.drawable.usr_albert,"Albert Einstein es un físico alemán de origen judío, nacionalizado después suizo y estadounidense. Es considerado como el científico más importante del siglo XX"));
-	     Samples.add(new Friend(3, "Bill Gates", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
+	     Samples.add(new Friend(3, "alan", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
 	     Samples.add(new Friend(4, "Gordon Earl Moore", "San Francisco", R.drawable.usr_gordon,"Gordon Earl Moore es el cofundador de Intel y autor de la Ley de Moore. Nacido en San Francisco, California el 3 de enero de 1929. Recibió un certificado de bachiller de ciencias en química por la Universidad de California en Berkeley en 1950 y un Ph."));
 	     Samples.add(new Friend(5, "Frank Gray", "Alpine", R.drawable.usr_gray,"Frank Gray es un fisico e investigador en los Laboratorios Bell. Hizo numerosas inovaciones mecanicas y electronicas en la televisión. Famoso por el Código Gray."));
 	     Samples.add(new Friend(6, "Isaac Newton", "Londres", R.drawable.usr_isaac,"Sir Isaac Newton es un físico, filósofo, teólogo, inventor, alquimista y matemático inglés, autor de los Philosophiae naturalis principia mathematica, más conocidos como los Principia, donde describió la ley de la gravitación universal y estableció las bases de la mecánica clásica mediante las leyes que llevan su nombre."));
