@@ -8,7 +8,7 @@
 
     <!--
          MisEventosActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="myEvents_TxtEventsToGo"> > Eventos a los que voy: </string>
@@ -16,7 +16,7 @@
 
     <!--
          eventViewActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="eventView_LabelSite">Lugar: </string>
@@ -30,7 +30,7 @@
 
     <!--
          VistaAmigoActivity  TODO
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="friendView_LabelCity">Ciudad: </string>
@@ -38,7 +38,7 @@
 
     <!--
          Descripcion de Contenido para Imagenes
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="contentDescription_LogoMenu">logo_biljet</string>
@@ -49,7 +49,7 @@
 
     <!--
           Titulos Actividades
-    	  **********************************************************************
+    	  **********************************************************************
     -->
     <string name="title_activity_my_friends">Biljet - Mis Amigos</string>
     <string name="title_activity_friend_view">Biljet - Detalles Amigo</string>
@@ -58,9 +58,10 @@
     <string name="title_activity_event_view">Biljet - Detalles del Evento</string>
     <string name="title_activity_my_events">Biljet - Mis Eventos</string>
     <string name="title_activity_new_event">Biljet - Crear Nuevo Evento</string>
+    <string name="title_activity_search">Biljet - Buscar</string>
     <!--
          MyProfileActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="myProfile_LabelCity">Ciudad: </string>
@@ -83,9 +84,9 @@
     <string name="newEvent_LabelSite">"Lugar:"</string>
     <string name="newEvent_LabelPrice">"Precio:"</string>    
     <string name="newEvent_LabelLength">"Duración aproximada:"</string>
-		<string name="newEvent_LabelLengthDays">"Días:"</string>
-		<string name="newEvent_LabelLengthHours">"Horas"</string>
-		<string name="newEvent_LabelLengthMinutes">"Min:"</string>
+	<string name="newEvent_LabelLengthDays">"Días:"</string>
+	<string name="newEvent_LabelLengthHours">"Horas"</string>
+	<string name="newEvent_LabelLengthMinutes">"Min:"</string>
     <string name="newEvent_LabelCapacity">"Aforo:"</string>
     <string name="newEvent_LabelInfo">"Observaciones:"</string>    
     <string name="newEvent_LabelDate">"Fecha:"</string>

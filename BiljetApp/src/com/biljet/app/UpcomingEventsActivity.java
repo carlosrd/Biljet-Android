@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -25,10 +27,9 @@ public class UpcomingEventsActivity extends ActivitiesHeader {
      
         // ACTION BAR
      	// **************************************************************************************
-        //cabecera(true, drawable.home, MenuActivity.class, "Proximos Events", true, android.R.drawable.ic_menu_search, ProximosEventsActivity.class);
         createHeaderView(R.drawable.header_back_button,"Proximos Eventos", android.R.drawable.ic_menu_search,true);
 		setBackButton();
-		setRightButtonAction(UpcomingEventsActivity.class);
+		setThisRightButtonAction(SearchActivity.class);
 		
 		
 		// LIST VIEW
@@ -95,4 +96,19 @@ public class UpcomingEventsActivity extends ActivitiesHeader {
         getMenuInflater().inflate(R.menu.upcoming_events, menu);
         return true;
     }
+    
+    
+    
+    public void setThisRightButtonAction(final Class actA){
+		ImageButton rightButton = (ImageButton) findViewById(R.id.headerBotonDcho);
+        rightButton.setOnClickListener(new OnClickListener() {
+									     public void onClick(View arg0) {
+									    	 Intent boton0 = new Intent(UpcomingEventsActivity.this, actA);
+									    	 Bundle dataBundle = new Bundle();
+									    	 dataBundle.putChar("amigo_evento", 'e');
+									    	 boton0.putExtras(dataBundle);
+									    	 startActivity(boton0);
+									     }
+								     });
+	}
 }
