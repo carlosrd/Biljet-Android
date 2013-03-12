@@ -95,6 +95,7 @@ public class MyEventsActivity extends ActivitiesHeader {
 		
 		final Spinner eventSpinner = (Spinner)findViewById(R.id.spinner_MyEvents);
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
 		eventSpinner.setAdapter(spinnerAdapter);
 		
 		eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -140,8 +141,8 @@ public class MyEventsActivity extends ActivitiesHeader {
     private ArrayList<Event> getEventsOrganized() {
 	    
     	ArrayList<Event> sampleItems = new ArrayList<Event>();
-	     
-		Event Event1 = new Event("Cine Forum",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 0,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
+	    
+		Event Event1 = new Event("Cine Forum",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
 	    
 		sampleItems.add(Event1);
 		
