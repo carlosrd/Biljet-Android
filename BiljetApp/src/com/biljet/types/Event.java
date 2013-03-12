@@ -17,7 +17,7 @@ public class Event implements Parcelable{
 	int confirmedPeople;		// número de personas que van a asistir
 	int capacity;				// Número de entradas totales (disponibles: capacity - confirmedPeople
 	
-	// Duracion del evento
+	// Duración del evento
 	int length_days;			
 	int length_hours;
 	int length_minutes;
