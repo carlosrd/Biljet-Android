@@ -191,7 +191,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"                
-                android:hint="@string/newEvent_LabelCapacity" />
+                android:hint="Aforo" />
             
            		<!-- Image for new event  -->
            		
@@ -226,7 +226,7 @@
 	                android:lines="3"       
 	                android:gravity="top"     	
 	            	android:inputType="text|textMultiLine"
-	                android:hint="@string/newEvent_LabelInfo"/>    	   
+	                android:hint="Información del evento"/>    	   
 	            
 	             <LinearLayout 
 			        android:layout_width="fill_parent"
