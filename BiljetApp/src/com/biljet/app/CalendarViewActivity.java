@@ -38,6 +38,7 @@ public class CalendarViewActivity extends ActivitiesHeader {
 							switch(position){
 								case 0: 
 										break;
+							}
 						}
 		});
 		
