@@ -81,6 +81,21 @@ public class ActivitiesHeader extends Activity {
 										     }
 									     });
 		}
+		
+		// Setea el intent para el boton derecho
+		@SuppressWarnings("rawtypes")
+		public void setRightButtonAction(final Class actA, final char c){
+			ImageButton rightButton = (ImageButton) findViewById(R.id.headerBotonDcho);
+	        rightButton.setOnClickListener(new OnClickListener() {
+										     public void onClick(View arg0) {
+										    	 Intent boton0 = new Intent(ActivitiesHeader.this, actA);
+										    	 Bundle dataBundle = new Bundle();
+										    	 dataBundle.putChar("amigo_evento", c);
+										    	 boton0.putExtras(dataBundle);
+										    	 startActivity(boton0);
+										     }
+									     });
+		}
 	
 } // HeaderActividades
 

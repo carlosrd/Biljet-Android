@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -29,7 +27,7 @@ public class MyFriendsActivity extends ActivitiesHeader {
         
         createHeaderView(R.drawable.header_back_button,"Mis Amigos", android.R.drawable.ic_menu_search,true);
 		setBackButton();
-		setThisRightButtonAction(SearchActivity.class);
+		setRightButtonAction(SearchActivity.class, 'a');
 		
 		// LIST VIEW
 		// **************************************************************************************
@@ -97,19 +95,7 @@ public class MyFriendsActivity extends ActivitiesHeader {
 	    
 	     return Samples;
 	    }
-    
-    public void setThisRightButtonAction(final Class actA){
-		ImageButton rightButton = (ImageButton) findViewById(R.id.headerBotonDcho);
-        rightButton.setOnClickListener(new OnClickListener() {
-									     public void onClick(View arg0) {
-									    	 Intent boton0 = new Intent(MyFriendsActivity.this, actA);
-									    	 Bundle dataBundle = new Bundle();
-									    	 dataBundle.putChar("amigo_evento", 'a');
-									    	 boton0.putExtras(dataBundle);
-									    	 startActivity(boton0);
-									     }
-								     });
-	}
+
 }
 
 
