@@ -90,7 +90,7 @@ public class CalendarViewActivity extends ActivitiesHeader {
         // GRID VIEW: CALENDARIO
 		// **************************************************************************************
         
-	    // Acoplar el adaptador al GridView
+	    // Acoplar el adaptador al GridView de las etiquetas de los días
 		CalendarDaysAdapter ad = new CalendarDaysAdapter(this);
 		GridView labelDaysGrid = (GridView)findViewById(R.id.calendarView_gridCalendarLabelDays);
 		labelDaysGrid.setClickable(false);
@@ -98,7 +98,7 @@ public class CalendarViewActivity extends ActivitiesHeader {
 		labelDaysGrid.setAdapter(ad);
 	    
 	    
-	    // Acoplar el adaptador al GridView
+	    // Acoplar el adaptador al GridView del calendario
 		adapter = new CalendarAdapter(this,month);
 		GridView calendarGrid = (GridView)findViewById(R.id.calendarView_gridCalendar);
 
@@ -115,7 +115,7 @@ public class CalendarViewActivity extends ActivitiesHeader {
 					        		day = "0"+day;
 					        	}
 					        	// return chosen date as string format 
-					        	choosedDay.putExtra("date", android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day);
+					        	choosedDay.putExtra("date", day + "-" + android.text.format.DateFormat.format("MM-yyyy", month));
 					        	startActivity(choosedDay);
 					        	//setResult(RESULT_OK, intent);
 					        	//finish();
@@ -166,7 +166,16 @@ public class CalendarViewActivity extends ActivitiesHeader {
 			for(int i=0; i<31; i++) {
 				Random r = new Random();
 				
-				if(r.nextInt(10)>6)
-				{
+					if(r.nextInt(10)>6)
+					{
+					items.add(Integer.toString(i));
+					}
+				}
+
+			adapter.setItems(items);
+			adapter.notifyDataSetChanged();
+		}
+	};
+
 	*/
 }
