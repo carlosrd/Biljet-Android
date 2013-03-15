@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical" >
 
     <!-- Action Bar -->
@@ -16,8 +16,9 @@
 	<!-- Month Viewfinder -->
 	
 	<RelativeLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" >
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="#0B0B61" >
 	   
 	   <!-- Button Previous -->
 	   
@@ -28,11 +29,15 @@
 		    
 		    <Button
 		    	android:id="@+id/calendarView_ButtonPrevious"
-		    	style="?android:attr/buttonStyleSmall"
 		    	android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:gravity="left"
-		    	android:text="@string/calendarView_ButtonPrevious" />
+		    	android:text="@string/calendarView_ButtonPrevious"
+				android:gravity="center"
+		    	android:height="35dp"
+		    	android:width="35dp"
+		    	android:background="#0040FF"
+		    	android:textColor="#FFFFFF" 
+		    	android:textStyle="bold" />
 		    
 		</LinearLayout>
 
@@ -47,7 +52,8 @@
 	        android:layout_toRightOf="@id/calendarView_ButtonPrevious"
 			android:text="@string/calendarView_MonthText"
 			android:gravity="center_horizontal"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	        android:textAppearance="?android:attr/textAppearanceLarge" 
+	        android:textColor="#FFFFFF"/>
 	    
 	   	<!-- Button Next -->
 	    
@@ -59,21 +65,38 @@
 		    
 		    <Button
 		    	android:id="@+id/calendarView_ButtonNext"
-		    	style="?android:attr/buttonStyleSmall"
 		    	android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:gravity="right"
-		    	android:text="@string/calendarView_ButtonNext" />
+		    	android:text="@string/calendarView_ButtonNext"
+		    	android:gravity="center"
+		    	android:height="35dp"
+		    	android:width="35dp"
+		    	android:background="#0040FF"
+		    	android:textColor="#FFFFFF" 
+		    	android:textStyle="bold" />
 		    
 	    </LinearLayout>
 	    
 	</RelativeLayout>
-
+	
+	<GridView
+	    android:id="@+id/calendarView_gridCalendarLabelDays"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:numColumns="7"
+	    android:background="#0B0B61"
+	    android:verticalSpacing="2dp"
+	    android:clickable="false" >
+	</GridView>
+	
 	<GridView
 	    android:id="@+id/calendarView_gridCalendar"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:numColumns="7" >
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:numColumns="7" 
+	   	android:background="#0B0B61"
+	    android:verticalSpacing="2dp"
+	    android:horizontalSpacing="2dp">
 	</GridView>
 	
 </LinearLayout>

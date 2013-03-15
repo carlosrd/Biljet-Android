@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="60px"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:padding="8dp"
     android:orientation="vertical" >
     
 	<TextView 
 		android:id="@+id/calendarItem_TxtDay"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
 	    android:textSize="14sp"
-	    android:textStyle="bold"
-	    android:textColor="#000000" >
+	    android:textStyle="bold" >
 	</TextView>
+	
 	<ImageView
 			android:id="@+id/calendarItem_IconDay"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
+		    android:contentDescription="@string/contentDescription_ImageCalendarItem"
 			android:visibility="invisible"/>
+	
 </LinearLayout>

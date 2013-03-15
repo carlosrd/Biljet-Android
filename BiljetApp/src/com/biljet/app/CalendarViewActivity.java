@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.CalendarAdapter;
+import com.biljet.adapters.CalendarDaysAdapter;
 
 public class CalendarViewActivity extends ActivitiesHeader {
 
@@ -43,6 +44,7 @@ public class CalendarViewActivity extends ActivitiesHeader {
         
 		createHeaderView(R.drawable.header_back_button,"Mi Calendario", R.drawable.perfil,false);
 		setBackButton();
+
 		
         // BARRA MES + BOTONES ANT/SIG MES
      	// **************************************************************************************
@@ -66,7 +68,6 @@ public class CalendarViewActivity extends ActivitiesHeader {
 	    
 	    TextView title = (TextView) findViewById(R.id.calendarView_LabelMonth);
 	    title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
-		
 	    
 	    Button next  = (Button) findViewById(R.id.calendarView_ButtonNext);
 	    next.setOnClickListener(new OnClickListener() {
@@ -90,6 +91,14 @@ public class CalendarViewActivity extends ActivitiesHeader {
 		// **************************************************************************************
         
 	    // Acoplar el adaptador al GridView
+		CalendarDaysAdapter ad = new CalendarDaysAdapter(this);
+		GridView labelDaysGrid = (GridView)findViewById(R.id.calendarView_gridCalendarLabelDays);
+		labelDaysGrid.setClickable(false);
+		labelDaysGrid.setFocusable(false);
+		labelDaysGrid.setAdapter(ad);
+	    
+	    
+	    // Acoplar el adaptador al GridView
 		adapter = new CalendarAdapter(this,month);
 		GridView calendarGrid = (GridView)findViewById(R.id.calendarView_gridCalendar);
 
@@ -100,15 +109,16 @@ public class CalendarViewActivity extends ActivitiesHeader {
 					    	TextView date = (TextView)v.findViewById(R.id.calendarItem_TxtDay);
 					        if (date instanceof TextView && !date.getText().equals("")) {
 					        	
-					        	Intent intent = new Intent();
+					        	Intent choosedDay = new Intent(CalendarViewActivity.this, DayViewActivity.class);
 					        	String day = date.getText().toString();
 					        	if (day.length() == 1) {
 					        		day = "0"+day;
 					        	}
 					        	// return chosen date as string format 
-					        	intent.putExtra("date", android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day);
-					        	setResult(RESULT_OK, intent);
-					        	finish();
+					        	choosedDay.putExtra("date", android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day);
+					        	startActivity(choosedDay);
+					        	//setResult(RESULT_OK, intent);
+					        	//finish();
 					        }
 						}
 		});

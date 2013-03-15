@@ -89,8 +89,11 @@
         <activity
             android:name="com.biljet.app.SearchActivity"
             android:label="@string/title_activity_search" >
-		</activity>
-
+        </activity>
+        <activity
+            android:name="com.biljet.app.DayViewActivity"
+            android:label="@string/title_activity_day_view" >
+        </activity>
     </application>
 
 </manifest>
