@@ -308,9 +308,9 @@ public class NewEventActivity extends ActivitiesHeader {
 	   }
 	   
 	   //Creación del NUEVO EVENTO.
-	   /** Method to create a NEW EVENT
-	    * 
-	    * @return
+	   /**
+ 		* Method to create a NEW EVENT
+	    * @return Event object with all data related to it
 	    */
 	   private Event createNewEvent() {  
 		   String nombre = getNameNewEvent();
