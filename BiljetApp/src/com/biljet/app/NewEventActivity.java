@@ -3,6 +3,7 @@ package com.biljet.app;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -31,12 +32,8 @@ import com.biljet.types.Event;
 import com.biljet.types.User;
 
 /** 
- * public class  NewEventActivity extends ActivitiesHeader
  * This class provides methods to create a new event, where the user enters the event data, such as:
  * Name, type, date, time, price, approximate time, logo and details of the event.
- *  
- * @author Juan
- *
  */
 public class NewEventActivity extends ActivitiesHeader {
 	
@@ -44,7 +41,7 @@ public class NewEventActivity extends ActivitiesHeader {
 	    // **************************************************************************************
 			  
 		private Calendar dateTime = Calendar.getInstance();    
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd, yyyy");
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd, yyyy");
 	    private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a"); 
 	    private static final int DIALOG_DATE = 1;
 	    private static final int DIALOG_TIME = 2;
@@ -58,7 +55,7 @@ public class NewEventActivity extends ActivitiesHeader {
 	    private String typeEvent; //Tipo de evento que vamos a crear.
 	    private int postImage = 0;
 	    
-	    //Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
+	    // Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
 	    final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
 	    
 	    // Array de tipos de eventos.
@@ -87,6 +84,7 @@ public class NewEventActivity extends ActivitiesHeader {
 			editTextDate = (EditText) findViewById(R.id.newEvent_EditDate);			
 			editTextDate.setText(dateFormatter.format(dateTime.getTime()));	
 			
+			buttonDatePicker.setText("Seleccionar Fecha");
 			buttonDatePicker.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {
 	                showDialog(DIALOG_DATE);
@@ -99,6 +97,7 @@ public class NewEventActivity extends ActivitiesHeader {
 			editTextTime = (EditText) findViewById(R.id.newEvent_EditTime);		
 			editTextTime.setText(timeFormatter.format(dateTime.getTime()));
 			
+			buttonTimePicker.setText("Seleccionar Hora");
 			buttonTimePicker.setOnClickListener(new View.OnClickListener() {
 	 
 	            public void onClick(View v) {
@@ -161,17 +160,15 @@ public class NewEventActivity extends ActivitiesHeader {
 			
 	    }  //onCreate
 	    
-	    
-	    
-	     //Método para cambiar las imagenes, mas adelante utulizaremos el metodo para acceder a la galeria de imagemes.    
-		 public void addListenerChangeImage() {				
+	    //Método para cambiar las imagenes, mas adelante utulizaremos el metodo para acceder a la galeria de imagemes.    
+		public void addListenerChangeImage() {				
 				
 				final ImageView image = (ImageView) findViewById(R.id.newEvent_Image);	 
 				Button button = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
 				
 				button.setOnClickListener(new OnClickListener() {				
 					public void onClick(View arg0) {
-						postImage=(postImage+1)%(arrayIMG.length);
+						postImage = (postImage+1)%(arrayIMG.length);
 						image.setImageResource(arrayIMG[postImage]);
 					}
 				});
@@ -247,10 +244,8 @@ public class NewEventActivity extends ActivitiesHeader {
 	        return null;
 	    }
 	    
-	    
-	    
-	    /**Method that creates a new event with the data entered by user.
-	     * 
+	    /**
+	     * Method that creates a new event with the data entered by user.
 	     * @param view
 	     */   
 	    @SuppressLint("NewApi")
@@ -268,20 +263,19 @@ public class NewEventActivity extends ActivitiesHeader {
 			}				
 	    }
 	    
-	
-	    /**Method alert to cancel
-	     *
+	    /**
+	     * Method alert to cancel
 	     * @param view
 	     */
 	    public void alertCancelNewEvent(View view) {  //Alerta de cancelación del evento 	
 	    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 	    		//Título
-				alertDialogBuilder.setTitle("Alerta!!!");
+				alertDialogBuilder.setTitle("Biljet");
 	 
 				// Mensaje del díalogo
 				alertDialogBuilder
-					.setMessage("Estas seguro que quieres cancelar el evento "+((EditText) findViewById(R.id.newEvent_EditName)).getText().toString()+"?")
+					.setMessage("¿Estás seguro que quieres cancelar la creación del evento "+((EditText) findViewById(R.id.newEvent_EditName)).getText().toString()+"?")
 					.setCancelable(false)
 					.setPositiveButton("Si",new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int id) {
@@ -307,16 +301,16 @@ public class NewEventActivity extends ActivitiesHeader {
 	   private void alertRequiredField(){
 		   AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
 	        dlgAlert.setMessage("Es obligatorio rellenar todos los campos");
-	        dlgAlert.setTitle("Atención!!!");
+	        dlgAlert.setTitle("Biljet");
 	        dlgAlert.setPositiveButton("OK", null);
 	        dlgAlert.setCancelable(true);
 	        dlgAlert.create().show();  
 	   }
 	   
 	   //Creación del NUEVO EVENTO.
-	   /** Method to create a NEW EVENT
-	    * 
-	    * @return
+	   /**
+ 		* Method to create a NEW EVENT
+	    * @return Event object with all data related to it
 	    */
 	   private Event createNewEvent() {  
 		   String nombre = getNameNewEvent();
@@ -350,10 +344,9 @@ public class NewEventActivity extends ActivitiesHeader {
 	    * Returns the event name.
 	    * @return
 	    */
-	   @SuppressLint("NewApi")
 	   private String getNameNewEvent(){
 		   EditText editTxtName = (EditText) findViewById(R.id.newEvent_EditName);	   
-		   if(editTxtName.getText().toString().isEmpty()){
+		   if(editTxtName.getText().toString().equals("")){
 			   faltanCamposPorRellenar = true;
 		   }
 		   return editTxtName.getText().toString();
@@ -367,8 +360,6 @@ public class NewEventActivity extends ActivitiesHeader {
 		   return userProfile.getEventsOrganized().size()+1;	   
 	   }   
 	   
-	   
-	   
 	   /**
 	    * Returns the event logo.
 	    * @return
@@ -378,15 +369,13 @@ public class NewEventActivity extends ActivitiesHeader {
 		   return arrayIMG[postImage];  
 	   }  
 	   
-	   
 	   /**
 	    * Returns the event site.
 	    * @return
 	    */
-	   @SuppressLint("NewApi")
 	   private String getSiteNewEvent(){
 		   EditText editSite = (EditText) findViewById(R.id.newEvent_EditSite);
-		   if(editSite.getText().toString().isEmpty()){
+		   if(editSite.getText().toString().equals("")){
 			   faltanCamposPorRellenar = true;
 		   }
 		   return editSite.getText().toString();	   
@@ -405,15 +394,13 @@ public class NewEventActivity extends ActivitiesHeader {
 	   }
 	   */
 	   
-	   
 	   /**
 	    * Returns the event price.
-	    * @return
+	    * @return Ticket price
 	    */
-	   @SuppressLint("NewApi")
 	   private int getPriceNewEvent(){
 		   EditText editPrice = (EditText) findViewById(R.id.newEvent_EditPrice);	   
-		   if(editPrice.getText().toString().isEmpty()){
+		   if(editPrice.getText().toString().equals("")){
 			   faltanCamposPorRellenar = true;
 			   return 0;
 		   }
@@ -422,15 +409,13 @@ public class NewEventActivity extends ActivitiesHeader {
 		   } 	   
 	   }  
 	   
-	    
 	   /**
-	    * 
-	    * @return
+	    * Returns place capacity where the event it's going to be celebrated
+	    * @return capacity
 	    */
-	   @SuppressLint("NewApi")
 	   private int getCapacityNewEvent(){				// Número de entradas totales (disponibles: capacity - confirmedPeople //AFORO
 		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditCapacity);
-		   if(editCapacity.getText().toString().isEmpty()){		   
+		   if(editCapacity.getText().toString().equals("")){		   
 			   faltanCamposPorRellenar = true;
 			   return 0;
 		   }
@@ -439,15 +424,13 @@ public class NewEventActivity extends ActivitiesHeader {
 		   }
 	   }   
 	     
-	   
 	   /**
 	    * Returns the event length days
 	    * @return
 	    */
-	   @SuppressLint("NewApi")
 	   private int getLengthDaysNewEvent(){
 		   EditText editDays = (EditText) findViewById(R.id.newEvent_EditLengthDays);
-		   if(editDays.getText().toString().isEmpty()){
+		   if(editDays.getText().toString().equals("")){
 			   faltanCamposPorRellenar = true;
 			   return 0;
 		   }
@@ -456,15 +439,13 @@ public class NewEventActivity extends ActivitiesHeader {
 		   }
 	   }
 	   
-	   
 	   /**
 	    * Returns the event length hours
 	    * @return
 	    */
-	   @SuppressLint("NewApi")
 	   private int getLengthHoursNewEvent(){
 		   EditText editHours = (EditText) findViewById(R.id.newEvent_EditLengthHours);
-		   if(editHours.getText().toString().isEmpty()){
+		   if(editHours.getText().toString().equals("")){
 			   faltanCamposPorRellenar = true;
 			   return 0;
 		   }
@@ -473,15 +454,13 @@ public class NewEventActivity extends ActivitiesHeader {
 		   }
 	   }
 	   
-	   
 	   /**
 	    * Returns the event length minutes
 	    * @return
 	    */
-	   @SuppressLint("NewApi")
 	   private int getLengthMinutesNewEvent(){
 		   EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditLengthMinutes);
-		   if(editMinutes.getText().toString().isEmpty()){		   
+		   if(editMinutes.getText().toString().equals("")){		   
 			   faltanCamposPorRellenar = true;
 			   return 0;
 		   }
@@ -489,7 +468,6 @@ public class NewEventActivity extends ActivitiesHeader {
 			   return Integer.parseInt(editMinutes.getText().toString());
 		   }
 	   }
-	   
 	   
 	   /**
 	    * Return the name of the creator of the event 
@@ -503,10 +481,9 @@ public class NewEventActivity extends ActivitiesHeader {
 	    * Returns detailed event information
 	    * @return
 	    */
-	   @SuppressLint("NewApi")
 	   private String getInfoNewEvent(){			
 		   EditText editInfo = (EditText) findViewById(R.id.newEvent_EditInfo);
-		   if(editInfo.getText().toString().isEmpty()){
+		   if(editInfo.getText().toString().equals("")){
 			   faltanCamposPorRellenar = true;
 		   }
 		   return editInfo.getText().toString();

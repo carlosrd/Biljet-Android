@@ -7,15 +7,31 @@
     <string name="action_settings">Settings</string>
 
     <!--
-         MisEventosActivity
-    	 ***********************************************************************
+         MyEventsActivity
+  	 	 ***********************************************************************
     -->
 
     <string name="myEvents_TxtEventsToGo"> > Eventos a los que voy: </string>
     <string name="myEvents_TxtSelect"> > ¿Que eventos quieres mostrar?</string>
 
     <!--
-         eventViewActivity
+         CalendarViewActivity
+    	 ***********************************************************************
+    -->
+
+    <string name="calendarView_ButtonPrevious"> &lt;&lt; </string>
+    <string name="calendarView_MonthText"> dfsd </string>
+    <string name="calendarView_ButtonNext"> >> </string>
+    <string name="calendarView_LabelMonday"> Lun </string>
+    <string name="calendarView_LabelTuesday"> Mar </string>
+    <string name="calendarView_LabelWednesday"> Mie </string>
+    <string name="calendarView_LabelThursday"> Jue </string>
+    <string name="calendarView_LabelFriday"> Vie </string>
+    <string name="calendarView_LabelSaturday"> Sab </string>
+    <string name="calendarView_LabelSunday"> Dom </string>
+
+    <!--
+         EventViewActivity
     	 ***********************************************************************
     -->
 
@@ -46,11 +62,13 @@
     <string name="contentDescription_Avatar">avatar_amigo</string>
     <string name="contentDescription_ButtonNext">boton_next</string>
     <string name="contentDescription_ImageEvent">imagen_evento</string>
+    <string name="contentDescription_ImageCalendarItem">imagen_elemento_calendario</string>
 
     <!--
           Titulos Actividades
-    	  **********************************************************************
+    	  **********************************************************************
     -->
+
     <string name="title_activity_my_friends">Biljet - Mis Amigos</string>
     <string name="title_activity_friend_view">Biljet - Detalles Amigo</string>
     <string name="title_activity_my_profile">Biljet - Mi Perfil</string>
@@ -58,10 +76,13 @@
     <string name="title_activity_event_view">Biljet - Detalles del Evento</string>
     <string name="title_activity_my_events">Biljet - Mis Eventos</string>
     <string name="title_activity_new_event">Biljet - Crear Nuevo Evento</string>
+    <string name="title_activity_calendar_view">Biljet - Calendario</string>
     <string name="title_activity_search">Biljet - Buscar</string>
+    <string name="title_activity_day_view">Biljet - Vista Día</string>
+
     <!--
          MyProfileActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="myProfile_LabelCity">Ciudad: </string>
@@ -72,28 +93,27 @@
     <string name="myProfile_LabelTwitter">Twitter: </string>
     <string name="myProfile_LabelFacebook">Facebook: </string>
     <string name="myProfile_LabelLast_login">Última visita el día: </string>
-    
-	<!--
-         NewEventActivity
-    	 ***********************************************************************
 
-    -->	
-    
-	<string name="newEvent_LabelName">Nombre del evento: </string>    
-    <string name="newEvent_LabelEventType">"Tipo:"</string>    
+    <!--
+         NewEventActivity
+    	 ***********************************************************************
+    -->
+
+    <string name="newEvent_LabelName">Nombre del evento: </string>
+    <string name="newEvent_LabelEventType">"Tipo:"</string>
     <string name="newEvent_LabelSite">"Lugar:"</string>
-    <string name="newEvent_LabelPrice">"Precio:"</string>    
+    <string name="newEvent_LabelPrice">"Precio:"</string>
     <string name="newEvent_LabelLength">"Duración aproximada:"</string>
-	<string name="newEvent_LabelLengthDays">"Días:"</string>
-	<string name="newEvent_LabelLengthHours">"Horas"</string>
-	<string name="newEvent_LabelLengthMinutes">"Min:"</string>
+    <string name="newEvent_LabelLengthDays">"Días:"</string>
+    <string name="newEvent_LabelLengthHours">"Horas"</string>
+    <string name="newEvent_LabelLengthMinutes">"Min:"</string>
     <string name="newEvent_LabelCapacity">"Aforo:"</string>
-    <string name="newEvent_LabelInfo">"Observaciones:"</string>    
+    <string name="newEvent_LabelInfo">"Observaciones:"</string>
     <string name="newEvent_LabelDate">"Fecha:"</string>
-	<string name="newEvent_LabelTime">"Hora:"</string>		
-	<string name="newEvent_ButtonSetDate">"Set date" </string>
-	<string name="newEvent_ButtonSetTime">"Set time" </string>		
-	<string name="newEvent_ButtonCreateEvent">"Crear" </string>
-	<string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
+    <string name="newEvent_LabelTime">"Hora:"</string>
+    <string name="newEvent_ButtonSetDate">"Set date" </string>
+    <string name="newEvent_ButtonSetTime">"Set time" </string>
+    <string name="newEvent_ButtonCreateEvent">"Crear" </string>
+    <string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
 
 </resources>

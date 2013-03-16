@@ -83,8 +83,16 @@
             android:label="@string/title_activity_new_event" >
         </activity>
         <activity
+            android:name="com.biljet.app.CalendarViewActivity"
+            android:label="@string/title_activity_calendar_view" >
+        </activity>
+        <activity
             android:name="com.biljet.app.SearchActivity"
             android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.DayViewActivity"
+            android:label="@string/title_activity_day_view" >
         </activity>
     </application>
 
