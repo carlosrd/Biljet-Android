@@ -12,7 +12,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.FriendsAdapter;
@@ -162,7 +161,7 @@ public class SearchActivity extends ActivitiesHeader {
 		ArrayList<Event> resultado = new ArrayList<Event>();
 		
 		for(Event e:eventsList)		
-			if(e.getName().equals(s))	
+			if(e.getName().contains(s))	 
 				resultado.add(e);
 		
 		return resultado;
@@ -178,7 +177,7 @@ public class SearchActivity extends ActivitiesHeader {
 		ArrayList<Friend> resultado = new ArrayList<Friend>();
 		
 		for(Friend f:friendsList)		
-			if(f.getName().equals(s))	
+			if(f.getName().contains(s))	
 				resultado.add(f);
 		
 		return resultado;
@@ -199,9 +198,9 @@ public class SearchActivity extends ActivitiesHeader {
 	
 	private ArrayList<Friend> getFriends(){
 		ArrayList<Friend> Samples = new ArrayList<Friend>();
-	     Samples.add(new Friend(1, "alan", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
+	     Samples.add(new Friend(1, "alan sdfds", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
 	     Samples.add(new Friend(2, "Albert Einstein", "Ulm", R.drawable.usr_albert,"Albert Einstein es un físico alemán de origen judío, nacionalizado después suizo y estadounidense. Es considerado como el científico más importante del siglo XX"));
-	     Samples.add(new Friend(3, "alan", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
+	     Samples.add(new Friend(3, "alan asdgsd", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
 	     Samples.add(new Friend(4, "Gordon Earl Moore", "San Francisco", R.drawable.usr_gordon,"Gordon Earl Moore es el cofundador de Intel y autor de la Ley de Moore. Nacido en San Francisco, California el 3 de enero de 1929. Recibió un certificado de bachiller de ciencias en química por la Universidad de California en Berkeley en 1950 y un Ph."));
 	     Samples.add(new Friend(5, "Frank Gray", "Alpine", R.drawable.usr_gray,"Frank Gray es un fisico e investigador en los Laboratorios Bell. Hizo numerosas inovaciones mecanicas y electronicas en la televisión. Famoso por el Código Gray."));
 	     Samples.add(new Friend(6, "Isaac Newton", "Londres", R.drawable.usr_isaac,"Sir Isaac Newton es un físico, filósofo, teólogo, inventor, alquimista y matemático inglés, autor de los Philosophiae naturalis principia mathematica, más conocidos como los Principia, donde describió la ley de la gravitación universal y estableció las bases de la mecánica clásica mediante las leyes que llevan su nombre."));
