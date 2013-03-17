@@ -18,7 +18,7 @@
 	<RelativeLayout 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:background="#0B0B61" >
+	    android:background="#F0F8FF" >
 	   
 	   <!-- Button Previous -->
 	   
@@ -36,7 +36,7 @@
 		    	android:height="35dp"
 		    	android:width="35dp"
 		    	android:background="#0040FF"
-		    	android:textColor="#FFFFFF" 
+		    	android:textColor="#000000" 
 		    	android:textStyle="bold" />
 		    
 		</LinearLayout>
@@ -53,7 +53,7 @@
 			android:text="@string/calendarView_MonthText"
 			android:gravity="center_horizontal"
 	        android:textAppearance="?android:attr/textAppearanceLarge" 
-	        android:textColor="#FFFFFF"/>
+	        android:textColor="#000000"/>
 	    
 	   	<!-- Button Next -->
 	    
@@ -72,7 +72,7 @@
 		    	android:height="35dp"
 		    	android:width="35dp"
 		    	android:background="#0040FF"
-		    	android:textColor="#FFFFFF" 
+		    	android:textColor="#000000" 
 		    	android:textStyle="bold" />
 		    
 	    </LinearLayout>
@@ -84,7 +84,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:numColumns="7"
-	    android:background="#0B0B61"
+	    android:background="#F0F8FF"
 	    android:verticalSpacing="2dp"
 	    android:clickable="false" >
 	</GridView>
@@ -94,9 +94,11 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:numColumns="7" 
-	   	android:background="#0B0B61"
+	   	android:background="#F0F8FF"
 	    android:verticalSpacing="2dp"
 	    android:horizontalSpacing="2dp">
 	</GridView>
+	
+	<!-- color de antes en el fondo -> android:background="#0B0B61" -->
 	
 </LinearLayout>

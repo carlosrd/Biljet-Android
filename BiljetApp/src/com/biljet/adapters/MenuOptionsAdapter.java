@@ -17,11 +17,11 @@ public class MenuOptionsAdapter extends ArrayAdapter<MenuOption> {
 		
 		private static MenuOption[] options =
 				new MenuOption[]{
-				new MenuOption("Prox Eventos",android.R.drawable.ic_menu_today),
-				new MenuOption("Mis Eventos",android.R.drawable.ic_menu_agenda),
+				new MenuOption("Prox Eventos",R.drawable.prox_eventos),	// android.R.drawable.ic_menu_today
+				new MenuOption("Mis Eventos",R.drawable.mis_eventos), // android.R.drawable.ic_menu_agenda
 				new MenuOption("Amigos", R.drawable.amigos),
-				new MenuOption("Calendario",android.R.drawable.ic_menu_my_calendar),
-				new MenuOption("Sección 5",android.R.drawable.ic_menu_crop)};
+				new MenuOption("Calendario",R.drawable.calendario)//, // android.R.drawable.ic_menu_my_calendar
+				/*new MenuOption("Sección 5",android.R.drawable.ic_menu_crop)*/};
 		
 
 		public MenuOptionsAdapter(Activity context) {
