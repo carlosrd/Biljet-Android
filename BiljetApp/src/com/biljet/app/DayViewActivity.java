@@ -16,7 +16,7 @@ public class DayViewActivity extends ActivitiesHeader {
         // ACTION BAR
      	// **************************************************************************************
         
-		createHeaderView(R.drawable.header_back_button,"Mi Calendario",android.R.drawable.ic_input_add,true);
+		createHeaderView(R.drawable.header_back_button,"Mi Calendario",R.drawable.mas,true);
 		setBackButton();
 		setRightButtonAction(NewEventActivity.class);
 		

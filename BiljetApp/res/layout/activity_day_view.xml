@@ -17,7 +17,7 @@
 	<RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="40dp"
-        android:background="#0B0B61" >
+        android:background="#444444" >
 
         <TextView
             android:id="@+id/dayView_LabelDate"

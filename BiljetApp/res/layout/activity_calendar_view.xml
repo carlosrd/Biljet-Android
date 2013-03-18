@@ -35,7 +35,7 @@
 				android:gravity="center"
 		    	android:height="35dp"
 		    	android:width="35dp"
-		    	android:background="#0040FF"
+		    	android:background="#F0F8FF"
 		    	android:textColor="#000000" 
 		    	android:textStyle="bold" />
 		    
@@ -71,7 +71,7 @@
 		    	android:gravity="center"
 		    	android:height="35dp"
 		    	android:width="35dp"
-		    	android:background="#0040FF"
+		    	android:background="#F0F8FF"
 		    	android:textColor="#000000" 
 		    	android:textStyle="bold" />
 		    

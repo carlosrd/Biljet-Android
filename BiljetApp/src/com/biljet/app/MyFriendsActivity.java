@@ -25,7 +25,7 @@ public class MyFriendsActivity extends ActivitiesHeader {
         // ACTION BAR
      	// **************************************************************************************
         
-        createHeaderView(R.drawable.header_back_button,"Mis Amigos", android.R.drawable.ic_menu_search,true);
+        createHeaderView(R.drawable.header_back_button,"Mis Amigos", R.drawable.buscar,true);
 		setBackButton();
 		setRightButtonAction(SearchActivity.class, 'a');
 		
