@@ -4,23 +4,26 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biljet.adapters.ActivitiesHeader;
+import com.biljet.adapters.ImageAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.biljet.types.User;
 
 public class MyProfileActivity extends ActivitiesHeader {
-
-    private Gallery gallery_events_signup;
-    private Gallery gallery_events_follow;
-    private Gallery gallery_events_organized;
-    
-    //////////////////
-    
+   
+	final ArrayList<Integer> array_e_f = new ArrayList<Integer>();
+	final ArrayList<Integer> array_e_o = new ArrayList<Integer>();
+	final ArrayList<Integer> array_e_s = new ArrayList<Integer>();
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +32,7 @@ public class MyProfileActivity extends ActivitiesHeader {
     //cabecera(true, drawable.home, MenuActivity.class, "Mi Profile", false, android.R.drawable.ic_input_add, NuevoEventActivity.class);
         createHeaderView(R.drawable.header_back_button,"Mi Perfil", android.R.drawable.ic_input_add,false);
 		setBackButton();
-		
-		Gallery gallery = (Gallery)findViewById(R.id.myProfile_LabelEventsFollow);
-		
+
 		User userProfile = getUser();
 		
 	//image
@@ -63,27 +64,64 @@ public class MyProfileActivity extends ActivitiesHeader {
 		TextView txtLastLogin = (TextView)findViewById(R.id.myProfile_TxtLastLogin);
 		txtLastLogin.setText(userProfile.getLastLogin());	
 		
-	//eventsFollow
-	    ArrayList<Integer> picView = new ArrayList<Integer>();
-	    ImageView i;
+		
+	// metemos solo las imagenes de los eventos en la galería pictures_events_follow
+		final ArrayList<String> nombres_f = new ArrayList<String>();
 		for(Event ev:userProfile.getEventsFollow()){
-			
+			array_e_f.add(ev.getImage());
+			nombres_f.add(ev.getName());
 		}
 		
-		// metemos solo las imagenes de los eventos en la galería pictures_events_follow
 			
-	//eventsOrganized
-		String evOrganized = "";
-		for(Event ev:userProfile.getEventsOrganized())	 evOrganized = evOrganized + ev.getName() + "\n"; 
-	
-		// metemos solo las imagenes de los eventos en la galería myProfile_LabelEventsOrganized
+	// metemos solo las imagenes de los eventos en la galería myProfile_LabelEventsOrganized
+		final ArrayList<String> nombres_o = new ArrayList<String>();
+		for(Event ev:userProfile.getEventsOrganized()){
+			array_e_o.add(ev.getImage());
+			nombres_o.add(ev.getName());
+		}
 		
-	//eventsSignup
-		String evSignup = "";
-		for(Event ev:userProfile.getEventsSignup())	 evSignup = evSignup + ev.getName() + "\n"; 
 		
-		// metemos solo las imagenes de los eventos en la galería pictures_events_signup
+	// metemos solo las imagenes de los eventos en la galería pictures_events_signup
+		final ArrayList<String> nombres_s = new ArrayList<String>();
+		for(Event ev:userProfile.getEventsSignup()){
+			array_e_s.add(ev.getImage());
+			nombres_s.add(ev.getName());
+		}
+
+	// Adaptadores 
 		
+		ImageAdapter adapter_e_f = new ImageAdapter(this, array_e_f);
+		
+		Gallery gallery_events_follow = (Gallery)findViewById(R.id.pictures_events_follow);
+		gallery_events_follow.setAdapter(adapter_e_f);
+		
+		gallery_events_follow.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView parent, View v, int position, long id){
+				Toast.makeText(MyProfileActivity.this, nombres_f.get(position), Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		ImageAdapter adapter_e_o = new ImageAdapter(this, array_e_o);
+		
+		Gallery gallery_events_organized = (Gallery)findViewById(R.id.pictures_events_organized);
+		gallery_events_organized.setAdapter(adapter_e_o);
+		
+		gallery_events_organized.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView parent, View v, int position, long id){
+				Toast.makeText(MyProfileActivity.this, nombres_o.get(position), Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		ImageAdapter adapter_e_s = new ImageAdapter(this, array_e_s);
+		
+		Gallery gallery_events_signup = (Gallery)findViewById(R.id.pictures_events_signup);
+		gallery_events_signup.setAdapter(adapter_e_s);
+		
+		gallery_events_signup.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView parent, View v, int position, long id){
+				Toast.makeText(MyProfileActivity.this, nombres_s.get(position), Toast.LENGTH_SHORT).show();
+			}
+		});
     }
 
     @Override

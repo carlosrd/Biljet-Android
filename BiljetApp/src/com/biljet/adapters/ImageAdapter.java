@@ -3,14 +3,11 @@ package com.biljet.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-
-import com.biljet.app.R;
 
 public class ImageAdapter extends BaseAdapter{
 	
@@ -19,12 +16,14 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private ArrayList<Integer> imagesID = new ArrayList<Integer>();
 	
-	public ImageAdapter(Context c){
+	public ImageAdapter(Context c, ArrayList<Integer> i){
 		context = c;
-		TypedArray attr = context.obtainStyledAttributes(R.styleable.GalleryEventsFollow);
+		imagesID = i;
+			
+		/*TypedArray attr = context.obtainStyledAttributes(R.styleable.GalleryEventsFollow);
 		galleryItemBackground = attr.getResourceId(
 				R.styleable.GalleryEventsFollow_android_galleryItemBackground, 0);
-		attr.recycle();
+		attr.recycle();*/
 	}
 	
 	@Override
