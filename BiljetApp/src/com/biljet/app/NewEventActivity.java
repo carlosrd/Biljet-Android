@@ -31,9 +31,18 @@ import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.biljet.types.User;
 
-/** 
- * This class provides methods to create a new event, where the user enters the event data, such as:
- * Name, type, date, time, price, approximate time, logo and details of the event.
+/**
+ *This class provides methods to save the preferences (settings) as:
+ *
+ *Sound notification.
+ *Vibration notification.
+ *Notification lighting.
+ *
+ *Receive e-mail notifications.
+ *
+ *Update personal information (phone, mobile, address)
+ *
+ *Change the user's password.
  */
 public class NewEventActivity extends ActivitiesHeader {
 	
@@ -73,8 +82,8 @@ public class NewEventActivity extends ActivitiesHeader {
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.activity_new_event);
-	        
+	       
+	        setContentView(R.layout.activity_new_event);	        
 	
 	        createHeaderView(R.drawable.header_back_button,"Nuevo Evento", R.drawable.amigo,false);
 			setBackButton();
