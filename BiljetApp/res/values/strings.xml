@@ -88,6 +88,7 @@
 
     <string name="myProfile_LabelCity">Ciudad: </string>
     <string name="myProfile_LabelBio">Biografía: </string>
+    <string name="myProfile_find_me">Me puedes encontrar en: </string>
     <string name="myProfile_LabelEvents_follow">Eventos a los que sigo: </string>
     <string name="myProfile_LabelEvents_organized">Eventos que organizo: </string>
     <string name="myProfile_LabelEvents_signup">Eventos a los que voy: </string>
@@ -117,4 +118,9 @@
     <string name="newEvent_ButtonCreateEvent">"Crear" </string>
     <string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
 
+    <!--
+         Used in the gallery part
+    	 ***********************************************************************
+    -->
+    <string name="picture">Picture</string>
 </resources>

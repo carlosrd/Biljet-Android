@@ -17,7 +17,8 @@
 	
 	<!-- Vista Evento -->
 	
-    <ScrollView android:layout_width="fill_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         
     	<LinearLayout 

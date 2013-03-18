@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,11 +15,26 @@ import com.biljet.types.User;
 
 public class MyProfileActivity extends ActivitiesHeader {
 
+	
+	/* Atributos para la gallery: pictures_events_signup */
+    
+    //variable for selection intent
+    private final int PICKER = 1;	// Para identificar que imagen has pulsado
+
+    //variable to store the currently selected image
+    private int currentPic = 0;
+    
+    //gallery object
+    private Gallery picGallery;
+    
+    //image view for larger display
+    private ImageView picView;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
-        
+   
     //cabecera(true, drawable.home, MenuActivity.class, "Mi Profile", false, android.R.drawable.ic_input_add, NuevoEventActivity.class);
         createHeaderView(R.drawable.header_back_button,"Mi Perfil", android.R.drawable.ic_input_add,false);
 		setBackButton();
@@ -58,22 +74,19 @@ public class MyProfileActivity extends ActivitiesHeader {
 		String evFollow = "";
 		for(Event ev:userProfile.getEventsFollow())	 evFollow = evFollow + ev.getName() + "\n"; 
 		
-		TextView txtEventsFollow = (TextView)findViewById(R.id.myProfile_TxtEventsFollow);
-		txtEventsFollow.setText(evFollow);	
+		// metemos solo las imagenes de los eventos en la galería pictures_events_follow
 			
 	//eventsOrganized
 		String evOrganized = "";
 		for(Event ev:userProfile.getEventsOrganized())	 evOrganized = evOrganized + ev.getName() + "\n"; 
 	
-		TextView txtEventsOrganized = (TextView)findViewById(R.id.myProfile_TxtEventsOrganized);
-		txtEventsOrganized.setText(evOrganized);	
+		// metemos solo las imagenes de los eventos en la galería myProfile_LabelEventsOrganized
 		
 	//eventsSignup
 		String evSignup = "";
 		for(Event ev:userProfile.getEventsSignup())	 evSignup = evSignup + ev.getName() + "\n"; 
 		
-		TextView txtEventsSignup = (TextView)findViewById(R.id.myProfile_TxtEventsSignup);
-		txtEventsSignup.setText(evSignup);
+		// metemos solo las imagenes de los eventos en la galería pictures_events_signup
 		
     }
 
