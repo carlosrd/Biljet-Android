@@ -18,291 +18,299 @@
     <ScrollView android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         
-    <LinearLayout 
-		    android:orientation="vertical"
-		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent">    
-		    	
+		<LinearLayout 
+			android:orientation="vertical"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent">    
+		   	
 			<RelativeLayout
-		        android:layout_width="fill_parent"
-		        android:layout_height="40dp"
-		        android:background="#0B0B61" > 
-		        
-				    <TextView				        
-				        android:id="@+id/sharedPreferences_LabelNotifications"				        
-				        android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:layout_centerVertical="true"
-			            android:layout_marginLeft="5dp"
-			            android:text="@string/sharedPreferences_LabelNotifications"
-			            android:textColor="#FFFFFF"
-			            android:textStyle="bold" 
-			          />
-			</RelativeLayout>
-		
-			  
+				android:layout_width="fill_parent"
+				android:layout_height="40dp"
+				android:background="#0B0B61"> 
+				
+				<TextView				        
+					android:id="@+id/sharedPreferences_LabelNotifications"				        
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:layout_marginLeft="5dp"
+					android:text="@string/sharedPreferences_LabelNotifications"
+					android:textColor="#FFFFFF"
+					android:textStyle="bold">
+				</TextView>									
+			</RelativeLayout>	
+				  
 			<CheckBox
-			       android:id="@+id/sharedPreferences_CheckBoxReceiveMsg" 
-			       android:layout_width="wrap_content"
-			       android:layout_height="wrap_content"			        
-			       android:text="@string/sharedPreferences_CheckBoxReceiveMsg" />
-			
-			  			   		   
-			<!-- tabulado de los checkbuttons de notificaciones -->
-			   <LinearLayout 
-			    android:orientation="vertical"
-			    android:layout_width="fill_parent" 
+				android:id="@+id/sharedPreferences_CheckBoxReceiveMsg" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"			        
+				android:text="@string/sharedPreferences_CheckBoxReceiveMsg">
+			</CheckBox>	
+		  			   		   
+		<!-- tabulado de los checkbuttons de notificaciones -->
+			<LinearLayout 
+				android:orientation="vertical"
+				android:layout_width="fill_parent" 
 				android:layout_height="fill_parent"
 				android:layout_marginLeft="40dp">
-			        
-				    <CheckBox
-				        android:id="@+id/sharedPreferences_CheckBoxRMsgBySound"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"				        		        	        
-				        android:text="@string/sharedPreferences_CheckBoxRMsgBySound" />
-				    
-				    <CheckBox
-				        android:id="@+id/sharedPreferences_CheckBoxRMsgByVibration"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"
-				        android:text="@string/sharedPreferences_CheckBoxRMsgByVibration" />
-				    
-				    <CheckBox
-				        android:id="@+id/sharedPreferences_checkBoxRMsgByLight"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"				            
-				        android:text="@string/sharedPreferences_checkBoxRMsgByLight" />
-			   </LinearLayout>
-			   
-			  <!-- Checkbutton: Recibir notificaciones por e-mail -->
-			  <CheckBox
-			       android:id="@+id/sharedPreferences_CheckBoxRMsgByEmail"
-			       android:layout_width="wrap_content"
-			       android:layout_height="wrap_content"			        
-			       android:text="@string/sharedPreferences_CheckBoxRMsgByEmail" />
-			  
-				<RelativeLayout
-				     android:layout_width="fill_parent"
-				     android:layout_height="40dp"
-				     android:background="#0B0B61" > 
-				     
-				   <TextView
-				       android:id="@+id/sharedPreferences_LabelPersonalData"
-				       android:layout_width="wrap_content"
-				          android:layout_height="wrap_content"
-				          android:layout_centerVertical="true"
-				          android:layout_marginLeft="5dp"
-				          android:text="@string/sharedPreferences_LabelPersonalData"
-				          android:textColor="#FFFFFF"
-				          android:textStyle="bold" 
-				        />
-				</RelativeLayout>			  
-
-				<!-- Datos personales-->
-			<TextView
-				    android:id="@+id/sharedPreferences_LabelUpdatePersonalData"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:textStyle="bold" 
-				    android:text="@string/sharedPreferences_LabelUpdatePersonalData"/>
-			
-			<LinearLayout
-		        android:id="@+id/relativeLayout1"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content" 
-		        >
-		 
-		        <TextView
-		            android:id="@+id/sharedPreferences_LabelPhone"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:text="@string/sharedPreferences_LabelPhone"/>	
-		            	 
-		        <EditText
-		            android:id="@+id/sharedPreferences_EditPhone" 		          
-		            android:layout_width="fill_parent"
-		            android:layout_height="wrap_content"	
-		            android:layout_marginLeft="20dp"		  
-		            android:phoneNumber="true"
-		            android:inputType=""                
-		            android:hint=""/>		 
-		    </LinearLayout>
-		    
-			<LinearLayout
-		        android:id="@+id/sharedPreferences_lativeLayoutMobil"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content" 
-		        >
-		 
-		        <TextView
-		            android:id="@+id/sharedPreferences_TextMobil"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"		                       		                    
-		            android:text="@string/sharedPreferences_LabelMobil"/>		
-		             
-		        <EditText
-		            android:id="@+id/sharedPreferences_EditMobil"
-		            android:layout_width="fill_parent"
-		            android:layout_height="wrap_content"		           
-		            android:layout_marginLeft="40dp"
-		            android:hint=""/>		 
-		            
-		    </LinearLayout>
-		    
-			<LinearLayout		       
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content" 
-		        >
-		 
-		        <TextView
-		            android:id="@+id/sharedPreferences_LabelAddress"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:text="@string/sharedPreferences_LabelAddress"/>		 
-		            
-		        <EditText
-		            android:id="@+id/sharedPreferences_EditAddress"
-		            android:layout_width="fill_parent"
-		            android:layout_height="wrap_content"		            
-		            android:layout_marginLeft="15dp"
-		            android:hint=""/>
-		        		 
-		    </LinearLayout>
-		    
-	    		<RelativeLayout
-				     android:layout_width="fill_parent"
-				     android:layout_height="40dp"
-				     android:background="#0B0B61" > 
-				     
-				   <TextView
-				       android:id="@+id/sharedPreferences_LabelCountBiljet"
-				       android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:layout_centerVertical="true"
-			          android:layout_marginLeft="5dp"
-			          android:text="@string/sharedPreferences_LabelCountBiljet"
-			          android:textColor="#FFFFFF"
-			          android:textStyle="bold" 
-				        />
-				</RelativeLayout>
-	     		
-	    		<TextView
-				    android:id="@+id/sharedPreferences_LabelUpdateCountBiljet"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:textStyle="bold" 
-				    android:text="@string/sharedPreferences_LabelUpdateCountBiljet"/>
-	     
-	    		<CheckBox
-			       android:id="@+id/sharedPreferences_CheckBoxChangePassword"
-			       android:layout_width="wrap_content"
-			       android:layout_height="wrap_content"			        
-			       android:text="@string/sharedPreferences_CheckBoxChangePassword" />
-	    		
-	    		<!-- Separator 1-->     
-				    	
-				<RelativeLayout
-				    android:layout_width="fill_parent"
-			        android:layout_height="2dp"
-			        android:background="#000000">    
-					  
-				</RelativeLayout>
-	    		
-	    		
-				<LinearLayout				    
-				    android:layout_width="fill_parent" 
-					android:layout_height="wrap_content"
-					android:orientation="horizontal"					
-					android:layout_gravity="center_vertical">    
-					
-						<TextView
-						    android:id="@+id/sharedPreferences_LabelCurrentPassword"
-						    android:layout_width="wrap_content"
-						    android:layout_height="wrap_content"
-						    android:layout_marginLeft="50dp"
-						    android:text="@string/sharedPreferences_LabelCurrentPassword"/>
-					 
-						<EditText
-						    android:id="@+id/sharedPreferences_EditCurrentPassword"
-						    android:layout_width="match_parent"						    
-						    android:layout_height="wrap_content"
-						    android:inputType="textPassword"
-						    android:enabled="false"
-						    android:layout_marginRight="50dp">      
-						    
-						</EditText>					
-						
-				</LinearLayout>		
+				   
+				<CheckBox
+				    android:id="@+id/sharedPreferences_CheckBoxRMsgBySound"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"				        		        	        
+				    android:text="@string/sharedPreferences_CheckBoxRMsgBySound">
+				</CheckBox>   
 				
-				<LinearLayout				    
-				    android:layout_width="fill_parent" 
-					android:layout_height="wrap_content"
-					android:orientation="horizontal"					
-					android:layout_gravity="center_vertical">    
-					
-						<TextView
-						    android:id="@+id/sharedPreferences_LabelNewPassword"
-						    android:layout_width="wrap_content"
-						    android:layout_height="wrap_content"
-						    android:layout_marginLeft="50dp"						    
-						    android:text="@string/sharedPreferences_LabelNewPassword"/>
-					 
-						<EditText
-						    android:id="@+id/sharedPreferences_EditNewPassword"
-						    android:layout_width="match_parent"						    
-						    android:layout_height="wrap_content"
-						    android:inputType="textPassword"
-						    android:enabled="false"
-						    android:layout_marginRight="50dp">      
-						    
-						</EditText>					
-						
-				</LinearLayout>		
+				<CheckBox
+				    android:id="@+id/sharedPreferences_CheckBoxRMsgByVibration"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/sharedPreferences_CheckBoxRMsgByVibration">
+				</CheckBox>    
 				
-				<LinearLayout				    
-				    android:layout_width="fill_parent" 
+				<CheckBox
+				    android:id="@+id/sharedPreferences_checkBoxRMsgByLight"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"				            
+				    android:text="@string/sharedPreferences_checkBoxRMsgByLight">
+				</CheckBox>    
+			</LinearLayout>
+		   
+		  <!-- Checkbutton: Recibir notificaciones por e-mail -->
+			<CheckBox
+				android:id="@+id/sharedPreferences_CheckBoxRMsgByEmail"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"			        
+				android:text="@string/sharedPreferences_CheckBoxRMsgByEmail">
+			</CheckBox>	
+		  
+			<RelativeLayout
+				android:layout_width="fill_parent"
+				android:layout_height="40dp"
+				android:background="#0B0B61" >
+     
+				<TextView
+					android:id="@+id/sharedPreferences_LabelPersonalData"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:orientation="horizontal"					
-					android:layout_gravity="center_vertical">    
+					android:layout_centerVertical="true"
+					android:layout_marginLeft="5dp"
+					android:text="@string/sharedPreferences_LabelPersonalData"
+					android:textColor="#FFFFFF"
+					android:textStyle="bold">
+				</TextView>
 					
-						<TextView
-						    android:id="@+id/sharedPreferences_LabelRepeatNewPassword"
-						    android:layout_width="wrap_content"
-						    android:layout_height="wrap_content"
-						    android:layout_marginLeft="50dp"
-						    android:text="@string/sharedPreferences_LabelRepeatNewPassword"/>
-					 
-						<EditText
-						    android:id="@+id/sharedPreferences_EditRepeatNewPassword"
-						    android:layout_width="match_parent"						    
-						    android:layout_height="wrap_content"
-						    android:inputType="textPassword"
-						    android:enabled="false"
-						    android:layout_marginRight="50dp">      						    
-						</EditText>					
-						
-				</LinearLayout>			 
-
+			</RelativeLayout>			  
 		
-	   <!-- Separator 2-->     				      	
+			<!-- Datos personales-->
+			<TextView
+				android:id="@+id/sharedPreferences_LabelUpdatePersonalData"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textStyle="bold" 
+				android:text="@string/sharedPreferences_LabelUpdatePersonalData">
+			</TextView>	
+	
+			<LinearLayout
+				android:id="@+id/relativeLayout1"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+		
+				<TextView
+					android:id="@+id/sharedPreferences_LabelPhone"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/sharedPreferences_LabelPhone">
+				</TextView>		
+		           	 
+				<EditText
+					android:id="@+id/sharedPreferences_EditPhone" 		          
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"	
+					android:layout_marginLeft="20dp"		           
+					android:inputType="phone"   
+				    android:hint="">
+				</EditText>    		 
+			</LinearLayout>
+		   
+			<LinearLayout				
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+						
+				<TextView
+					android:id="@+id/sharedPreferences_TextMobil"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"		                       		                    
+					android:text="@string/sharedPreferences_LabelMobil">
+				</TextView>			
+					 
+				<EditText
+					android:id="@+id/sharedPreferences_EditMobil"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"		           
+					android:layout_marginLeft="40dp"
+					android:hint="">
+				</EditText>			 
+		           
+			</LinearLayout>
+		   
+			<LinearLayout		       
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content" >
+				
+				<TextView
+				    android:id="@+id/sharedPreferences_LabelAddress"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/sharedPreferences_LabelAddress">
+				</TextView>    		 
+				    
+				<EditText
+				    android:id="@+id/sharedPreferences_EditAddress"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"		            
+				    android:layout_marginLeft="15dp"
+				    android:hint="">
+				</EditText>    
+		       		 
+			</LinearLayout>
+		   
+			<RelativeLayout
+				android:layout_width="fill_parent"
+				android:layout_height="40dp"
+				android:background="#0B0B61" > 
+			     
+				<TextView
+					android:id="@+id/sharedPreferences_LabelCountBiljet"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:layout_marginLeft="5dp"
+					android:text="@string/sharedPreferences_LabelCountBiljet"
+					android:textColor="#FFFFFF"
+					android:textStyle="bold">
+				</TextView>
+					
+			</RelativeLayout>
+		   		
+			<TextView
+				android:id="@+id/sharedPreferences_LabelUpdateCountBiljet"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textStyle="bold" 
+				android:text="@string/sharedPreferences_LabelUpdateCountBiljet">
+			</TextView>	
+				
+			<CheckBox
+				android:id="@+id/sharedPreferences_CheckBoxChangePassword"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"			        
+				android:text="@string/sharedPreferences_CheckBoxChangePassword">
+			</CheckBox>	
+		  		
+		  	<!-- Separator 1-->    
+			    	
 			<RelativeLayout
 			    android:layout_width="fill_parent"
 		        android:layout_height="2dp"
-		        android:background="#000000">       							  
+		        android:background="#000000"/>    
+				 	
+			<LinearLayout				    
+			    android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"					
+				android:layout_gravity="center_vertical">    
+				
+					<TextView
+					    android:id="@+id/sharedPreferences_LabelCurrentPassword"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_marginLeft="50dp"
+					    android:text="@string/sharedPreferences_LabelCurrentPassword">
+					</TextView>
+				 
+					<EditText
+					    android:id="@+id/sharedPreferences_EditCurrentPassword"
+					    android:layout_width="match_parent"						    
+					    android:layout_height="wrap_content"
+					    android:inputType="textPassword"
+					    android:enabled="false"
+					    android:layout_marginRight="50dp">    				    
+					</EditText>					
+					
+			</LinearLayout>		
+			
+			<LinearLayout				    
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"					
+				android:layout_gravity="center_vertical">    
+						
+					<TextView
+					    android:id="@+id/sharedPreferences_LabelNewPassword"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_marginLeft="50dp"						    
+					    android:text="@string/sharedPreferences_LabelNewPassword">					    
+					</TextView>   
+				 
+					<EditText
+					    android:id="@+id/sharedPreferences_EditNewPassword"
+					    android:layout_width="match_parent"						    
+					    android:layout_height="wrap_content"
+					    android:inputType="textPassword"
+					    android:enabled="false"
+					    android:layout_marginRight="50dp">      					    
+					</EditText>					
+					
+			</LinearLayout>		
+			
+			<LinearLayout				    
+			    android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"					
+				android:layout_gravity="center_vertical">    
+				
+					<TextView
+						android:id="@+id/sharedPreferences_LabelRepeatNewPassword"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_marginLeft="50dp"
+					    android:text="@string/sharedPreferences_LabelRepeatNewPassword">					    
+					</TextView>    
+				 
+					<EditText
+					    android:id="@+id/sharedPreferences_EditRepeatNewPassword"
+					    android:layout_width="match_parent"						    
+					    android:layout_height="wrap_content"
+					    android:inputType="textPassword"
+					    android:enabled="false"
+					    android:layout_marginRight="50dp">      						    
+					</EditText>
+									
+			</LinearLayout>			 
+		
+		
+			<!-- Separator 2-->		      				      	
+			<RelativeLayout
+				android:layout_width="fill_parent"
+				android:layout_height="2dp"
+				android:background="#000000">       							  
 			</RelativeLayout>
-		 <!-- FIN Separator 2-->     
-		 			
+		     
+					
 			<LinearLayout 		    
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content">  
-			    
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">  
+		    
 				<Button
 			        android:id="@+id/sharedPreferences_ButtonSaveAndBack"
 			        android:layout_width="fill_parent"
 			        android:layout_height="wrap_content"
 			        android:text="@string/sharedPreferences_ButtonSaveAndBack"			        
 			        android:onClick="savePreferences"			        
-			        android:layout_weight="2"/>			    
+			        android:layout_weight="2">
+			    </Button>    			    
 			    
 			    <Button
 			        android:id="@+id/sharedPreferences_ButtonBack"
@@ -310,11 +318,12 @@
 			        android:layout_height="wrap_content"
 			        android:text="@string/sharedPreferences_ButtonBack"
 			        android:onClick="cancelPreferences"
-			        android:layout_weight="2" />
-				    
-			</LinearLayout>		
-	    
-    </LinearLayout>	
-	</ScrollView>       
+			        android:layout_weight="2">
+				</Button>
+								    
+			</LinearLayout>
+						    
+    	</LinearLayout>	
+	</ScrollView>   
 	
 </LinearLayout>

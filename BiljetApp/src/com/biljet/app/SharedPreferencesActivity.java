@@ -142,6 +142,7 @@ public class SharedPreferencesActivity extends ActivitiesHeader {
 			}
 			
 		}
+
 		Toast.makeText(SharedPreferencesActivity.this,
  		 	   "GUARDANDO LOS DATOS DE LA CONFIGURACION...", Toast.LENGTH_LONG).show();
 		
@@ -151,6 +152,10 @@ public class SharedPreferencesActivity extends ActivitiesHeader {
 	
 	//Boton Volver
 	public void cancelPreferences(View view){
+		//Mensaje que indica al usuario que no se han guardado los cambios modificados
+		Toast.makeText(SharedPreferencesActivity.this,
+	 		 	   "NO SE HAN GUARDADO LOS CAMBIOS REALIZADOS", Toast.LENGTH_LONG).show();
+		//Terminación de la activity.
 		finish();
 	}
 	
@@ -271,7 +276,7 @@ public class SharedPreferencesActivity extends ActivitiesHeader {
     				findViewById(R.id.sharedPreferences_EditRepeatNewPassword).setEnabled(true);
     				
     				Toast.makeText(SharedPreferencesActivity.this,
-    			 	   "ACTIVADO: Cambiar password", Toast.LENGTH_LONG).show();
+    			 	   "ACTIVADO: Cambiar contraseña", Toast.LENGTH_LONG).show();
     			}
     			else{
     				changePwd = false;    				
@@ -280,7 +285,7 @@ public class SharedPreferencesActivity extends ActivitiesHeader {
     				findViewById(R.id.sharedPreferences_EditRepeatNewPassword).setEnabled(false);
     				
     				Toast.makeText(SharedPreferencesActivity.this,
-    				   "DESACTIVADO: Cambiar password", Toast.LENGTH_LONG).show();
+    				   "DESACTIVADO: Cambiar contraseña", Toast.LENGTH_LONG).show();
     			}
     	 
     		  }
@@ -370,7 +375,7 @@ public class SharedPreferencesActivity extends ActivitiesHeader {
 				}
 				else{
 					Toast.makeText(SharedPreferencesActivity.this,
-				 		 	   "El campo 'contraseña NUEVA' y la 'REPETIDA' no se corresponden" , Toast.LENGTH_SHORT).show();
+				 		 	   "La nueva contraseña y la contraseña repetida no se corresponden, inténtalo de nuevo" , Toast.LENGTH_SHORT).show();
 					resp = false;
 				}		
 			}
