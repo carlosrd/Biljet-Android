@@ -15,20 +15,11 @@ import com.biljet.types.User;
 
 public class MyProfileActivity extends ActivitiesHeader {
 
-	
-	/* Atributos para la gallery: pictures_events_signup */
+    private Gallery gallery_events_signup;
+    private Gallery gallery_events_follow;
+    private Gallery gallery_events_organized;
     
-    //variable for selection intent
-    private final int PICKER = 1;	// Para identificar que imagen has pulsado
-
-    //variable to store the currently selected image
-    private int currentPic = 0;
-    
-    //gallery object
-    private Gallery picGallery;
-    
-    //image view for larger display
-    private ImageView picView;
+    //////////////////
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +29,8 @@ public class MyProfileActivity extends ActivitiesHeader {
     //cabecera(true, drawable.home, MenuActivity.class, "Mi Profile", false, android.R.drawable.ic_input_add, NuevoEventActivity.class);
         createHeaderView(R.drawable.header_back_button,"Mi Perfil", android.R.drawable.ic_input_add,false);
 		setBackButton();
+		
+		Gallery gallery = (Gallery)findViewById(R.id.myProfile_LabelEventsFollow);
 		
 		User userProfile = getUser();
 		
@@ -71,8 +64,11 @@ public class MyProfileActivity extends ActivitiesHeader {
 		txtLastLogin.setText(userProfile.getLastLogin());	
 		
 	//eventsFollow
-		String evFollow = "";
-		for(Event ev:userProfile.getEventsFollow())	 evFollow = evFollow + ev.getName() + "\n"; 
+	    ArrayList<Integer> picView = new ArrayList<Integer>();
+	    ImageView i;
+		for(Event ev:userProfile.getEventsFollow()){
+			
+		}
 		
 		// metemos solo las imagenes de los eventos en la galería pictures_events_follow
 			
