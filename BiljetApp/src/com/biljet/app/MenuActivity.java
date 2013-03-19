@@ -54,9 +54,9 @@ public class MenuActivity extends ActivitiesHeader {
 								case 3: Intent boton3 = new Intent(MenuActivity.this, CalendarViewActivity.class);
 										startActivity(boton3);
 										break;
-								case 4: Intent boton4 = new Intent(MenuActivity.this, SharedPreferencesActivity.class);
-										startActivity(boton4);
-								break;
+										
+								default: break;
+
 							}
 						}
 		});

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources> 
 
     <string name="app_name">BiljetApp</string>
     <string name="hello_world">Hello world!</string>
@@ -35,11 +35,12 @@
     	 ***********************************************************************
     -->
 
+	<string name="eventView_LabelType">Tipo: </string>
     <string name="eventView_LabelSite">Lugar: </string>
     <string name="eventView_LabelDate">Fecha: </string>
     <string name="eventView_LabelLength">Duración aprox: </string>
-    <string name="eventView_LabelPrice">Precio: </string>
-    <string name="eventView_LabelConfirmedPeople">Personas que asisten: </string>
+    <string name="eventView_LabelPrice">Por sólo: </string>
+    <string name="eventView_LabelConfirmedPeople">Asisten: </string>
     <string name="eventView_LabelCapacity">Aforo Total: </string>
     <string name="eventView_LabelInfo">Info: </string>
     <string name="eventView_LabelBtnReadQR"> Leer lista de invitados</string>
@@ -87,13 +88,14 @@
 
     <string name="myProfile_LabelCity">Ciudad: </string>
     <string name="myProfile_LabelBio">Biografía: </string>
+    <string name="myProfile_find_me">Me puedes encontrar en: </string>
     <string name="myProfile_LabelEvents_follow">Eventos a los que sigo: </string>
     <string name="myProfile_LabelEvents_organized">Eventos que organizo: </string>
     <string name="myProfile_LabelEvents_signup">Eventos a los que voy: </string>
     <string name="myProfile_LabelTwitter">Twitter: </string>
     <string name="myProfile_LabelFacebook">Facebook: </string>
-    <string name="myProfile_LabelLast_login">Última visita el día: </string>
-
+    <string name="myProfile_LabelLast_login">Última visita el día: </string>	
+    
     <!--
          NewEventActivity
     	 ***********************************************************************
@@ -145,4 +147,9 @@
     <string name="sharedPreferences_ButtonBack"> "Volver"</string>
     
 
+    <!--
+         Used in the gallery part
+    	 ***********************************************************************
+    -->
+    <string name="picture">Picture</string>
 </resources>

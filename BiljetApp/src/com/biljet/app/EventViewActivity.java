@@ -80,6 +80,8 @@ public class EventViewActivity extends ActivitiesHeader {
 //		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
 //		txtInfo.setText(dataBundle.getString("INFO"));
 		
+		int auxInt = 0;
+		
 		ImageView eventImage = (ImageView)findViewById(R.id.eventView_Image);
 		eventImage.setImageResource(e.getImage());
 		eventImage.setScaleType(ImageView.ScaleType.CENTER);
@@ -108,6 +110,12 @@ public class EventViewActivity extends ActivitiesHeader {
 		TextView txtSite = (TextView)findViewById(R.id.eventView_TxtSite);
 		txtSite.setText(e.getSite());
 	
+		TextView txtPrice = (TextView)findViewById(R.id.eventView_TxtPrice);
+		String auxString2 = "";
+		float auxFloat = e.getPrice();
+		auxString2 = auxFloat+" €";
+		txtPrice.setText(auxString2);
+		
 		TextView txtDate = (TextView)findViewById(R.id.eventView_TxtDate);
 		String auxDate= e.getDate().toString();
 		auxDate = auxDate+"";
@@ -115,7 +123,7 @@ public class EventViewActivity extends ActivitiesHeader {
 		
 		TextView txtLength = (TextView)findViewById(R.id.eventView_TxtLength);
 		String auxString = "";
-		int auxInt = e.getLength_days();
+		auxInt = e.getLength_days();
 		if (auxInt > 0)
 			auxString = auxInt+" días ";
 		auxInt = e.getLength_hours();
@@ -128,20 +136,17 @@ public class EventViewActivity extends ActivitiesHeader {
 			auxString = "Indeterminado";
 		txtLength.setText(auxString);
 		
-		TextView txtPrice = (TextView)findViewById(R.id.eventView_TxtPrice);
-		float auxFloat = e.getPrice();
-		auxString = auxFloat+" €";
-		txtPrice.setText(auxString);
-		
 		TextView txtGuests = (TextView)findViewById(R.id.eventView_TxtConfirmedPeople);
+		String auxString3 = "";
 		auxInt = e.getConfirmedPeople();
-		auxString = auxInt+"";
-		txtGuests.setText(auxString);
+		auxString3 = auxInt+"";
+		txtGuests.setText(auxString3);
 
 		TextView txtCapacity = (TextView)findViewById(R.id.eventView_TxtCapacity);
+		String auxString4 = "";
 		auxInt = e.getCapacity();
-		auxString = auxInt+"";
-		txtCapacity.setText(auxString);
+		auxString4 = auxInt+"";
+		txtCapacity.setText(auxString4);
 
 		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
 		txtInfo.setText(e.getEventInfo());

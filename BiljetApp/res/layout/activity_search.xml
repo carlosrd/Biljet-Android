@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+	android:background="#F0F8FF"
     android:scrollbars="vertical" >
 	
     <!-- Action Bar -->
@@ -14,33 +15,41 @@
         android:layout_width="fill_parent"
         android:layout_height="60dip" />
 	
-	<AbsoluteLayout 
-	    android:id="@+id/AbsoluteLayout01"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent">
+	
 		
-		<EditText
-		    android:id="@+id/filterText"
-		    android:layout_width="227dp"
-		    android:layout_height="wrap_content"
-		    android:layout_x="12px"
-		    android:layout_y="12px" />
-	
-		<Button
-		    android:id="@+id/search_button"
-		    android:layout_width="100px"
-		    android:layout_height="wrap_content"
-		    android:layout_x="239dp"
-		    android:layout_y="9dp"
-		    android:text="Search" />
-	
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:scrollbars="vertical" >
+		    
+	    <AbsoluteLayout 
+		    android:id="@+id/AbsoluteLayout01"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent">
+		
+			<EditText
+			    android:id="@+id/filterText"
+			    android:layout_width="227dp"
+			    android:layout_height="wrap_content"
+			    android:layout_x="12px"
+			    android:layout_y="12px" />
+		
+			<Button
+			    android:id="@+id/search_button"
+			    android:layout_width="80px"
+			    android:layout_height="wrap_content"
+			    android:layout_x="239dp"
+			    android:layout_y="9dp"
+			    android:text="Buscar" />
+		</AbsoluteLayout>
+		
 		<ListView
 		    android:id="@+id/list"
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_x="11dp"
-		    android:layout_y="59dp" >
+		    android:layout_height="wrap_content">
 		</ListView>
-	</AbsoluteLayout>
+
+	</LinearLayout>
 	
 </LinearLayout>

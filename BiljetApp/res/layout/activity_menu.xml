@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
+    android:layout_height="fill_parent"
+    android:background="#F0F8FF"
     android:orientation="vertical" >
     
     <!-- Action Bar -->
@@ -22,9 +23,12 @@
         android:numColumns="2" 
 		android:stretchMode="columnWidth" 
 		android:horizontalSpacing="5dp"
+		
+		android:layout_marginTop="20dp"
+		android:layout_marginLeft="30dp"
+		android:layout_marginRight="30dp"
+		android:layout_marginBottom="30dp"
 		android:gravity="center" >
     </GridView>
-    
-    
 
 </LinearLayout>
