@@ -21,7 +21,7 @@ public class MenuOptionsAdapter extends ArrayAdapter<MenuOption> {
 				new MenuOption("Mis Eventos",android.R.drawable.ic_menu_agenda),
 				new MenuOption("Amigos", R.drawable.amigos),
 				new MenuOption("Calendario",android.R.drawable.ic_menu_my_calendar),
-				new MenuOption("Sección 5",android.R.drawable.ic_menu_crop)};
+				new MenuOption("Configuración",android.R.drawable.ic_menu_preferences)};
 		
 
 		public MenuOptionsAdapter(Activity context) {
