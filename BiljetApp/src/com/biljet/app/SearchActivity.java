@@ -185,22 +185,25 @@ public class SearchActivity extends ActivitiesHeader {
 	
 	private ArrayList<Event> getEvents(){
 		ArrayList<Event> sampleItems = new ArrayList<Event>();
-		Event Event1 = new Event("acdc",1 ,R.drawable.acdc_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event2 = new Event("jj",2 ,R.drawable.acdc_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Hugo", "Celebro mi cumpleaños en mi casa, vente!", 3);
-		Event Event3 = new Event("jj",1 ,R.drawable.jessie_j_evento ,"Cine", "Madrid", new Date(24,12,2012,21,00), 0,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
+
+		Event Event1 = new Event("Concierto ACDC",1 ,R.drawable.acdc_evento ,"Concierto", "Valladolid", new Date(8,12,2012,22,10),0,3,15, 40, 30, 200, "Empresa1 Conciertos", "Ya puede comprar las entradas ACDC. Los pioneros australianos del hard rock, se subirán de nuevo a los escenarios, este año presentarán su nueva gira mundial. La última vez que estuvieron de gira, fue hace 8 años. ¡Las entradas para la gira europea de AC/DC, están aquí disponibles! ¡Aproveche la oportunidad que le brindamos y oiga los éxitos legendarios de ACDC en concierto! Podrá oir el sonido inigualable de guitarra, que con el paso de los años no ha cambiado lo más mínimo. Los AC/DC siempre han sabido atraer a las masas. Las entradas para ver a los ACDC, le asegurarán una fantástica actuación en directo y podrá oir los éxitos “Back in Black”, “Highway to Hell” y “High Voltage” como también hits del último álbum “The Razor’s Edge” y “Ballbreaker”. Si nunca ha presenciado en directo a AC/DC, entonces no sabe lo que se pierde. Esta gira del grupo de rock duro, será seguramente, la última que ofrezcan, por eso tendrá que darse prisa, antes de que se agoten las entradas para los conciertos de AC/DC", 6);
+		Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+		Event Event3 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
+		Event Event4 = new Event("Cine Forum",4 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),2,0,0, 3, 10, 5, "ONG", "organiza un cine fórum sobre la conocida película de Luis García Berlanga “Bienvenido Mr. Marshall” en el Ensanche de Vallecas, a la salida del metro Valdecarros (Avenida del Ensanche s/n), uno de los terrenos barajados en la Comunidad de Madrid como posible ubicación de Eurovegas", 7);
 	    
 		sampleItems.add(Event1);
 	    sampleItems.add(Event2);
 	    sampleItems.add(Event3);
+	    sampleItems.add(Event4);
 	    
 		return sampleItems;
 	}// getEvents
 	
 	private ArrayList<Friend> getFriends(){
 		ArrayList<Friend> Samples = new ArrayList<Friend>();
-	     Samples.add(new Friend(1, "alan sdfds", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
+	     Samples.add(new Friend(1, "Alan sdfds", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
 	     Samples.add(new Friend(2, "Albert Einstein", "Ulm", R.drawable.usr_albert,"Albert Einstein es un físico alemán de origen judío, nacionalizado después suizo y estadounidense. Es considerado como el científico más importante del siglo XX"));
-	     Samples.add(new Friend(3, "alan asdgsd", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
+	     Samples.add(new Friend(3, "Bill Gates", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
 	     Samples.add(new Friend(4, "Gordon Earl Moore", "San Francisco", R.drawable.usr_gordon,"Gordon Earl Moore es el cofundador de Intel y autor de la Ley de Moore. Nacido en San Francisco, California el 3 de enero de 1929. Recibió un certificado de bachiller de ciencias en química por la Universidad de California en Berkeley en 1950 y un Ph."));
 	     Samples.add(new Friend(5, "Frank Gray", "Alpine", R.drawable.usr_gray,"Frank Gray es un fisico e investigador en los Laboratorios Bell. Hizo numerosas inovaciones mecanicas y electronicas en la televisión. Famoso por el Código Gray."));
 	     Samples.add(new Friend(6, "Isaac Newton", "Londres", R.drawable.usr_isaac,"Sir Isaac Newton es un físico, filósofo, teólogo, inventor, alquimista y matemático inglés, autor de los Philosophiae naturalis principia mathematica, más conocidos como los Principia, donde describió la ley de la gravitación universal y estableció las bases de la mecánica clásica mediante las leyes que llevan su nombre."));
