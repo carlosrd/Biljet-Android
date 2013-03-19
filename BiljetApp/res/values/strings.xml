@@ -8,7 +8,7 @@
 
     <!--
          MyEventsActivity
-  	 	 ***********************************************************************
+  	 	 ***********************************************************************
     -->
 
     <string name="myEvents_TxtEventsToGo"> > Eventos a los que voy: </string>
@@ -16,7 +16,7 @@
 
     <!--
          CalendarViewActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="calendarView_ButtonPrevious"> &lt;&lt; </string>
@@ -32,7 +32,7 @@
 
     <!--
          EventViewActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
 	<string name="eventView_LabelType">Tipo: </string>
@@ -47,7 +47,7 @@
 
     <!--
          VistaAmigoActivity  TODO
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="friendView_LabelCity">Ciudad: </string>
@@ -55,7 +55,7 @@
 
     <!--
          Descripcion de Contenido para Imagenes
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="contentDescription_LogoMenu">logo_biljet</string>
@@ -67,7 +67,7 @@
 
     <!--
           Titulos Actividades
-    	  **********************************************************************
+    	  **********************************************************************
     -->
 
     <string name="title_activity_my_friends">Biljet - Mis Amigos</string>
@@ -80,10 +80,10 @@
     <string name="title_activity_calendar_view">Biljet - Calendario</string>
     <string name="title_activity_search">Biljet - Buscar</string>
     <string name="title_activity_day_view">Biljet - Vista Día</string>
-
+	<string name="title_activity_shared_preferences">SharedPreferencesActivity</string>
     <!--
          MyProfileActivity
-    	 ***********************************************************************
+    	 ***********************************************************************
     -->
 
     <string name="myProfile_LabelCity">Ciudad: </string>
@@ -117,6 +117,35 @@
     <string name="newEvent_ButtonSetTime">"Set time" </string>
     <string name="newEvent_ButtonCreateEvent">"Crear" </string>
     <string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
+    
+    
+    
+      <!--
+         SharedPreferencesActivity
+    	 ***********************************************************************
+
+    -->
+
+    <string name="sharedPreferences_LabelNotifications">Notificaciones </string>
+    <string name="sharedPreferences_CheckBoxReceiveMsg">"Recibir mensajes en este terminal"</string>
+    <string name="sharedPreferences_CheckBoxRMsgBySound">"Con sonido"</string>    
+    <string name="sharedPreferences_CheckBoxRMsgByVibration">"Con vibración"</string>
+    <string name="sharedPreferences_checkBoxRMsgByLight">"Con lumínicas*"</string>    
+    <string name="sharedPreferences_CheckBoxRMsgByEmail">"Recibir notificaciones por E-mail"</string>    
+    <string name="sharedPreferences_LabelPersonalData">"Datos personales"</string>    
+    <string name="sharedPreferences_LabelUpdatePersonalData">"Actualizar datos personales"</string>    
+    <string name="sharedPreferences_LabelPhone">"Teléfono"</string>    
+    <string name="sharedPreferences_LabelMobil">"Móvil"</string>    
+    <string name="sharedPreferences_LabelAddress">"Dirección"</string>    
+    <string name="sharedPreferences_LabelCountBiljet">"Tu cuenta Biljet" </string>   
+    <string name="sharedPreferences_LabelUpdateCountBiljet">"Actualizar datos de tu cuenta Biljet" </string>   
+    <string name="sharedPreferences_CheckBoxChangePassword">"Cambiar la contraseña" </string>    
+    <string name="sharedPreferences_LabelCurrentPassword">"Acutal" </string>    
+    <string name="sharedPreferences_LabelNewPassword"> "Nueva"</string>    
+    <string name="sharedPreferences_LabelRepeatNewPassword"> "Repita"</string>    
+    <string name="sharedPreferences_ButtonSaveAndBack"> "Guardar y volver"</string>    
+    <string name="sharedPreferences_ButtonBack"> "Volver"</string>
+    
 
     <!--
          Used in the gallery part

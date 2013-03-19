@@ -34,7 +34,7 @@ public class MyProfileActivity extends ActivitiesHeader {
 		setBackButton();
 
 		User userProfile = getUser();
-		
+
 	//image
 		ImageView image = (ImageView)findViewById(R.id.myProfile_Avatar);
 		image.setImageResource(userProfile.getImage());	

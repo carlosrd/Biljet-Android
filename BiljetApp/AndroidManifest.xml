@@ -94,6 +94,10 @@
             android:name="com.biljet.app.DayViewActivity"
             android:label="@string/title_activity_day_view" >
         </activity>
+        <activity
+            android:name="com.biljet.app.SharedPreferencesActivity"
+            android:label="@string/title_activity_shared_preferences" >
+        </activity>
     </application>
 
 </manifest>

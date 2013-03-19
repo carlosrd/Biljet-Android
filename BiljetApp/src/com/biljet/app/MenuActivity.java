@@ -54,7 +54,9 @@ public class MenuActivity extends ActivitiesHeader {
 								case 3: Intent boton3 = new Intent(MenuActivity.this, CalendarViewActivity.class);
 										startActivity(boton3);
 										break;
+										
 								default: break;
+
 							}
 						}
 		});
