@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/indexSubmenu_optionSettings"
+        android:title="@string/indexMenu_optionSettings"/>
+    <item 
+        android:id="@+id/indexSubmenu_ButtonAbout" 
+        android:title="@string/indexMenu_optionAbout" />
+    <item 
+        android:id="@+id/indexSubmenu_ButtonExit" 
+        android:title="@string/indexMenu_optionExit" />
+    
+</menu>
