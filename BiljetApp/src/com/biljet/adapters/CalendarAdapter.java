@@ -66,6 +66,8 @@ public class CalendarAdapter extends BaseAdapter {
         if (days[position].equals("")) {
         	dayView.setClickable(false);
         	dayView.setFocusable(false);
+        	dayView.setEnabled(false);
+        	dayView.setVisibility(View.INVISIBLE);
         	v.setBackgroundColor(Color.WHITE);
         } // Si el día contiene algo (es un día del mes)
         else {

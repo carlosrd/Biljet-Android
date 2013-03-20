@@ -96,6 +96,7 @@ public class MyProfileActivity extends ActivitiesHeader {
 		gallery_events_follow.setAdapter(adapter_e_f);
 		
 		gallery_events_follow.setOnItemClickListener(new OnItemClickListener(){
+			@SuppressWarnings("rawtypes")
 			public void onItemClick(AdapterView parent, View v, int position, long id){
 				Toast.makeText(MyProfileActivity.this, nombres_f.get(position), Toast.LENGTH_SHORT).show();
 			}
@@ -107,6 +108,7 @@ public class MyProfileActivity extends ActivitiesHeader {
 		gallery_events_organized.setAdapter(adapter_e_o);
 		
 		gallery_events_organized.setOnItemClickListener(new OnItemClickListener(){
+			@SuppressWarnings("rawtypes")
 			public void onItemClick(AdapterView parent, View v, int position, long id){
 				Toast.makeText(MyProfileActivity.this, nombres_o.get(position), Toast.LENGTH_SHORT).show();
 			}
@@ -118,6 +120,7 @@ public class MyProfileActivity extends ActivitiesHeader {
 		gallery_events_signup.setAdapter(adapter_e_s);
 		
 		gallery_events_signup.setOnItemClickListener(new OnItemClickListener(){
+			@SuppressWarnings("rawtypes")
 			public void onItemClick(AdapterView parent, View v, int position, long id){
 				Toast.makeText(MyProfileActivity.this, nombres_s.get(position), Toast.LENGTH_SHORT).show();
 			}

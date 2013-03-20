@@ -4,9 +4,13 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- Fijar permisos de la app -->
+    <!-- =========================================================== -->
     <uses-permission android:name="android.permission.CAMERA" >
     </uses-permission>
 
+    <!-- Fijar recursos accedidos por la app -->
+    <!-- =========================================================== -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature
         android:name="android.hardware.camera.autofocus"
@@ -15,26 +19,23 @@
         android:name="android.hardware.touchscreen"
         android:required="false" />
 
+    <!-- Fijar versión de la API para el cual esta orientada la app -->
+    <!-- =========================================================== -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="10" />
 
+    <!-- Definicion de las actividades de la app -->
+    <!-- =========================================================== -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.biljet.app.MenuActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!-- Activity + informacion para el intent SCAN del lector de QR -->
+        <!-- =========================================================== -->
 
-        <!-- Informacion para el intent SCAN del QR -->
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:clearTaskOnLaunch="true"
@@ -54,6 +55,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- Biljet Activities -->
+        <!-- =========================================================== -->
+
         <activity
             android:name="com.biljet.app.MyFriendsActivity"
             android:label="@string/title_activity_my_friends" >
@@ -95,8 +100,17 @@
             android:label="@string/title_activity_day_view" >
         </activity>
         <activity
-            android:name="com.biljet.app.SharedPreferencesActivity"
-            android:label="@string/title_activity_shared_preferences" >
+            android:name="com.biljet.app.IndexActivity"
+            android:label="@string/title_activity_index" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.biljet.app.SettingsActivity"
+            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 
