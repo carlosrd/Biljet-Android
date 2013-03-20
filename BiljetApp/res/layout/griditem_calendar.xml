@@ -20,6 +20,7 @@
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:contentDescription="@string/contentDescription_ImageCalendarItem"
+		    android:src="@drawable/icon_calendar2"
 			android:visibility="invisible"/>
 	
 </LinearLayout>

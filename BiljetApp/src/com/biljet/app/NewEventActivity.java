@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -85,7 +86,7 @@ public class NewEventActivity extends ActivitiesHeader {
 	       
 	        setContentView(R.layout.activity_new_event);	        
 	
-	        createHeaderView(R.drawable.header_back_button,"Nuevo Evento", R.drawable.amigo,false);
+	        createHeaderView(R.drawable.header_back_button,"Nuevo Evento", -1,false);
 			setBackButton();
 			
 			// BOTON SET DATE: botón para cambiar la fecha
@@ -93,7 +94,6 @@ public class NewEventActivity extends ActivitiesHeader {
 			editTextDate = (EditText) findViewById(R.id.newEvent_EditDate);			
 			editTextDate.setText(dateFormatter.format(dateTime.getTime()));	
 			
-			buttonDatePicker.setText("Seleccionar Fecha");
 			buttonDatePicker.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {
 	                showDialog(DIALOG_DATE);
@@ -106,7 +106,6 @@ public class NewEventActivity extends ActivitiesHeader {
 			editTextTime = (EditText) findViewById(R.id.newEvent_EditTime);		
 			editTextTime.setText(timeFormatter.format(dateTime.getTime()));
 			
-			buttonTimePicker.setText("Seleccionar Hora");
 			buttonTimePicker.setOnClickListener(new View.OnClickListener() {
 	 
 	            public void onClick(View v) {
@@ -214,6 +213,21 @@ public class NewEventActivity extends ActivitiesHeader {
 	        getMenuInflater().inflate(R.menu.new_event, menu);
 	        return true;
 	    }
+	    
+		/**
+		 * Actions related to the menu options displayed when you press ··· or Config button on the device
+		 */
+		@Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        switch (item.getItemId()) {
+		        case R.id.indexSubmenu_optionSettings:
+		        	Intent openSettings = new Intent(NewEventActivity.this,SettingsActivity.class);
+		        	startActivity(openSettings);
+		        	break;
+		    }
+		    return true;
+		}
+
 	    
 	    /**
 	     * Method to show the dialog date and time

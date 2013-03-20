@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -60,24 +61,8 @@ public class MyEventsActivity extends ActivitiesHeader {
 						//Acciones necesarias al hacer click
 							
 							Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
-							
-//							Bundle dataBundle = new Bundle();
-//							
-//							//En realidad creo que se le puede pasar el tipo Event usand (ya lo probaremos)
-//							dataBundle.putInt("IMAGE-URL", sampleEventsToGo.get(eventId).getImage());
-//							dataBundle.putString("NAME", sampleEventsToGo.get(eventId).getName());
-//							dataBundle.putString("EVENT_TYPE", sampleEventsToGo.get(eventId).getEventType());
-//							dataBundle.putString("SITE", sampleEventsToGo.get(eventId).getSite());
-//							dataBundle.putInt("PRICE", sampleEventsToGo.get(eventId).getPrice());
-//							dataBundle.putInt("CONFIRMED_PEOPLE", sampleEventsToGo.get(eventId).getConfirmedPeople());
-//							dataBundle.putInt("CAPACITY", sampleEventsToGo.get(eventId).getCapacity());
-//							dataBundle.putString("INFO", sampleEventsToGo.get(eventId).getEventInfo());
-//							
-//							dataBundle.putBoolean("OWN?", isOwn);
-//							
-//							eventIntent.putExtras(dataBundle);
 					
-							Event e= sampleEventsToGo.get(eventId);
+							Event e = sampleEventsToGo.get(eventId);
 							eventIntent.putExtra("event",e);
 							eventIntent.putExtra("OWN?", isOwn);
 							
@@ -159,5 +144,20 @@ public class MyEventsActivity extends ActivitiesHeader {
         getMenuInflater().inflate(R.menu.my_events, menu);
         return true;
     }
+    
+	/**
+	 * Actions related to the menu options displayed when you press ··· or Config button on the device
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.indexSubmenu_optionSettings:
+	        	Intent openSettings = new Intent(MyEventsActivity.this,SettingsActivity.class);
+	        	startActivity(openSettings);
+	        	break;
+	    }
+	    return true;
+	}
+
 }
 

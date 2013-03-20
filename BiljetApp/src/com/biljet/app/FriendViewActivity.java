@@ -1,7 +1,9 @@
 package com.biljet.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,5 +60,20 @@ public class FriendViewActivity extends ActivitiesHeader {
 		getMenuInflater().inflate(R.menu.friend_view, menu);
 		return true;
 	}
+	
+	/**
+	 * Actions related to the menu options displayed when you press ··· or Config button on the device
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.indexSubmenu_optionSettings:
+	        	Intent openSettings = new Intent(FriendViewActivity.this,SettingsActivity.class);
+	        	startActivity(openSettings);
+	        	break;
+	    }
+	    return true;
+	}
+
 }
 

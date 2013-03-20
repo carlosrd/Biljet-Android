@@ -57,7 +57,7 @@ public class SettingsActivity extends ActivitiesHeader {
         super.onCreate(savedInstanceState);        
         setContentView(R.layout.activity_settings);
         
-        createHeaderView(R.drawable.header_back_button,"Configuración", R.drawable.amigo,false);
+        createHeaderView(R.drawable.header_back_button,"Configuración", -1,false);
         
 		setBackButton();
         init();	
@@ -134,7 +134,7 @@ public class SettingsActivity extends ActivitiesHeader {
 		}
 
 		Toast.makeText(SettingsActivity.this,
- 		 	   "GUARDANDO LOS DATOS DE LA CONFIGURACION...", Toast.LENGTH_LONG).show();
+ 		 	   "Preferencias actualizadas correctamente!", Toast.LENGTH_LONG).show();
 		
 		//Terminamos la activity y regresamos a la actividad principal(Home)
  		finish(); 	   
@@ -144,7 +144,7 @@ public class SettingsActivity extends ActivitiesHeader {
 	public void cancelPreferences(View view){
 		//Mensaje que indica al usuario que no se han guardado los cambios modificados
 		Toast.makeText(SettingsActivity.this,
-	 		 	   "NO SE HAN GUARDADO LOS CAMBIOS REALIZADOS", Toast.LENGTH_LONG).show();
+	 		 	   "Preferencias descartadas!", Toast.LENGTH_LONG).show();
 		//Terminación de la activity.
 		finish();
 	}
@@ -370,7 +370,7 @@ public class SettingsActivity extends ActivitiesHeader {
 		}
 		else{
 			Toast.makeText(SettingsActivity.this,
-		 		 	   "Intruduzca la contraseña actual y la nueva contraseña" , Toast.LENGTH_SHORT).show();
+		 		 	   "Introduzca la contraseña actual y la nueva contraseña" , Toast.LENGTH_SHORT).show();
 			resp = false;
 		}
 		

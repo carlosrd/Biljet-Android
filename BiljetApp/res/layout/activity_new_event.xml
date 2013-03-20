@@ -42,7 +42,7 @@
              <Spinner
 				android:id="@+id/newEvent_SpinnerEventType"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content">
+				android:layout_height="wrap_content" >
 			</Spinner>
 			
              <!--  Fin tipo evento -->             
@@ -69,7 +69,8 @@
 		    android:orientation="horizontal">    
 		    
 			    <EditText 
-			        android:id="@+id/newEvent_EditDate"	        
+			        android:id="@+id/newEvent_EditDate"	   
+			        android:inputType="date"     
 			        android:layout_weight="1"        
 			        android:layout_width="0dp"
 			        android:layout_height="wrap_content"
@@ -83,7 +84,11 @@
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:text="@string/newEvent_ButtonSetDate"
-			        android:onClick="setDate" />
+			        android:onClick="setDate"
+			        android:background="@drawable/blue_gradient"
+		    		android:textColor="#FFFFFF" 
+		    		android:textStyle="bold"
+		    		android:layout_marginLeft="5dp" />
 			    
 			</LinearLayout>
          
@@ -113,7 +118,11 @@
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:text="@string/newEvent_ButtonSetTime"
-			        android:onClick="setTime" />
+			        android:onClick="setTime" 
+			        android:background="@drawable/blue_gradient"
+		    		android:textColor="#FFFFFF" 
+		    		android:textStyle="bold"
+		    		android:layout_marginLeft="5dp"/>
 				    
 			</LinearLayout>	            
             
@@ -209,9 +218,13 @@
 			        android:id="@+id/newEvent_ButtonChangeImage"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"  
+			        android:layout_marginTop="10dp"
 			        android:layout_weight="0"
 			        android:text="Change Image"
-			        android:layout_gravity="center">        
+			        android:layout_gravity="center"
+			        android:background="@drawable/blue_gradient"
+		    		android:textColor="#FFFFFF" 
+		    		android:textStyle="bold" >        
 			    </Button>
 			    
 				<TextView 
@@ -223,6 +236,7 @@
 	                android:id="@+id/newEvent_EditInfo"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
+	                android:layout_marginBottom="10dp"
 	                android:singleLine="false" 
 	                android:lines="3"       
 	                android:gravity="top"     	
@@ -240,7 +254,10 @@
 				        android:layout_height="wrap_content"
 				        android:text="@string/newEvent_ButtonCreateEvent"
 				        android:onClick="buttonCreateNewEvent" 
-				        android:layout_weight="2"/>
+				        android:layout_weight="2"
+				        android:background="@drawable/blue_gradient"
+		    			android:textColor="#FFFFFF" 
+		    			android:textStyle="bold" />
 					
 				    <Button
 				        android:id="@+id/newEvent_ButtonCancelEvent"
@@ -248,7 +265,10 @@
 				        android:layout_height="wrap_content"
 				        android:text="@string/newEvent_ButtonCancelEvent"
 				        android:onClick="alertCancelNewEvent"
-				        android:layout_weight="2" />
+				        android:layout_weight="2"
+				        android:background="@drawable/blue_gradient"
+		    			android:textColor="#FFFFFF" 
+		    			android:textStyle="bold" />
 				    
 				</LinearLayout>			             
         </LinearLayout>        	         

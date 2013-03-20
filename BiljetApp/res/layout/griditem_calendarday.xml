@@ -13,6 +13,6 @@
         android:layout_centerHorizontal="true"
         android:clickable="false"
         android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:textColor="#000000"/>
+        android:textColor="#0B173B"/>
 
 </RelativeLayout>

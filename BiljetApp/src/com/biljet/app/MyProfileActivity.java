@@ -2,8 +2,10 @@ package com.biljet.app;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -132,6 +134,21 @@ public class MyProfileActivity extends ActivitiesHeader {
         getMenuInflater().inflate(R.menu.my_profile, menu);
         return true;
     }
+    
+	/**
+	 * Actions related to the menu options displayed when you press ··· or Config button on the device
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.indexSubmenu_optionSettings:
+	        	Intent openSettings = new Intent(MyProfileActivity.this,SettingsActivity.class);
+	        	startActivity(openSettings);
+	        	break;
+	    }
+	    return true;
+	}
+
     
 /** Me creo un Profile de prueba, el real será cogido de la base de datos **/
     private User getUser(){

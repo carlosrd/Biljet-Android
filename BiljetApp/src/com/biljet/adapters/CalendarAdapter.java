@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.biljet.app.R;
@@ -66,28 +67,33 @@ public class CalendarAdapter extends BaseAdapter {
         if (days[position].equals("")) {
         	dayView.setClickable(false);
         	dayView.setFocusable(false);
-        	dayView.setEnabled(false);
-        	dayView.setVisibility(View.INVISIBLE);
-        	v.setBackgroundColor(Color.WHITE);
+        	v.setBackgroundColor(Color.parseColor("#F0F8FF"));
         } // Si el día contiene algo (es un día del mes)
         else {
         	// Si es el día actual, lo resaltamos
         	if (month.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR) && 
         		month.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
         		days[position].equals(""+selectedDate.get(Calendar.DAY_OF_MONTH))) {
-        		v.setBackgroundColor(Color.DKGRAY);
-        		dayView.setTextColor(Color.YELLOW);
+        		v.setBackgroundColor(Color.parseColor("#00BFFF"));
+        		dayView.setTextColor(Color.parseColor("#0B173B"));
         		//v.setBackgroundResource(R.drawable.item_background_focused);
         	}
         	else { // Sino, aplicamos el estilo normal
-        		v.setBackgroundColor(Color.GRAY);
-        		dayView.setTextColor(Color.BLACK);
+        		v.setBackgroundColor(Color.parseColor("#084B8A"));
+        		dayView.setTextColor(Color.WHITE);
         		//v.setBackgroundResource(R.drawable.list_item_background);
         	}
         }
         
         // Seteamos el texto del día con el correspondiente del array de días
         dayView.setText(days[position]);
+        
+        // Eventos en dias 13 y 23 (PRUEBA LOCAL)
+        ImageView iconEvent = (ImageView)v.findViewById(R.id.calendarItem_IconDay);
+        if (days[position].equals("13") || days[position].equals("23")) 
+    		iconEvent.setVisibility(View.VISIBLE); 	
+        else
+        	iconEvent.setVisibility(View.INVISIBLE); 	
         
         /*// create date string for comparison
         String date = days[position];

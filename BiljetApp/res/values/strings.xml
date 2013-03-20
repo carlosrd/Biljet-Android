@@ -10,7 +10,7 @@
   	<!-- ***********************************************************************  -->
     
     <string name="indexMenu_optionSettings">Preferencias</string>
-	<string name="indexMenu_optionAbout">Acerca de...</string>
+	<string name="indexMenu_optionAbout">Acerca de&#8230;</string>
 	<string name="indexMenu_optionExit">Salir</string>
 	
 	
@@ -35,6 +35,11 @@
     <string name="calendarView_LabelSaturday"> Sab </string>
     <string name="calendarView_LabelSunday"> Dom </string>
 
+    
+    <!-- CalendarViewActivity -->
+  	<!-- ***********************************************************************  -->
+  	
+    <string name="dayView_LabelNoEvents"> No hay eventos planificados para este día: Crea tu uno!</string>
     
     <!-- EventsViewActivity -->
   	<!-- ***********************************************************************  -->
@@ -81,7 +86,7 @@
     <string name="title_activity_search">Biljet - Buscar</string>
     <string name="title_activity_day_view">Biljet - Vista Día</string>
     <string name="title_activity_shared_preferences">Biljet - Preferencias</string>
-    <string name="title_activity_index">Biljet - Menu Principal</string>
+    <string name="title_activity_index">BiljetApp</string>
 
     <!-- MyProfileActivity -->
   	<!-- ***********************************************************************  -->
@@ -112,36 +117,10 @@
     <string name="newEvent_LabelInfo">"Observaciones:"</string>
     <string name="newEvent_LabelDate">"Fecha:"</string>
     <string name="newEvent_LabelTime">"Hora:"</string>
-    <string name="newEvent_ButtonSetDate">"Set date" </string>
-    <string name="newEvent_ButtonSetTime">"Set time" </string>
+    <string name="newEvent_ButtonSetDate">"Fijar fecha" </string>
+    <string name="newEvent_ButtonSetTime">"Fijar hora" </string>
     <string name="newEvent_ButtonCreateEvent">"Crear" </string>
     <string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
-
-    <!--
-         SharedPreferencesActivity
-    	 ***********************************************************************
-    -->
-
-    <string name="sharedPreferences_LabelNotifications">Notificaciones </string>
-    <string name="sharedPreferences_CheckBoxReceiveMsg">"Recibir mensajes en este terminal"</string>
-    <string name="sharedPreferences_CheckBoxRMsgBySound">"Con sonido"</string>
-    <string name="sharedPreferences_CheckBoxRMsgByVibration">"Con vibración"</string>
-    <string name="sharedPreferences_checkBoxRMsgByLight">"Con lumínicas*"</string>
-    <string name="sharedPreferences_CheckBoxRMsgByEmail">"Recibir notificaciones por E-mail"</string>
-    <string name="sharedPreferences_LabelPersonalData">"Datos personales"</string>
-    <string name="sharedPreferences_LabelUpdatePersonalData">"Actualizar datos personales"</string>
-    <string name="sharedPreferences_LabelPhone">"Teléfono"</string>
-    <string name="sharedPreferences_LabelMobil">"Móvil"</string>
-    <string name="sharedPreferences_LabelAddress">"Dirección"</string>
-    <string name="sharedPreferences_LabelCountBiljet">"Tu cuenta Biljet" </string>
-    <string name="sharedPreferences_LabelUpdateCountBiljet">"Actualizar datos de tu cuenta Biljet" </string>
-    <string name="sharedPreferences_CheckBoxChangePassword">"Cambiar la contraseña" </string>
-    <string name="sharedPreferences_LabelCurrentPassword">"Acutal" </string>
-    <string name="sharedPreferences_LabelNewPassword"> "Nueva"</string>
-    <string name="sharedPreferences_LabelRepeatNewPassword"> "Repita"</string>
-    <string name="sharedPreferences_ButtonSaveAndBack"> "Guardar y volver"</string>
-    <string name="sharedPreferences_ButtonBack"> "Volver"</string>
-
     
     <!-- SettingsActivity -->
   	<!-- ***********************************************************************  -->
@@ -160,7 +139,7 @@
     <string name="settingsView_LabelCountBiljet">"Tu cuenta Biljet" </string>
     <string name="settingsView_LabelUpdateCountBiljet">"Actualizar datos de tu cuenta Biljet" </string>
     <string name="settingsView_CheckBoxChangePassword">"Cambiar la contraseña" </string>
-    <string name="settingsView_LabelCurrentPassword">"Acutal" </string>
+    <string name="settingsView_LabelCurrentPassword">"Actual" </string>
     <string name="settingsView_LabelNewPassword"> "Nueva"</string>
     <string name="settingsView_LabelRepeatNewPassword"> "Repita"</string>
     <string name="settingsView_ButtonSaveAndBack"> "Guardar y volver"</string>

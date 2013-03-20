@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -61,6 +62,21 @@ public class SearchActivity extends ActivitiesHeader {
 		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
 	}
+	
+	/**
+	 * Actions related to the menu options displayed when you press ··· or Config button on the device
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.indexSubmenu_optionSettings:
+	        	Intent openSettings = new Intent(SearchActivity.this,SettingsActivity.class);
+	        	startActivity(openSettings);
+	        	break;
+	    }
+	    return true;
+	}
+
 	
 	/**
 	 * method who fills the listView depending c's value

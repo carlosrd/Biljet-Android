@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.CalendarAdapter;
@@ -135,6 +137,20 @@ public class CalendarViewActivity extends ActivitiesHeader {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.calendar_view, menu);
 		return true;
+	}
+
+	/**
+	 * Actions related to the menu options displayed when you press ··· or Config button on the device
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.indexSubmenu_optionSettings:
+	        	Intent openSettings = new Intent(CalendarViewActivity.this,SettingsActivity.class);
+	        	startActivity(openSettings);
+	        	break;
+	    }
+	    return true;
 	}
 
 	/**

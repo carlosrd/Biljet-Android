@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,56 +30,6 @@ public class EventViewActivity extends ActivitiesHeader {
 
 		createHeaderView(R.drawable.header_back_button,"Evento: "+e.getName()/*dataBundle.getString("NAME")*/, R.drawable.perfil,false);
 		setBackButton();
-		
-		
-
-//		ImageView eventImage = (ImageView)findViewById(R.id.eventView_Image);
-//		eventImage.setImageResource(dataBundle.getInt("IMAGE-URL"));
-//		eventImage.setScaleType(ImageView.ScaleType.CENTER);
-//	
-//		Button buttonReadQR = (Button)findViewById(R.id.eventView_Button_ReadQR);
-//		if (dataBundle.getBoolean("OWN?")){
-//			buttonReadQR.setVisibility(View.VISIBLE);
-//	        buttonReadQR.setOnClickListener(new OnClickListener() {
-//		        							   public void onClick(View arg0) {
-//		        								   // Intent para lanzar el lector de QR
-//		        								   Intent intent = new Intent("com.biljet.app.SCAN");
-//		        								   intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-//		        								   startActivityForResult(intent, 0);
-//		        							   }
-//	        							   });
-//			}
-//		else
-//			buttonReadQR.setVisibility(View.INVISIBLE);
-//		
-//		TextView txtName = (TextView)findViewById(R.id.eventView_TxtName);
-//		txtName.setText(dataBundle.getString("NAME"));
-//	
-//		TextView txtEventType = (TextView)findViewById(R.id.eventView_TxtEventType);
-//		txtEventType.setText(dataBundle.getString("EVENT_TYPE"));
-//		
-//		TextView txtSite = (TextView)findViewById(R.id.eventView_TxtSite);
-//		txtSite.setText(dataBundle.getString("SITE"));
-//	
-//		TextView txtPrice = (TextView)findViewById(R.id.eventView_TxtPrice);
-//		int auxInt = dataBundle.getInt("PRICE");
-//		String auxString = auxInt+"";
-//		txtPrice.setText(auxString);
-//		
-//		TextView txtConfirmed = (TextView)findViewById(R.id.eventView_TxtConfirmedPeople);
-//		auxInt = dataBundle.getInt("CONFIRMED_PEOPLE");
-//		auxString = auxInt+"";
-//		txtConfirmed.setText(auxString);
-//
-//		
-//		TextView txtCapacity = (TextView)findViewById(R.id.eventView_TxtCapacity);
-//		auxInt = dataBundle.getInt("CAPACITY");
-//		auxString = auxInt+"";
-//		txtCapacity.setText(auxString);
-//
-//		
-//		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
-//		txtInfo.setText(dataBundle.getString("INFO"));
 		
 		int auxInt = 0;
 		
@@ -159,7 +110,7 @@ public class EventViewActivity extends ActivitiesHeader {
 		         String contents = intent.getStringExtra("SCAN_RESULT");
 		         String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 		         // Handle successful scan
-	             Toast toast = Toast.makeText(this, "Contenido:" + contents + " Formato:" + format , Toast.LENGTH_LONG);
+	             Toast toast = Toast.makeText(this, "Contenido:" + contents + "       Formato:" + format , Toast.LENGTH_LONG);
 	             toast.setGravity(Gravity.TOP, 25, 500);
 	             toast.show();
 		      } else if (resultCode == RESULT_CANCELED) {
@@ -176,6 +127,20 @@ public class EventViewActivity extends ActivitiesHeader {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.event_view, menu);
 		return true;
+	}
+
+	/**
+	 * Actions related to the menu options displayed when you press ··· or Config button on the device
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.indexSubmenu_optionSettings:
+	        	Intent openSettings = new Intent(EventViewActivity.this,SettingsActivity.class);
+	        	startActivity(openSettings);
+	        	break;
+	    }
+	    return true;
 	}
 
 }
