@@ -20,28 +20,30 @@ You'll need a few additional software to compile/run the project
 * [JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
  Java Development Kit to build Java and Android apps.
  
-## MenuActivity
+## BiljetApp / IndexActivity
 
 This project contains BiljetApp Android principal application. The following sections are almost implemented (pendant to improve GUI)
 
 * **Menu** : It's the first view after login view. It shows direct access to the most important options for Biljet users
-* **Upcoming** Events : In this view, you can see which events are going to be celebrate soon (Event View). 
+* **Upcoming** Events : In this view, you can see which events are going to be celebrate soon (Event View). In this section is possible to search events
 * **My Events** : In this area you can follow events organized by yourself or events for which you have a pass to get on. In first case of event type you can launch the QR reader to process the invitations of your guests. In second case you can see a QR code that will allow you entry to the event. Both cases shows data relative to the event such as date, time, place, etc
 * **New Event** : Shows a form to fill in order to create a new event. User has to provide all information required for a correct creation. This view changes depending on the type of user (regular or company) which it's using the app
-* **My Friends** : In this activity resides the social section. Here you can manage (add/delete) friends (other Biljet users) to your account and watch their public profiles with their personal data (Friend View). A search action will be available for this section
 * **My Profile** : This view let the user check its own data and update them
+* **Settings** : User can adjust notifications and make changes on personal data in this view.
+* **Calendar** : Shows a Calendar to manage the events more easily by date.
 	
 ## CaptureActivity
 
 This is the library needed to capture and decode QR codes within our own project. This auxiliary project has been developed by the [zXing Team](http://code.google.com/p/zxing/) and it has been embedded as a native QR decoder of our app. Some internal changes were added to adjust the decoder to our needs like change the focus area of rectangular to square. Texts on capturer have been translated and been rotated to simulate a portrait view
 
+## ActionBar
+
+This is the library that allows us to easily configure the appearance and actions of the Action Bar that is displayed on top of all activities. This provide us an API to add/remove Actions and show/hide a Progress Bar. All the changes are make directly on BiljetApp to overriding the original settings
+
 ## Features to be added
 
-* Search action in `My Friends` and `Upcoming Events`
 * Login access
 * Internal data manager
-* User settings view
-* Calendar view (considering it)
 
 ## Disclaimer
 The software is provided 'as is', without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no ecent shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
