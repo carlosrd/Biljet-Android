@@ -2,6 +2,7 @@ package com.biljet.app;
 
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,17 +14,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.CalendarAdapter;
 import com.biljet.adapters.CalendarDaysAdapter;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class CalendarViewActivity extends ActivitiesHeader {
+public class CalendarViewActivity extends Activity {
 
 	private Calendar month; 
 	private CalendarAdapter adapter;
-	//public Handler handler;
+	//public Handler handler;sad
 	//public ArrayList<String> items; // container to store some random calendar items
 	
 	/**
@@ -44,9 +45,14 @@ public class CalendarViewActivity extends ActivitiesHeader {
         // ACTION BAR
      	// **************************************************************************************
         
-		createHeaderView(R.drawable.header_back_button,"Mi Calendario", R.drawable.perfil,false);
-		setBackButton();
+		/*createHeaderView(R.drawable.header_back_button,"Mi Calendario", R.drawable.perfil,false);
+		setBackButton();*/
 
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Mi Calendario");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		
         // BARRA MES + BOTONES ANT/SIG MES
      	// **************************************************************************************

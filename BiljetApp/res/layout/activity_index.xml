@@ -7,13 +7,17 @@
     tools:context=".IndexActivity" >
     
     <!-- Action Bar -->
-
-	<ViewStub 
+    
+	<com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
+	
+	<!--<ViewStub 
 	    android:id="@+id/actionBar"
        	android:inflatedId="@+id/header"
         android:layout="@layout/header"
         android:layout_width="fill_parent"
-        android:layout_height="60dip" />
+        android:layout_height="60dip" /> -->
 	
 	<!-- Menu Principal -->
 	

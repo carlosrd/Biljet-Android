@@ -2,22 +2,24 @@ package com.biljet.app;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.UpcomingEventsAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class DayViewActivity extends ActivitiesHeader {
+public class DayViewActivity extends Activity{
 
 	// ATRIBUTOS
  	// **************************************************************************************
@@ -35,9 +37,15 @@ public class DayViewActivity extends ActivitiesHeader {
         // ACTION BAR
      	// **************************************************************************************
         
-		createHeaderView(R.drawable.header_back_button,"Mi Calendario",R.drawable.mas,true);
+		/*createHeaderView(R.drawable.header_back_button,"Mi Calendario",R.drawable.mas,true);
 		setBackButton();
-		setRightButtonAction(NewEventActivity.class);
+		setRightButtonAction(NewEventActivity.class);*/
+		
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Mi Calendario");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.mas));
 		
         // DAY SUBTITLE BAR
      	// **************************************************************************************

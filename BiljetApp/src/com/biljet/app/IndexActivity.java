@@ -1,6 +1,8 @@
 package com.biljet.app;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +15,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.MenuOptionsAdapter;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class IndexActivity extends ActivitiesHeader {
+public class IndexActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,11 +28,16 @@ public class IndexActivity extends ActivitiesHeader {
 		
 		// ACTION BAR
 		// **************************************************************************************
-		//cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
+		/*cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
 		createHeaderView(R.drawable.imagen_menu,"Menu Principal", R.drawable.perfil,true);
-		setRightButtonAction(MyProfileActivity.class);
+		setRightButtonAction(MyProfileActivity.class);*/
 		
-        
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setHomeLogo(R.drawable.actionbar_logo);
+		actionBar.setTitle("Menu Principal");
+		actionBar.addAction(new IntentAction(this, createShareIntent(), android.R.drawable.ic_menu_share));
+		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.perfil));
+		
         // GRID VIEW
 		// **************************************************************************************
         // Acoplar el adaptador al GridView
@@ -48,11 +56,11 @@ public class IndexActivity extends ActivitiesHeader {
 								case 1: Intent myEventsOption = new Intent(IndexActivity.this, MyEventsActivity.class);
 										startActivity(myEventsOption);
 										break;
-								case 2: Intent myFriendsOption = new Intent(IndexActivity.this, MyFriendsActivity.class);
-										startActivity(myFriendsOption);
-										break;
-								case 3: Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
+								case 2: Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
 										startActivity(calendarViewOption);
+										break;
+								case 3: Intent myFriendsOption = new Intent(IndexActivity.this, SettingsActivity.class);
+										startActivity(myFriendsOption);
 										break;
 										
 								default: break;
@@ -103,6 +111,19 @@ public class IndexActivity extends ActivitiesHeader {
 		alert.show();
 	}
 	
+    public static Intent createIntent(Context context) {
+        Intent i = new Intent(context, IndexActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return i;
+    }
+
+    private Intent createShareIntent() {
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "Comparte BiljetApp con tus amigos! Para descargar seguir el siguiente enlace: https://dl.dropbox.com/u/16354811/Android/BiljetApp.apk");
+        return Intent.createChooser(intent, "Share");
+    }
+    
 	// TECLA SUBMENU / BOTON ···
 	// **************************************************************************************
 	
