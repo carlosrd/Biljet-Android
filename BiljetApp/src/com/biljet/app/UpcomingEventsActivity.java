@@ -2,6 +2,7 @@ package com.biljet.app;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,12 +12,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.UpcomingEventsAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class UpcomingEventsActivity extends ActivitiesHeader {
+public class UpcomingEventsActivity extends Activity {
 
 	final ArrayList<Event> itemsEvent = getEvents();;
     @Override
@@ -26,9 +28,14 @@ public class UpcomingEventsActivity extends ActivitiesHeader {
      
         // ACTION BAR
      	// **************************************************************************************
-        createHeaderView(R.drawable.header_back_button,"Proximos Eventos", R.drawable.buscar,true);
-		setBackButton();
-		setRightButtonAction(SearchActivity.class, 'e');
+        /*createHeaderView(R.drawable.header_back_button,"Proximos Eventos", R.drawable.buscar,true);
+		setBackButton();*/
+		
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Próximos Eventos");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.addAction(new IntentAction(this, new Intent(this, SearchActivity.class), R.drawable.buscar));
 		
 		
 		// LIST VIEW

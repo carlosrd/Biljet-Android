@@ -1,5 +1,6 @@
 package com.biljet.app;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -9,10 +10,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.types.Preferences;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class SettingsActivity extends ActivitiesHeader {
+public class SettingsActivity extends Activity {
 
 	// ATRIBUTOS
 	// **************************************************************************************
@@ -57,9 +59,15 @@ public class SettingsActivity extends ActivitiesHeader {
         super.onCreate(savedInstanceState);        
         setContentView(R.layout.activity_settings);
         
-        createHeaderView(R.drawable.header_back_button,"Configuración", -1,false);
-        
-		setBackButton();
+       /* createHeaderView(R.drawable.header_back_button,"Configuración", -1,false);
+		setBackButton();*/
+		
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Configuración de la app");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		
         init();	
         addListenerOnChechBox();        
        

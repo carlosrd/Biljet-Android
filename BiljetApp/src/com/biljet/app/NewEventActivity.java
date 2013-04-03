@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -27,10 +28,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.biljet.types.User;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
 /**
  *This class provides methods to save the preferences (settings) as:
@@ -45,7 +47,7 @@ import com.biljet.types.User;
  *
  *Change the user's password.
  */
-public class NewEventActivity extends ActivitiesHeader {
+public class NewEventActivity extends Activity {
 	
 		// ATRIBUTOS
 	    // **************************************************************************************
@@ -86,8 +88,14 @@ public class NewEventActivity extends ActivitiesHeader {
 	       
 	        setContentView(R.layout.activity_new_event);	        
 	
-	        createHeaderView(R.drawable.header_back_button,"Nuevo Evento", -1,false);
-			setBackButton();
+	        /*createHeaderView(R.drawable.header_back_button,"Nuevo Evento", -1,false);
+			setBackButton();*/
+			
+			ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+			actionBar.setTitle("Crear Nuevo Evento");
+			actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			
 			
 			// BOTON SET DATE: botón para cambiar la fecha
 			buttonDatePicker = (Button) findViewById(R.id.newEvent_ButtonSetDate);			
