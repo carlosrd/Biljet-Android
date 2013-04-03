@@ -2,6 +2,7 @@ package com.biljet.app;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,14 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.FriendsAdapter;
 import com.biljet.adapters.UpcomingEventsAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.biljet.types.Friend;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class SearchActivity extends ActivitiesHeader {
+public class SearchActivity extends Activity {
 	
 	// ATRIBUTOS
  	// **************************************************************************************
@@ -38,8 +40,13 @@ public class SearchActivity extends ActivitiesHeader {
 
         // ACTION BAR
      	// **************************************************************************************
-	    createHeaderView(R.drawable.header_back_button,"Buscar", android.R.drawable.ic_input_add,false);
+	    /*createHeaderView(R.drawable.header_back_button,"Buscar", android.R.drawable.ic_input_add,false);
 		setBackButton();
+		*/
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Buscar");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		// leemos el boton de busqueda
 		Button searchButton = (Button)findViewById(R.id.search_button);

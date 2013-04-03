@@ -2,6 +2,7 @@ package com.biljet.app;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,13 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.ImageAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.biljet.types.User;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class MyProfileActivity extends ActivitiesHeader {
+public class MyProfileActivity extends Activity {
    
 	final ArrayList<Integer> array_e_f = new ArrayList<Integer>();
 	final ArrayList<Integer> array_e_o = new ArrayList<Integer>();
@@ -31,9 +33,17 @@ public class MyProfileActivity extends ActivitiesHeader {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
    
-    //cabecera(true, drawable.home, MenuActivity.class, "Mi Profile", false, android.R.drawable.ic_input_add, NuevoEventActivity.class);
+    /*cabecera(true, drawable.home, MenuActivity.class, "Mi Profile", false, android.R.drawable.ic_input_add, NuevoEventActivity.class);
         createHeaderView(R.drawable.header_back_button,"Mi Perfil", android.R.drawable.ic_input_add,false);
-		setBackButton();
+		setBackButton();*/
+
+        // ACTION BAR
+     	// **************************************************************************************
+        
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Mi Perfil");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		User userProfile = getUser();
 

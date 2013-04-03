@@ -2,6 +2,7 @@ package com.biljet.app;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,12 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.adapters.UpcomingEventsAdapter;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class MyEventsActivity extends ActivitiesHeader {
+public class MyEventsActivity extends Activity {
 
 	// ATRIBUTOS
  	// **************************************************************************************
@@ -45,9 +47,16 @@ public class MyEventsActivity extends ActivitiesHeader {
         // ACTION BAR
      	// **************************************************************************************
         
-        createHeaderView(R.drawable.header_back_button,"Mis Eventos", R.drawable.mas,true);
-		setBackButton();
-		setRightButtonAction(NewEventActivity.class);
+        /*createHeaderView(R.drawable.header_back_button,"Mis Eventos", R.drawable.mas,true);
+		setBackButton(); fgd
+		setRightButtonAction(NewEventActivity.class);*/
+        
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Mis Eventos");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.mas));
+		
 		
 		// LIST VIEW
 		// **************************************************************************************

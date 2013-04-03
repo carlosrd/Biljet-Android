@@ -1,5 +1,6 @@
 package com.biljet.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
 import com.biljet.types.Event;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class EventViewActivity extends ActivitiesHeader {
+public class EventViewActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,10 +28,19 @@ public class EventViewActivity extends ActivitiesHeader {
 //		createHeaderView(R.drawable.header_back_button,"Evento: "+dataBundle.getString("NAME"), R.drawable.perfil,false);
 //		setBackButton();
 
+		
+        // ACTION BAR
+     	// **************************************************************************************
+        
+		//createHeaderView(R.drawable.header_back_button,"Evento: "+e.getName()/*dataBundle.getString("NAME")*/, R.drawable.perfil,false);
+		//setBackButton();
+		
 		Event e = getIntent().getParcelableExtra("event");
-
-		createHeaderView(R.drawable.header_back_button,"Evento: "+e.getName()/*dataBundle.getString("NAME")*/, R.drawable.perfil,false);
-		setBackButton();
+		
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Evento: "+e.getName());
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		int auxInt = 0;
 		
