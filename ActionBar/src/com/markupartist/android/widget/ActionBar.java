@@ -100,7 +100,7 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
         // TODO: Add possibility to add an IntentAction as well.
         mLogoView.setImageResource(resId);
         mLogoView.setVisibility(View.VISIBLE);
-        mTitleView.setPadding(115, 0, 0, 0);		// Añadida para que no se muestre encima del logo de biljet
+        mTitleView.setPadding(75, 0, 0, 0);		// Añadida para que no se muestre encima del logo de biljet
         mHomeLayout.setVisibility(View.GONE);
     }
 

@@ -29,7 +29,7 @@ public class Event implements Parcelable{
 	// Constructora
 	public Event(String name, int id, int image, String eventType, 
 				 String site, Date date, int length_days, int length_hours, int length_minutes,
-				 int price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
+				 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
 		
 		this.name = name;
 		this.id = id;

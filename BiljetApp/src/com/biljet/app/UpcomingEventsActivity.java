@@ -1,16 +1,32 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.biljet.adapters.UpcomingEventsAdapter;
 import com.biljet.types.Date;
@@ -20,7 +36,7 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class UpcomingEventsActivity extends Activity {
 
-	final ArrayList<Event> itemsEvent = getEvents();;
+	ArrayList<Event> itemsEvent;// = getEvents();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +53,87 @@ public class UpcomingEventsActivity extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.addAction(new IntentAction(this, new Intent(this, SearchActivity.class), R.drawable.buscar));
 		
+		Log.e("tag","\nComienzo seccion conexion DB");
+		// CONEXION CON DB
+		InputStream is = null;
+		try {
+			Log.e("tag","\nEntra en el try1");
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("www.biljetapp.com/api/event");
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+			}
+		catch(Exception e) {
+			System.out.println("Error en la conexión");
+			// En esta caputra de excepción podemos ver que hay un problema con la
+			// conexión e intentarlo más adelante.
+			}
+		
+		String cadena = null;
+		
+		try {
+			Log.e("tag","\nEntra en el try2");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+			StringBuilder sb = new StringBuilder();
+			sb.append(reader.readLine() + "\n");
+			String line="0";
+			
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			
+			is.close();
+			cadena = sb.toString();
+			}
+		catch(Exception e) {
+			System.out.println("Error al obtener la cadena desde el buffer");
+			}
+		    
+		//Creamos los atributos de nuestra clase persona
+		String title, creator,province, category,id, imageName, 
+					  longitude, latitude, finishAt;
+		int createdAt, _v;
+		JSONArray attendee,followers,comments;
+		double price;
+	
+		try {
+			Log.e("tag","\nEntra en el try3");
+			JSONArray jsonArray = new JSONArray(cadena);
+			JSONObject jsonObject=null;
+			for(int i=0;i<jsonArray.length();i++){
+				jsonObject = jsonArray.getJSONObject(i);
+				
+				title = jsonObject.getString("title");
+				createdAt = jsonObject.getInt("createdAt");
+				price = jsonObject.getDouble("price");
+				creator = jsonObject.getString("creator");
+				province = jsonObject.getString("province"); 
+				category = jsonObject.getString("category");
+				id = jsonObject.getString("id");
+				_v = jsonObject.getInt("_v");
+				imageName = jsonObject.getString("imageName"); 
+				//comments = jsonObject.getJSONArray("comments");
+				//longitude = jsonObject.getString("longitude"); 
+				//latitude = jsonObject.getString("latitude"); 
+				//followers= jsonObject.getJSONArray("followers");
+				//attendee = jsonObject.getJSONArray("attendee");
+				//finishAt = jsonObject.getString("finishAt");
+				
+				Event event = new Event(title,Integer.parseInt(id),0,category,""+province,null,0,0,0,(int) price,0,0,"","",0);
+				itemsEvent.add(event);
+				Log.e("tag","\nAñadido el evento "+title+" al array");
+				}
+			}
+		catch(JSONException e1){
+			Toast.makeText(getBaseContext(), "No se encuentran los datos"
+			,Toast.LENGTH_LONG).show();
+		} 
+		catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		
+
 		
 		// LIST VIEW
 		// **************************************************************************************
@@ -66,7 +163,7 @@ public class UpcomingEventsActivity extends Activity {
 //							
 //							intentEvent.putExtras(dataBundle);
 							
-							Event e= itemsEvent.get(idEvent);
+							Event e = itemsEvent.get(idEvent);
 							intentEvent.putExtra("event",e);
 							intentEvent.putExtra("OWN?", false);
 							
