@@ -9,6 +9,7 @@ public class Event implements Parcelable{
 	// Event Data
 	String name;
 	int id;
+	String _id;
 	int image;
 	String eventType;
 	String site;
@@ -49,6 +50,29 @@ public class Event implements Parcelable{
 		
 	} // DatosEvento
 
+	// USANDO ESTA!!! XXX!!
+	public Event(String name, String id, int image, String eventType, 
+			 String site, Date date, int length_days, int length_hours, int length_minutes,
+			 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
+	
+	this.name = name;
+	this._id = id;
+	this.image = image;
+	this.eventType = eventType;
+	this.site = site;
+	this.date = date;
+	this.length_days = length_days;
+	this.length_hours = length_hours;
+	this.length_minutes = length_minutes;
+	this.price = price;
+	this.confirmedPeople = confirmedPeople;
+	this.capacity = capacity;
+	this.nameCreator = nameCreator;
+	this.eventInfo = eventInfo;
+	this.score = score;
+	
+} // DatosEvento
+	
 	// GETTERS
 	// ************************************************************************
 	
@@ -186,16 +210,11 @@ public class Event implements Parcelable{
 		}
 		
 		@Override
-		public int describeContents() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
 		public void writeToParcel(Parcel dest, int flags) 
 		{
 			dest.writeString(name);
-			dest.writeInt(id);
+			//dest.writeInt(id);
+			dest.writeString(_id);
 			dest.writeInt(image);
 			dest.writeString(eventType);
 			dest.writeString(site);
@@ -215,7 +234,8 @@ public class Event implements Parcelable{
 		private void readFromParcel(Parcel in) 
 		{
 			name = in.readString();
-			id = in.readInt();
+			//id = in.readInt();
+			_id = in.readString();
 			image  =  in.readInt();
 			eventType = in.readString();
 			site = in.readString();
@@ -241,5 +261,12 @@ public class Event implements Parcelable{
 	        public Event[] newArray(int size) {
 	            return new Event[size];
 	        }
-	    };	
+	    };
+
+		@Override
+		public int describeContents() {
+
+			return 0;
+		}	
+		
 }// DatosEvento

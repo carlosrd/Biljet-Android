@@ -47,14 +47,20 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 			LayoutInflater inflater = context.getLayoutInflater();
 			View item = inflater.inflate(R.layout.listitem_event, null);
 			
-			ImageView icono = (ImageView)item.findViewById(R.id.eventList_Image);
-			icono.setImageResource(events.get(position).getImage());
+			ImageView imageEvent = (ImageView)item.findViewById(R.id.eventList_Image);
+			imageEvent.setImageResource(events.get(position).getImage());
 			
-			TextView lblTitulo = (TextView)item.findViewById(R.id.eventList_TxtTitle);
-			lblTitulo.setText(events.get(position).getName());
+			TextView title = (TextView)item.findViewById(R.id.eventList_TxtTitle);
+			title.setText(events.get(position).getName());
 			
-			TextView lblSubtitulo = (TextView)item.findViewById(R.id.eventList_TxtSubtitle);
-			lblSubtitulo.setText(events.get(position).getEventType());
+			TextView type = (TextView)item.findViewById(R.id.eventList_TxtType);
+			type.setText(events.get(position).getEventType());
+			
+			TextView date = (TextView)item.findViewById(R.id.eventList_TxtDate);
+			date.setText(events.get(position).getDate().toString());	
+			
+			TextView location = (TextView)item.findViewById(R.id.eventList_TxtPlace);
+			location.setText(events.get(position).getSite());
 			
 			return item;
 

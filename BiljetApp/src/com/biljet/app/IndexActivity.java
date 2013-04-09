@@ -59,8 +59,8 @@ public class IndexActivity extends Activity {
 								case 2: Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
 										startActivity(calendarViewOption);
 										break;
-								case 3: Intent myFriendsOption = new Intent(IndexActivity.this, SettingsActivity.class);
-										startActivity(myFriendsOption);
+								case 3: Intent settingsOption = new Intent(IndexActivity.this, SettingsActivity.class);
+										startActivity(settingsOption);
 										break;
 										
 								default: break;
@@ -72,6 +72,7 @@ public class IndexActivity extends Activity {
 		gridMenu.setAdapter(adapter);
 	}	
 
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		switch (keyCode) {

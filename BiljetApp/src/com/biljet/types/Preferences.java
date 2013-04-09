@@ -25,7 +25,7 @@ public class Preferences{
 	public static String BYVIBRATION = "Recibir mensajes con vibración";	
 	public static String BYLIGHT = "Recibir mensajes con luminicas";
 		
-	public static String RECEIVEBYEMAIL = "Recivir mensajes por email";
+	public static String RECEIVEBYEMAIL = "Recibir mensajes por email";
 	
 	//DATOS PERSONALES
 	
@@ -38,7 +38,7 @@ public class Preferences{
 	
 	public static String PWD  = "Password actual";
 	public static String NEWPWD  = "Nuevo password";
-	public static String PEATNEWPWD  = "Repetir nuevoe password";
+	public static String PEATNEWPWD  = "Repetir nuevo password";
 	
 	
 	//ESTADO DE LOS BOTONES
