@@ -11,6 +11,7 @@ public class Event implements Parcelable{
 	int id;
 	String _id;
 	int image;
+	String imagePath;
 	String eventType;
 	String site;
 	Date date;
@@ -51,13 +52,13 @@ public class Event implements Parcelable{
 	} // DatosEvento
 
 	// USANDO ESTA!!! XXX!!
-	public Event(String name, String id, int image, String eventType, 
+	public Event(String name, String id, String image, String eventType, 
 			 String site, Date date, int length_days, int length_hours, int length_minutes,
 			 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
 	
 	this.name = name;
 	this._id = id;
-	this.image = image;
+	this.imagePath = image;
 	this.eventType = eventType;
 	this.site = site;
 	this.date = date;
@@ -134,6 +135,10 @@ public class Event implements Parcelable{
 
 	public int getLength_minutes() {
 		return length_minutes;
+	}
+	
+	public String getImagePath() {
+		return imagePath;
 	}
 
 	// SETTERS
@@ -215,7 +220,8 @@ public class Event implements Parcelable{
 			dest.writeString(name);
 			//dest.writeInt(id);
 			dest.writeString(_id);
-			dest.writeInt(image);
+			//dest.writeInt(image);
+			dest.writeString(imagePath);
 			dest.writeString(eventType);
 			dest.writeString(site);
 			dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
@@ -236,7 +242,8 @@ public class Event implements Parcelable{
 			name = in.readString();
 			//id = in.readInt();
 			_id = in.readString();
-			image  =  in.readInt();
+			//image  =  in.readInt();
+			imagePath = in.readString();
 			eventType = in.readString();
 			site = in.readString();
 			date = in.readParcelable(Date.class.getClassLoader());

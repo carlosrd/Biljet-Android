@@ -1,8 +1,13 @@
 package com.biljet.app;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,10 +49,17 @@ public class EventViewActivity extends Activity {
 		
 		int auxInt = 0;
 		
-		ImageView eventImage = (ImageView)findViewById(R.id.eventView_Image);
-		eventImage.setImageResource(e.getImage());
-		eventImage.setScaleType(ImageView.ScaleType.CENTER);
+		ImageView eventImageView = (ImageView)findViewById(R.id.eventView_Image);
+		//eventImage.setImageResource(e.getImage());		
+		File imgFile = new File(e.getImagePath());
+		if(imgFile.exists()){
+		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+		    eventImageView.setImageBitmap(myBitmap);
+			}
+		
+		eventImageView.setScaleType(ImageView.ScaleType.CENTER);
 	
+		
 		Button buttonReadQR = (Button)findViewById(R.id.eventView_Button_ReadQR);
 		if (getIntent().getBooleanExtra("OWN?", true)){
 			buttonReadQR.setVisibility(View.VISIBLE);
@@ -126,7 +138,7 @@ public class EventViewActivity extends Activity {
 	             toast.show();
 		      } else if (resultCode == RESULT_CANCELED) {
 		         // Handle cancel
-	             Toast toast = Toast.makeText(this, "! : Escaneo cancelado", Toast.LENGTH_LONG);
+	             Toast toast = Toast.makeText(this, " ! : Escaneo cancelado", Toast.LENGTH_LONG);
 	             toast.setGravity(Gravity.TOP, 25, 500);
 	             toast.show();
 		      }

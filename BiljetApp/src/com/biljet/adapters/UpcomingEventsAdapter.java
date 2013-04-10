@@ -1,7 +1,11 @@
 package com.biljet.adapters;
+import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +51,18 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 			LayoutInflater inflater = context.getLayoutInflater();
 			View item = inflater.inflate(R.layout.listitem_event, null);
 			
-			ImageView imageEvent = (ImageView)item.findViewById(R.id.eventList_Image);
-			imageEvent.setImageResource(events.get(position).getImage());
+			ImageView imageEventView = (ImageView)item.findViewById(R.id.eventList_Image);
+			//imageEvent.setImageResource(events.get(position).getImage());
+			
+			File imgFile = new File(events.get(position).getImagePath());
+			Log.d("adapter",imgFile.getAbsolutePath());
+			
+			if(imgFile.exists()){
+			    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+			    imageEventView.setImageBitmap(myBitmap);
+				}
+			else
+				imageEventView.setImageResource(events.get(position).getImage());
 			
 			TextView title = (TextView)item.findViewById(R.id.eventList_TxtTitle);
 			title.setText(events.get(position).getName());

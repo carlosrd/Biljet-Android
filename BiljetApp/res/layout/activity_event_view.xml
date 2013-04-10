@@ -12,14 +12,6 @@
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
 
-	<!-- <ViewStub
-		android:id="@+id/actionBar"
-		android:inflatedId="@+id/header"
-	    android:layout="@layout/header"
-	    android:layout_width="fill_parent"
-	    android:layout_height="60dip" /> -->
-
-	
 	<!-- Vista Evento -->
 	
     <ScrollView
@@ -34,7 +26,7 @@
         
 			<LinearLayout 
 			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
+			    android:layout_height="fill_parent"
 			    android:layout_margin="10dp"
 			    android:orientation="horizontal" >
 			    
@@ -43,8 +35,8 @@
 			    
 				<ImageView
 				    android:id="@+id/eventView_Image"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
+				    android:layout_width="@dimen/event_preview_image_width"
+	   				android:layout_height="@dimen/event_preview_image_height"
 				    android:layout_margin="5dp"
 				    android:layout_gravity="center_vertical"
 				    android:contentDescription="@string/contentDescription_ImageEvent" />
