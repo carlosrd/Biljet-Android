@@ -1,8 +1,8 @@
 package com.biljet.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +14,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.biljet.types.Event;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class EventViewActivity extends Activity {
-
+public class EventViewActivity extends FragmentActivity {
+	
+	/*
+	double latitude1 = 44.4179916135238;
+	double longitude1 = -3.673574000000305;
+	*/
+	public double latitude;
+	public double longitude;
+	Event e = null;
+	private GoogleMap miniMap = null;
+	
+	
+	//TODO
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +51,8 @@ public class EventViewActivity extends Activity {
         
 		//createHeaderView(R.drawable.header_back_button,"Evento: "+e.getName()/*dataBundle.getString("NAME")*/, R.drawable.perfil,false);
 		//setBackButton();
-		
-		Event e = getIntent().getParcelableExtra("event");
+		//He cambiado Event e; declare como var global
+		/*Event*/ e = getIntent().getParcelableExtra("event");
 		
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Evento: "+e.getName());
@@ -43,6 +60,11 @@ public class EventViewActivity extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		int auxInt = 0;
+		
+		//Address FIXME
+		TextView txtAddress = (TextView)findViewById(R.id.eventView_TxtSite);
+		String address = e.getAddress().toString();		
+		txtAddress.setText(address);	
 		
 		ImageView eventImage = (ImageView)findViewById(R.id.eventView_Image);
 		eventImage.setImageResource(e.getImage());
@@ -69,9 +91,6 @@ public class EventViewActivity extends Activity {
 		TextView txtEventType = (TextView)findViewById(R.id.eventView_TxtEventType);
 		txtEventType.setText(e.getEventType());
 		
-		TextView txtSite = (TextView)findViewById(R.id.eventView_TxtSite);
-		txtSite.setText(e.getSite());
-	
 		TextView txtPrice = (TextView)findViewById(R.id.eventView_TxtPrice);
 		String auxString2 = "";
 		float auxFloat = e.getPrice();
@@ -112,6 +131,24 @@ public class EventViewActivity extends Activity {
 
 		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
 		txtInfo.setText(e.getEventInfo());
+	
+		//INCRUSTAMOS EL MAPA EN LA ACTIVIDAD.
+		
+		latitude = e.getAddress().getLatitude();
+		longitude = e.getAddress().getLongitude();
+		
+		
+		miniMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.minimap)).getMap();
+	
+		CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
+		miniMap.animateCamera(camUpd);
+		
+		//Vista normal del mapa
+		miniMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);				
+				
+		//Marcamos el a dirección del evento.
+		miniMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Aquí estamos"));
+		
 	}
 
 	// Metodo para recoger los resultados de leer el QR
@@ -121,7 +158,7 @@ public class EventViewActivity extends Activity {
 		         String contents = intent.getStringExtra("SCAN_RESULT");
 		         String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 		         // Handle successful scan
-	             Toast toast = Toast.makeText(this, "Contenido:" + contents + "       Formato:" + format , Toast.LENGTH_LONG);
+	             Toast toast = Toast.makeText(EventViewActivity.this, "Contenido:" + contents + "       Formato:" + format , Toast.LENGTH_LONG);
 	             toast.setGravity(Gravity.TOP, 25, 500);
 	             toast.show();
 		      } else if (resultCode == RESULT_CANCELED) {
@@ -132,7 +169,18 @@ public class EventViewActivity extends Activity {
 		      }
 		   }
 		}
-	
+	//Método que llama a la  MapsActivity
+	public void showMap(View v){
+	    	Intent intent = new Intent(EventViewActivity.this, MapsActivity.class);
+	    	
+	    	//Pasamos latitud, longitud y nombre a la MapsActivity.
+	    	intent.putExtra("latitude", latitude);
+	    	intent.putExtra("longitude", longitude);
+	    	intent.putExtra("name", e.getName());
+	    	
+			startActivity(intent);	    	
+	 } 
+	 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -153,5 +201,7 @@ public class EventViewActivity extends Activity {
 	    }
 	    return true;
 	}
+	
+	
 
 }

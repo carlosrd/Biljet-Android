@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.biljet.adapters.UpcomingEventsAdapter;
+import com.biljet.types.AddressEvent;
 import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
@@ -98,7 +99,7 @@ public class DayViewActivity extends Activity{
 	    
     	ArrayList<Event> sampleItems = new ArrayList<Event>();
     	
-    	Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
+    	Event Event2 = new Event("Jessie J en concierto", 2 ,R.drawable.jessie_j_evento ,"Concierto", new AddressEvent("Avenida","Complutense",10,"28040","Madrid", "Madrid", 40.447291113537815,-3.7274684000000207), new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
 		sampleItems.add(Event2);
 
 	    return sampleItems;
@@ -108,7 +109,7 @@ public class DayViewActivity extends Activity{
 	    
     	ArrayList<Event> sampleItems = new ArrayList<Event>();
     
-    	Event Event1 = new Event("Cine Forum",1 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,30),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
+    	Event Event1 = new Event("Cin<e Forum",1 ,R.drawable.cine_forum_evento ,"Cine", new AddressEvent("calle","Goya",3,"28001","Madrid", "Madrid", 40.42486156352708,-3.677171899999962), new Date(24,12,2012,21,30),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
 		sampleItems.add(Event1);
 
 	    return sampleItems;

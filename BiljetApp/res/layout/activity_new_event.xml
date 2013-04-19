@@ -49,17 +49,59 @@
 				android:layout_height="wrap_content" >
 			</Spinner>
 			
-             <!--  Fin tipo evento -->             
-            
+             <!--  Fin tipo evento --> 
+                         
+            <!-- Dirección -->
             <TextView 
-                android:text="@string/newEvent_LabelSite" 
+                android:text="@string/newEvent_LabelAddress" 
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />      
-            <EditText
-                android:id="@+id/newEvent_EditSite" 
+                android:layout_height="wrap_content" />    
+                 
+            	<!-- Tipo de la vía -->
+            <Spinner
+				android:id="@+id/newEvent_SpinnerRoadType"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" >
+			</Spinner>
+			
+				<!-- Nombre de la vía -->
+			<EditText
+                android:id="@+id/newEvent_EditRoadName" 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Lugar del acontecimiento" />
+                android:hint="Nombre de la calle" /> 
+			 
+			<!-- Número -->
+			<EditText
+                android:id="@+id/newEvent_EditNumber" 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Número" /> 
+                
+			<!-- C Postal -->
+			<EditText
+                android:id="@+id/newEvent_EditCP" 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"               
+                android:hint="C. Postal" /> 
+                
+			<!-- Ciudad -->
+			<EditText
+                android:id="@+id/newEvent_EditCity" 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ciudad" />
+			
+			<!-- Provincia -->
+			<EditText
+                android:id="@+id/newEvent_EditProvince" 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Provincia" />
+         
+            
+            <!-- Fin dirección -->
             
             <TextView 
                 android:text="@string/newEvent_LabelDate" 

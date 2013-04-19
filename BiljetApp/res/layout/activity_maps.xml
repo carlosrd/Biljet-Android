@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical" 
+    tools:context=".MapsActivity" >
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal" 
+        android:weightSum="1"> 
+         
+	 	
+	    <!-- modo de mostrar las vistas de mapa --> 
+		<Spinner
+			android:id="@+id/maps_SpinnerTypeView"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight=".7"
+			>
+		</Spinner>
+		
+		<!-- botón para mostrar en 3D -->
+		<Button
+	        android:id="@+id/maps_ButtonShow3D"
+	        android:layout_width="0dp"
+			android:layout_height="wrap_content"
+	        android:layout_weight=".3"
+	        android:text="3D" />
+	</LinearLayout>
+   
+	<!--  MAPA -->
+     <fragment         
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+     
+     <Button
+	        android:id="@+id/maps_ButtonStreetView"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right|bottom"	       
+	        android:text="Street view"
+	        android:onClick="streetView" />
+     
+   
+</LinearLayout>

@@ -126,6 +126,7 @@
 		        android:layout_height="5dp"
 		        android:background="@drawable/blue_gradient" />
 						    
+			<!-- Lugar: -->
 			<LinearLayout 
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
@@ -142,6 +143,16 @@
 				<TextView
 				    android:id="@+id/eventView_TxtSite"
 				   	style="@style/EventTextContent" />
+				
+			</LinearLayout>	
+			
+			
+			<LinearLayout 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="5dp"
+			    android:orientation="horizontal" >
+			
 				
 			<!-- Fecha:  -->
 			
@@ -239,6 +250,33 @@
 				
 			</LinearLayout>	
 			
+			<!-- Cómo llegar -->
+			
+			<TextView
+				    android:id="@+id/eventView_LabelLocation"
+				    style="@style/EventTextLabel"
+				    android:text="Cómo llegar" />
+			
+			<LinearLayout 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="5dp"
+			    android:orientation="horizontal" > 
+					
+				<fragment
+						android:id="@+id/minimap"
+						android:layout_width="150dp"
+						android:layout_height="150dp"
+						class="com.google.android.gms.maps.SupportMapFragment" />
+				
+				<ImageButton
+			        android:id="@+id/imageButton1" 
+			        android:layout_width="150dp"
+			        android:layout_height="150dp"
+			        android:src="@drawable/imagemap" 
+			        android:onClick="showMap" 		          
+			     />
+			</LinearLayout>
 		</LinearLayout>
 	</ScrollView>
 </LinearLayout>

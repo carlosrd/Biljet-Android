@@ -11,7 +11,9 @@ public class Event implements Parcelable{
 	int id;
 	int image;
 	String eventType;
-	String site;
+	//String site;
+	//Dirección
+	AddressEvent address;
 	Date date;
 	float price;					// price de la entrada
 	int confirmedPeople;		// número de personas que van a asistir
@@ -26,16 +28,21 @@ public class Event implements Parcelable{
 	String eventInfo;			// Información detallada del evento
 	int score;				// valoración del evento sobre 10
 	
+	//Coordenadas del evento
+	//double latitude;			//Latitud ...
+	//double longitude;			//y longitud del evento(en el mapa)
+	
 	// Constructora
 	public Event(String name, int id, int image, String eventType, 
-				 String site, Date date, int length_days, int length_hours, int length_minutes,
+				 AddressEvent address /*String site*/, Date date, int length_days, int length_hours, int length_minutes,
 				 int price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
+		
 		
 		this.name = name;
 		this.id = id;
 		this.image = image;
 		this.eventType = eventType;
-		this.site = site;
+		this.address = address;
 		this.date = date;
 		this.length_days = length_days;
 		this.length_hours = length_hours;
@@ -46,6 +53,10 @@ public class Event implements Parcelable{
 		this.nameCreator = nameCreator;
 		this.eventInfo = eventInfo;
 		this.score = score;
+		
+		//this.latitude = latitude;
+		//this.longitude = longitude;
+		
 		
 	} // DatosEvento
 
@@ -67,11 +78,15 @@ public class Event implements Parcelable{
 	public String getEventType() {
 		return eventType;
 	}
-
+	/*
 	public String getSite() {
 		return site;
 	}
-
+	 */
+	public AddressEvent getAddress() {
+		return address;
+	}
+	
 	public Date getDate() {
 		return date;
 	}
@@ -111,6 +126,17 @@ public class Event implements Parcelable{
 	public int getLength_minutes() {
 		return length_minutes;
 	}
+	/*
+	public double getLatitude() {
+		return latitude;
+	}
+	
+	public double getLongitude() {
+		return longitude;
+	}
+	*/
+	
+	
 
 	// SETTERS
 	// ************************************************************************
@@ -130,11 +156,15 @@ public class Event implements Parcelable{
 	public void setEvent_type(String eventType) {
 		this.eventType = eventType;
 	}
-
+	/*
 	public void setSite(String site) {
 		this.site = site;
 	}
-
+	 */
+	public void setAddress(AddressEvent address) {
+		this.address = address;
+	}
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -178,6 +208,19 @@ public class Event implements Parcelable{
 	public void setLength_minutes(int length_minutes) {
 		this.length_minutes = length_minutes;
 	}
+	
+	/*
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	*/
+	
+
+	
 	//---------------------------Metodos de parcelable-----------------------------------------//
 	
 		public Event(Parcel in)
@@ -198,7 +241,8 @@ public class Event implements Parcelable{
 			dest.writeInt(id);
 			dest.writeInt(image);
 			dest.writeString(eventType);
-			dest.writeString(site);
+			//dest.writeString(site);
+			dest.writeParcelable(address, flags);
 			dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
 			dest.writeInt(length_days);
 			dest.writeInt(length_hours);
@@ -209,7 +253,10 @@ public class Event implements Parcelable{
 			dest.writeString(nameCreator);
 			dest.writeString(eventInfo);
 			dest.writeInt(score);
-
+			
+			//dest.writeDouble(latitude);
+			//dest.writeDouble(longitude);
+			
 		}
 
 		private void readFromParcel(Parcel in) 
@@ -218,7 +265,8 @@ public class Event implements Parcelable{
 			id = in.readInt();
 			image  =  in.readInt();
 			eventType = in.readString();
-			site = in.readString();
+			//site = in.readString();
+			address = in.readParcelable(AddressEvent.class.getClassLoader());
 			date = in.readParcelable(Date.class.getClassLoader());
 			length_days = in.readInt();
 			length_hours = in.readInt();
@@ -228,8 +276,11 @@ public class Event implements Parcelable{
 			capacity = in.readInt();
 			nameCreator = in.readString();
 			eventInfo = in.readString();
-			score = in.readInt();
+			score = in.readInt();			
+			//latitude = in.readDouble();
+			//longitude = in.readDouble();
 			// si hay objetos de una clase hay que hacer un CREATOR.
+			
 		}
 		
 		public static final Parcelable.Creator<Event> CREATOR
