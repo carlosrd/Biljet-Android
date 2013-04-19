@@ -39,6 +39,7 @@
 		android:layout_weight="1.0"
         class="com.google.android.gms.maps.SupportMapFragment" />
      
+     <!-- Button streetView -->
      <Button
 	        android:id="@+id/maps_ButtonStreetView"
 	        android:layout_width="wrap_content"

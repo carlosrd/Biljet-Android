@@ -21,7 +21,7 @@
     <!-- Permisos para ver mi localización -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+ 
     <!-- Fijar recursos accedidos por la app -->
     <!-- =========================================================== -->
     <uses-feature android:name="android.hardware.camera" />
