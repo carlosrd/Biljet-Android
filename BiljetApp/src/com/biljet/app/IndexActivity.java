@@ -1,7 +1,11 @@
 package com.biljet.app;
 
+import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +25,9 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class IndexActivity extends Activity {
 
+	private static PendingIntent pendingIntent;
+	private boolean primera_vez_en_entrar = true;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +77,8 @@ public class IndexActivity extends Activity {
 		});
 		
 		gridMenu.setAdapter(adapter);
+		
+		iniciarAlarma();
 	}	
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -123,7 +132,7 @@ public class IndexActivity extends Activity {
         intent.putExtra(Intent.EXTRA_TEXT, "Comparte BiljetApp con tus amigos! Para descargar seguir el siguiente enlace: https://dl.dropbox.com/u/16354811/Android/BiljetApp.apk");
         return Intent.createChooser(intent, "Share");
     }
-    
+
 	// TECLA SUBMENU / BOTON ···
 	// **************************************************************************************
 	
@@ -131,20 +140,20 @@ public class IndexActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.index, menu);
-	
+
 		return true;
 	}
-	
-	
+
+
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
 	        case R.id.indexSubmenu_optionSettings:
 	        	Intent openSettings = new Intent(IndexActivity.this,SettingsActivity.class);
 	        	startActivity(openSettings);
 	        	break;
 	        case R.id.indexSubmenu_ButtonAbout:
-	        	Toast.makeText(this,"BiljetApp V.0 ALPHA-2 (IS 2012/2013)",Toast.LENGTH_LONG).show(); 
+	        	Toast.makeText(this,"BiljetApp V.0 ALPHA-2 (IS 2012/2013)",Toast.LENGTH_LONG).show();
 	        	break;
 		    case R.id.indexSubmenu_ButtonExit: 
 				showExitConfirmDialog();
@@ -152,5 +161,25 @@ public class IndexActivity extends Activity {
 	    }
 	    return true;
 	}
+
+	
+	private void iniciarAlarma(){
+	 
+		int comprobacionIntervaloSegundos = 10;
+ 
+		Intent myIntent = new Intent(IndexActivity.this, AlarmChecker.class);
+		pendingIntent = PendingIntent.getService(IndexActivity.this, 0, myIntent, 0);
+			 
+		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+			 
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.add(Calendar.SECOND, 10);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), comprobacionIntervaloSegundos * 1000, pendingIntent);
+		 
+		if (primera_vez_en_entrar)
+			Toast.makeText(IndexActivity.this, "Alarma iniciada", Toast.LENGTH_LONG).show();
+		primera_vez_en_entrar = false;
+	}// iniciarAlarma
 
 }

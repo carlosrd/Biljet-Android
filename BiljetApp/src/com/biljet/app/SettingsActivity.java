@@ -201,15 +201,18 @@ public class SettingsActivity extends Activity {
     		 
     		  public void onClick(View v) {
     	                //is checkBoxRMsgBySound checked?
+
     			if (((CheckBox) v).isChecked()) {
     				stateRMsgBySound = true;
+    				
     			}
     			else{
     				stateRMsgBySound = false;
     			}    	 
     		  }
     		});
-    
+
+    	
     	//Oyente de del CheckBox MENSAJE CON VIBRACION
     	checkBoxRMsgByVibration.setOnClickListener(new OnClickListener() {
    		 

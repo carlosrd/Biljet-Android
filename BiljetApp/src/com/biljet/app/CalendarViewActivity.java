@@ -22,7 +22,7 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class CalendarViewActivity extends Activity {
 
-	private Calendar month; 
+	private Calendar month;
 	private CalendarAdapter adapter;
 	//public Handler handler;sad
 	//public ArrayList<String> items; // container to store some random calendar items
