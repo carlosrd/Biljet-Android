@@ -115,7 +115,7 @@ public class SearchActivity extends Activity {
 			    eventList.setAdapter(adapterEvent);
 			    break;
 	
-			case 'a':
+			/*case 'a':
 				
 		        FriendsAdapter adapterFriends = new FriendsAdapter(this, friendsArray);
 		        ListView friendList = (ListView)findViewById(R.id.list);
@@ -134,7 +134,7 @@ public class SearchActivity extends Activity {
 					});
 		        
 		        friendList.setAdapter(adapterFriends);
-				break;
+				break;*/
 		}// switch
 			
 	}

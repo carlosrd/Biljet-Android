@@ -28,6 +28,28 @@
         <item name="android:layout_marginLeft">0px</item>
     </style>
     
+    
+   <!-- ESTILOS LOGIN ACTIVITY (Y MAS??)
+	 	 *********************************************************************************** -->      
+    
+    <style name="loginLabel">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">18sp</item>
+    	<item name="android:textColor">#000033</item>
+    	<item name="android:layout_marginBottom">2dp</item>
+    </style>
+    
+    
+    
+    
+  <!-- ========================================================================================= 
+       POR REVISAR
+       ========================================================================================= -->  
+    
+    
+    
     <!-- ESTILO TEXTO HEADER SECCIONES
     	 *********************************************************************************** -->  
         
@@ -76,7 +98,7 @@
 
   	</style>
   	
-    
+
     <!-- ESTILO TEXTO EVENTO
     	 *********************************************************************************** -->      
     

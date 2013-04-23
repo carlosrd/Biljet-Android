@@ -76,4 +76,3 @@ public class FriendViewActivity extends ActivitiesHeader {
 	}
 
 }
-

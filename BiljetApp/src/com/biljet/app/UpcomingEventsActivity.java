@@ -45,9 +45,6 @@ public class UpcomingEventsActivity extends Activity {
 	boolean connectionAlive;
 	ArrayList<Event> itemsEvent;// = getEvents();
 
-    
-	
-	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +70,6 @@ public class UpcomingEventsActivity extends Activity {
 
 		// LIST VIEW
 		// **************************************************************************************
-		
 		
 		eventListAdapter = new UpcomingEventsAdapter(this,itemsEvent);
         ListView eventList = (ListView)findViewById(R.id.list_Events);
@@ -209,7 +205,7 @@ public class UpcomingEventsActivity extends Activity {
 
 			runOnUiThread(new Runnable() {
 				  public void run() {
-					  Toast.makeText(getBaseContext(), "Error al guardar el puto archivo!", Toast.LENGTH_LONG).show();
+					  Toast.makeText(getBaseContext(), "Error al guardar avatar para el evento!", Toast.LENGTH_SHORT).show();
 				  }
 				});
 			//Toast.makeText(this, "Error al traducir los datos!", Toast.LENGTH_LONG).show();

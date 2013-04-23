@@ -102,15 +102,20 @@
         <activity
             android:name="com.biljet.app.IndexActivity"
             android:label="@string/title_activity_index" >
+
+        </activity>
+        <activity
+            android:name="com.biljet.app.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.LoginActivity"
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.biljet.app.SettingsActivity"
-            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 
