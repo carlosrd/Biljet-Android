@@ -115,7 +115,7 @@ public class LoginActivity extends Activity {
             /* Creamos el objeto cliente que realiza la petición al servidor */
             HttpClient client = new DefaultHttpClient();
             /* Definimos la ruta al servidor. En mi caso, es un servlet. */
-            HttpPost post = new HttpPost("http://www.biljetapp.com/api/login");
+            HttpPost post = new HttpPost("http://www.biljetapp.com/login");
  
             try{
                 /* Defino los parámetros que enviaré. Primero el nombre del parámetro, seguido por el valor.*/
