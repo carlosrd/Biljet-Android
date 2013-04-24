@@ -34,19 +34,7 @@ import com.biljet.types.User;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
-/**
- *This class provides methods to save the preferences (settings) as:
- *
- *Sound notification.
- *Vibration notification.
- *Notification lighting.
- *
- *Receive e-mail notifications.
- *
- *Update personal information (phone, mobile, address)
- *
- *Change the user's password.
- */
+
 public class NewEventActivity extends Activity {
 	
 		// ATRIBUTOS

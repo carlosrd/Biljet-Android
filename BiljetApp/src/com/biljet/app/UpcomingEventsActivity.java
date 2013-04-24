@@ -115,33 +115,41 @@ public class UpcomingEventsActivity extends Activity {
 				}
 			}
 		catch(Exception e) {
-        	Toast.makeText(this,"Error al conectar con el servidor!",Toast.LENGTH_LONG).show(); 
-			// En esta caputra de excepción podemos ver que hay un problema con la
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(UpcomingEventsActivity.this,"Error al conectar con el servidor!",Toast.LENGTH_SHORT).show(); 
+				  }
+				});	
+			// En esta captura de excepción podemos ver que hay un problema con la
 			// conexión e intentarlo más adelante.
-			}
+		}
 		
 		if (connector.isCancelled())
 			return false;
-			
-		
+					
 		String result = "";
 		
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+			//BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
 			StringBuilder sb = new StringBuilder();
 			sb.append(reader.readLine() + "\n");
 			String line="0";
 			
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) 
 				sb.append(line + "\n");
-			}
 			
 			is.close();
 			result = sb.toString();
+			
 			}
 		catch(Exception e) {
-        	Toast.makeText(this,"Error al obtener la cadena desde el buffer!",Toast.LENGTH_LONG).show(); 
-			}
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(UpcomingEventsActivity.this,"Error al obtener la cadena desde el buffer!",Toast.LENGTH_SHORT).show(); 
+				  }
+				});	
+		}
 		
 		if (connector.isCancelled())
 			return false;
@@ -202,16 +210,18 @@ public class UpcomingEventsActivity extends Activity {
 				}
 			
 		} catch(IOException e2) {
-
 			runOnUiThread(new Runnable() {
 				  public void run() {
-					  Toast.makeText(getBaseContext(), "Error al guardar avatar para el evento!", Toast.LENGTH_SHORT).show();
+					  Toast.makeText(UpcomingEventsActivity.this, "Error al guardar avatar para el evento!", Toast.LENGTH_SHORT).show();
 				  }
 				});
-			//Toast.makeText(this, "Error al traducir los datos!", Toast.LENGTH_LONG).show();
-			Log.e("IOExc",e2.getMessage());
+
 		} catch (JSONException e1) {
-			Toast.makeText(getBaseContext(), "Error al traducir los datos!", Toast.LENGTH_LONG).show();
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(getBaseContext(), "Error al traducir los datos!", Toast.LENGTH_SHORT).show();
+				  }
+				});	
 		}
 
 		

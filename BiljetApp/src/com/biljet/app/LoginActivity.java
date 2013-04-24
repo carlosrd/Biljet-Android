@@ -1,9 +1,13 @@
 package com.biljet.app;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.NoSuchPaddingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -33,6 +37,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.biljet.types.EncryptedData;
 
 public class LoginActivity extends Activity {
 
@@ -65,13 +71,19 @@ public class LoginActivity extends Activity {
 		editTextUsername = (EditText)this.findViewById(R.id.login_EditText_User);
 	    editTextPassword = (EditText)this.findViewById(R.id.login_EditText_Password);
 	    
+	    // TODO Quitar!! Solo para ahorrar el escribirlo en debug
+	    editTextUsername.setText("android");
+	    editTextPassword.setText("android");
+	    
 	    buttonLogin = (Button)this.findViewById(R.id.login_Button_Login);
 	    buttonLogin.setOnClickListener(new OnClickListener(){
-	        @Override
+	        
+	    	@Override
 	        public void onClick(View v){
 	        	String user = editTextUsername.getText().toString();
 	        	String password = editTextPassword.getText().toString();
 	        	
+	        	// Preparar el dialogo de proceso para el inicio de sesion
 	            loginProgress = new ProgressDialog(LoginActivity.this);
 	            loginProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	            loginProgress.setMessage("Iniciando sesión...");
@@ -82,8 +94,6 @@ public class LoginActivity extends Activity {
 					public void onCancel(DialogInterface dialog) {
 						if (connectionAlive)
 							connector.cancel(true);
-						else
-							finish();
 					}
 
 	            });
@@ -91,8 +101,8 @@ public class LoginActivity extends Activity {
 	        	connector = new LoginConnection();
 				connectionAlive = true;
 	        	connector.execute(user,password);
-	            //validateLogin(txtUsername.getText().toString(), txtPass.getText().toString());
 	        }
+	    	
 	    });
 	    
 	    
@@ -130,16 +140,6 @@ public class LoginActivity extends Activity {
     			StatusLine responseStatus = response.getStatusLine();
     			statusCode = responseStatus.getStatusCode();
     			
-    			/*if (statusCode == 200) {
-    				Intent showMenu = new Intent(LoginActivity.this,IndexActivity.class);
-    				startActivity(showMenu);
-    				finish();
-    			}
-    			else if (statusCode == 401)
-    				 Toast.makeText(LoginActivity.this, "Contraseña Incorrecta!", Toast.LENGTH_LONG).show();
-    				else
-    				 Toast.makeText(LoginActivity.this, "Error desconocido !",Toast.LENGTH_LONG).show();	
-                */
             	}
             catch (Exception e) {
             	Log.e("Exception",e.getMessage());
@@ -164,6 +164,7 @@ public class LoginActivity extends Activity {
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
             Log.w("Pass en MD5: ", hexString.toString());
             return hexString.toString();
+            
         }catch(NoSuchAlgorithmException ex){
             Log.w("NoSuchAlgorithmException", ex.toString());
             return null;
@@ -187,7 +188,7 @@ public class LoginActivity extends Activity {
                 return REVERSE_LANDSCAPE;
             }
         }
-		
+    
     /*  Se instancia con 3 tipos:
 	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
 	2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
@@ -195,18 +196,41 @@ public class LoginActivity extends Activity {
     */
 	private class LoginConnection extends AsyncTask<String,Integer,Integer> {
 	
+		String user;
+		String password;
+		String hash;
+		
 		@Override
 		protected void onPreExecute() {
 			//Mostrar dialogo de progreso
 			loginProgress.show();
+			// Bloquear la orientacion durante el logueo para evitar errores
 			setRequestedOrientation(getCurrentOrientation(LoginActivity.this));
 		}
 		
 		@Override
 		protected Integer doInBackground(String... params) {
-			String user = params[0];
-			String password = params[1];
-			return validateLogin(user,password);
+			user = params[0];
+			password = params[1];
+			hash = toMd5(params[1]);
+			
+			int statusCode = validateLogin(user,password);
+			if (statusCode == 200 && !connector.isCancelled()){
+				EncryptedData userData = new EncryptedData(LoginActivity.this);
+				try {
+					userData.encrypt(user,hash);
+				} catch (InvalidKeyException e) {
+					Log.e("Error","Clave de cifrado no valida");
+				} catch (NoSuchAlgorithmException e) {
+					Log.e("Error","El algoritmo no existe");
+				} catch (NoSuchPaddingException e) {
+					Log.e("Error","No such padding: "+e.getMessage());
+				} catch (IOException e) {
+					Log.e("Error","Entrada y salida");
+				}
+			}
+			
+			return statusCode;
 		}
 		
 		@Override
@@ -216,13 +240,16 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Integer statusCode) {
+			// Dejar de mostrar el dialogo, marcar la conexion como no activa y desbloquear sensor
 			loginProgress.dismiss();
 			connectionAlive = false;
 			setRequestedOrientation(SENSOR_ON);
+			
+			// Devolver resultado
 			switch(statusCode){
 				case 200: Intent showMenu = new Intent(LoginActivity.this,IndexActivity.class);
 						  startActivity(showMenu);
-						  finish();
+						  LoginActivity.this.finish();
 						  break;
 				case 401: Toast.makeText(LoginActivity.this, "Error: Contraseña incorrecta", Toast.LENGTH_LONG).show();
 						  break;

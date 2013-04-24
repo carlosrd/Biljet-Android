@@ -29,6 +29,9 @@ public class Preferences{
 	
 	//DATOS PERSONALES
 	
+	public static String USERNAME = "Nick univoco";
+	public static String PASSWORD = "Contraseña";
+	
 	public static String PHONE  = "Teléfono";
 	public static String MOBIL  = "Movil";
 	public static String ADDRESS  = "Dirección";

@@ -28,10 +28,7 @@ public class IndexActivity extends Activity {
 		
 		// ACTION BAR
 		// **************************************************************************************
-		/*cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
-		createHeaderView(R.drawable.imagen_menu,"Menu Principal", R.drawable.perfil,true);
-		setRightButtonAction(MyProfileActivity.class);*/
-		
+
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setHomeLogo(R.drawable.actionbar_logo);
 		actionBar.setTitle("Menu Principal");
