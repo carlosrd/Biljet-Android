@@ -117,7 +117,7 @@ final class CameraConfigurationManager {
     if (focusMode != null) {
       parameters.setFocusMode(focusMode);
     }
-
+    
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     camera.setParameters(parameters);
   }

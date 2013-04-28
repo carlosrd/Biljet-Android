@@ -16,20 +16,24 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+
+
+
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
@@ -95,6 +99,26 @@ public final class ViewfinderView extends View {
     canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
     canvas.drawRect(0, frame.bottom + 1, width, height, paint);
 
+    // XXX TEXTO ROTADO
+    int x = frame.top-100;
+    int y = frame.height() / 2  + frame.top;
+    
+    paint.setColor(Color.WHITE);
+    paint.setStyle(Paint.Style.FILL);
+    paint.setTextSize(20);
+    String rotatedtext = "Enfoca el codigo QR aquí dentro:";
+
+    // Draw bounding rect before rotating text:
+
+    Rect rect = new Rect();
+    paint.getTextBounds(rotatedtext, 0, rotatedtext.length(), rect);
+    
+    canvas.rotate(-90, x + rect.exactCenterX(),y + rect.exactCenterY());
+    canvas.drawText(rotatedtext, x, y, paint);
+    canvas.rotate(90, x + rect.exactCenterX(),y + rect.exactCenterY());
+
+    // ****************************
+    
     if (resultBitmap != null) {
       // Draw the opaque result bitmap over the scanning rectangle
       paint.setAlpha(CURRENT_POINT_OPACITY);

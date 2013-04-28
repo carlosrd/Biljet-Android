@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+	android:background="#F0F8FF"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+
+	<ScrollView
+	    android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        
+		<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="509dp"
+		    android:layout_marginLeft="10dp"
+		    android:orientation="vertical" >
+	
+			<LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginTop="10dp"
+			    android:orientation="horizontal" >	
+				
+				<!-- Imagen del amigo -->
+			    
+				<ImageView
+				    android:id="@+id/friendView_Avatar"		    
+				    android:layout_width="wrap_content"
+			   		android:layout_height="wrap_content"
+			    	android:layout_margin="5dp"
+			    	android:layout_gravity="center_vertical"
+				    android:contentDescription="@string/contentDescription_Avatar" />
+				
+				<!-- Nombre del amigo -->
+				
+				<TextView
+				    android:id="@+id/friendView_TxtName"
+				    android:layout_marginLeft="10dp"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content" 
+				    android:textColor="#000033"
+				    android:typeface="serif"
+				    android:textSize="30sp"
+				    android:textAppearance="?android:attr/textAppearanceLarge"
+				    android:shadowColor="#F0F8FF"
+				    android:shadowRadius="3.5"
+				    android:shadowDx="1"
+				    android:shadowDy="2" />
+				
+			</LinearLayout>
+			
+			
+			<LinearLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="509dp"
+			    android:layout_marginLeft="5dp"
+			    android:orientation="vertical" >
+				
+			    <!-- Ciudad -->
+			    
+				<TextView
+				    android:id="@+id/friendView_LabelCity"
+				    style="@style/EventTextLabel"
+				    android:text="@string/friendView_LabelCity" />
+			
+				<TextView 
+				    android:id="@+id/friendView_TxtCity"
+				    android:layout_marginBottom="10dp"
+				    style="@style/EventTextContent" />
+				
+				<!-- Biografia -->
+				
+				<TextView
+				    android:id="@+id/friendView_LabelBio"
+				    style="@style/EventTextLabel"
+				    android:text="@string/friendView_LabelBio" />
+			
+				<TextView
+				    android:id="@+id/friendView_TxtBio"
+				    style="@style/EventTextContent" />					
+		
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

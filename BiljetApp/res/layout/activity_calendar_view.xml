@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+
+	<!-- Month Viewfinder -->
+	
+	<RelativeLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="#F0F8FF" >
+	   
+	   <!-- Button Previous -->
+	   
+	   <LinearLayout 
+   			android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="left">
+		    
+		    <Button
+		    	android:id="@+id/calendarView_ButtonPrevious"
+		    	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="@string/calendarView_ButtonPrevious"
+				android:gravity="center"
+		    	android:height="40dp"
+		    	android:width="40dp"
+				android:background="@drawable/blue_gradient"
+		    	android:textColor="#FFFFFF" 
+		    	android:textStyle="bold" />
+		    
+		</LinearLayout>
+
+	   	<!-- Month Text -->
+	   	
+	    <TextView
+	        android:id="@+id/calendarView_LabelMonth"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_toRightOf="@id/calendarView_ButtonPrevious"
+			android:text="@string/calendarView_MonthText"
+			android:gravity="center_horizontal"
+	        android:textAppearance="?android:attr/textAppearanceLarge" 
+	        android:textColor="#0B173B" />
+	    
+	   	<!-- Button Next -->
+	    
+	    <LinearLayout 
+   			android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="right"
+		    android:layout_toRightOf="@+id/calendarView_LabelMonth" >
+		    
+		    <Button
+		    	android:id="@+id/calendarView_ButtonNext"
+		    	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="@string/calendarView_ButtonNext"
+		    	android:gravity="center"
+		    	android:height="40dp"
+		    	android:width="40dp"
+				android:background="@drawable/blue_gradient"
+		    	android:textColor="#FFFFFF" 
+		    	android:textStyle="bold" />
+		    
+	    </LinearLayout>
+	    
+	</RelativeLayout>
+	
+	<GridView
+	    android:id="@+id/calendarView_gridCalendarLabelDays"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:numColumns="7"
+	    android:background="#F0F8FF"
+	    android:verticalSpacing="2dp"
+	    android:clickable="false" >
+	</GridView>
+	
+	<GridView
+	    android:id="@+id/calendarView_gridCalendar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:numColumns="7" 
+	   	android:background="#F0F8FF"
+	    android:verticalSpacing="2dp"
+	    android:horizontalSpacing="2dp">
+	</GridView>
+	
+	<!-- color de antes en el fondo -> android:background="#0B0B61" -->
+	
+</LinearLayout>

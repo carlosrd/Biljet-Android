@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+	android:background="#F0F8FF"
+    android:scrollbars="vertical" >
+	
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+	
+	
+		
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:scrollbars="vertical" >
+		    
+	    <AbsoluteLayout 
+		    android:id="@+id/AbsoluteLayout01"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent">
+		
+			<EditText
+			    android:id="@+id/filterText"
+			    android:layout_width="227dp"
+			    android:layout_height="wrap_content"
+			    android:layout_x="12px"
+			    android:layout_y="12px" />
+		
+			<Button
+			    android:id="@+id/search_button"
+			    android:layout_width="80px"
+			    android:layout_height="wrap_content"
+			    android:layout_x="239dp"
+			    android:layout_y="9dp"
+			    android:text="Buscar" />
+		</AbsoluteLayout>
+		
+		<ListView
+		    android:id="@+id/list"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content">
+		</ListView>
+
+	</LinearLayout>
+	
+</LinearLayout>

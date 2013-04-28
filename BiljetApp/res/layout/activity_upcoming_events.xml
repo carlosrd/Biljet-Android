@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+	android:background="#F0F8FF"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+
+	<ViewStub 
+	    android:id="@+id/actionBar"
+       	android:inflatedId="@+id/header"
+        android:layout="@layout/header"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip" />
+	
+	<ListView 
+	    android:id="@+id/list_Events"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+
+</LinearLayout>

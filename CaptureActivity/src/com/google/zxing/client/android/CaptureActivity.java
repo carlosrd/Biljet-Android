@@ -16,19 +16,13 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
-import com.google.zxing.client.android.history.HistoryActivity;
-import com.google.zxing.client.android.history.HistoryItem;
-import com.google.zxing.client.android.history.HistoryManager;
-import com.google.zxing.client.android.result.ResultButtonListener;
-import com.google.zxing.client.android.result.ResultHandler;
-import com.google.zxing.client.android.result.ResultHandlerFactory;
-import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
-import com.google.zxing.client.android.share.ShareActivity;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,9 +43,6 @@ import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -62,13 +53,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.client.android.history.HistoryItem;
+import com.google.zxing.client.android.history.HistoryManager;
+import com.google.zxing.client.android.result.ResultButtonListener;
+import com.google.zxing.client.android.result.ResultHandler;
+import com.google.zxing.client.android.result.ResultHandlerFactory;
+import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -136,7 +131,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.capture);
-
+    
     hasSurface = false;
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
@@ -147,8 +142,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     //showHelpOnFirstLaunch();
+    
+    // Añadido para que no muestre el texto por defecto en la vista
+    statusView = (TextView) findViewById(R.id.status_view); 
+    statusView.setVisibility(View.GONE);
+    
   }
 
+  
   @Override
   protected void onResume() {
     super.onResume();
@@ -162,8 +163,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
 
-    resultView = findViewById(R.id.result_view);
-    statusView = (TextView) findViewById(R.id.status_view);
+    resultView = findViewById(R.id.result_view); 
+    statusView = (TextView) findViewById(R.id.status_view); 
 
     handler = null;
     lastResult = null;
@@ -564,6 +565,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
+  
+  // XXX Este metodo es el que decodifica externamente y creo que habra que modificarlo para que procese
+  //	 nuestros propios codigos QR
   private void handleDecodeExternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
 
     if (barcode != null) {
@@ -729,7 +733,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
     statusView.setText(R.string.msg_default_status);
-    statusView.setVisibility(View.VISIBLE);
+   // statusView.setVisibility(View.VISIBLE);
+    //Añadida para que no muestre el texto por defecto
+    statusView.setVisibility(View.GONE);
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;
   }
@@ -738,3 +744,4 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     viewfinderView.drawViewfinder();
   }
 }
+
