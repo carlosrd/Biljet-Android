@@ -4,83 +4,140 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class Event implements Parcelable{
+public class Event implements Parcelable {
 
-	// Event Data
-	String name;
+	
+	/** EJEMPLO JSON EVENTO:
+	 * 
+	 *	"title": "IS Demo",
+	 *	"createdAt": 1366903431960,
+	 *	"price": 0,
+     *  "creator": "51794a5a82890e4b08000001",
+     *  "province": "32",
+     *  "category": "Meeting",
+     *  "capacity": "70",
+     *  "description": "Evento para la demostración de IS en clase.",
+     *  "_id": "51794a8782890e4b08000002",
+     *  "__v": 0,
+     *  "imageName": "eventDefault.png",
+     *  "comments": [],
+     *  "address": null,
+     *  "longitude": null,
+     *  "latitude": null,
+     *  "postalCode": null,
+     *  "followers": [],
+     *  "attendee": [],
+     *  "duration": null,
+     *  "finishAt": 1369567500000
+	 */
+	
+	// DEPRECATED
 	int id;
-	String _id;
-	int image;
-	String imagePath;
-	String eventType;
-	String site;
-	Date date;
-	float price;					// price de la entrada
-	int confirmedPeople;		// número de personas que van a asistir
+	int image;	
+	int score;					
+	//Date date;					// Fecha del evento [finishAt] => TODO cambiar a java.Date
+	
+	// ATRIBUTOS
+	// ***************************************************************************************************
+	
+	String title;				// Titulo del evento (REQUERIDO)
+	String creatorId;			// Id del usuario creador del evento (REQUERIDO)
+	String _id;					// Id del evento
+	String description;
+	String imagePath;			// Ruta de la imagen del evento en el terminal
+	String category;			// Tipo de evento (REQUERIDO)
+	String address;				// Direccion del evento
+	String city;				// Ciudad del evento
+	int postalCode;				// Codigo postal
+	int province;				// Codigo de provincia (REQUERIDO)
+	
+	// Coordenadas geograficas para los mapas
+	int latitude;				// Latitud
+	int longitude;				// Longitud
+
+	long date;					// Fecha del evento (TIMESTAMP: En miliseg desde 01/01/1970
+	float price;				// Precio de la entrada (REQUERIDO)
+	int confirmedPeople;		// Número de personas que van a asistir
 	int capacity;				// Número de entradas totales (disponibles: capacity - confirmedPeople
 	
 	// Duración del evento
-	int length_days;			
-	int length_hours;
-	int length_minutes;
+	int days_duration;			// Dias
+	int hours_duration;			// Horas
+	int minutes_duration;		// Minutos
 
-	String nameCreator;			// Nombre del Creator
-	String eventInfo;			// Información detallada del evento
-	int score;				// valoración del evento sobre 10
-	
-	// Constructora
-	public Event(String name, int id, int image, String eventType, 
-				 String site, Date date, int length_days, int length_hours, int length_minutes,
-				 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
+
+	public Event(String title,
+				 String creatorId,
+				 String _id,
+				 String description,
+				 String imagePath,
+				 String category,
+				 String address,
+				 String city,
+				 int postalCode,
+				 int province,
+				 int longitude,
+				 int latitude,
+				 long date,
+				 float price,
+				 int capacity,
+				 int days_duration,
+				 int hours_duration,
+				 int minutes_duration){
 		
-		this.name = name;
-		this.id = id;
-		this.image = image;
-		this.eventType = eventType;
-		this.site = site;
+		this.title = title;				
+		this.creatorId = creatorId;			
+		this._id = _id;			
+		this.description = description;
+		this.imagePath = imagePath;			
+		this.category = category;		
+		
+		this.address = address;				
+		this.city = city;				
+		this.postalCode = postalCode;				
+		this.province = province;				
+		
+		this.latitude = latitude;				
+		this.longitude = longitude;				
+		
+		this.date = date;					
+		this.price = price;				
+		//int confirmedPeople;		
+		this.capacity = capacity;				
+		
+		
+		this.days_duration = days_duration;			
+		this.hours_duration = hours_duration;			
+		this.minutes_duration = minutes_duration;		
+			
+	}
+	
+	
+	/*
+	public Event(String title, String id, String image, String eventType, 
+			 String site, Date date, int days_duration, int hours_duration, int minutes_duration,
+			 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo){
+	
+		this.title = title;
+		this._id = id;
+		this.imagePath = image;
+		this.category = eventType;
+		this.address = site;
 		this.date = date;
-		this.length_days = length_days;
-		this.length_hours = length_hours;
-		this.length_minutes = length_minutes;
+		this.days_duration = days_duration;
+		this.hours_duration = hours_duration;
+		this.minutes_duration = minutes_duration;
 		this.price = price;
 		this.confirmedPeople = confirmedPeople;
 		this.capacity = capacity;
-		this.nameCreator = nameCreator;
-		this.eventInfo = eventInfo;
-		this.score = score;
-		
-	} // DatosEvento
-
-	// USANDO ESTA!!! XXX!!
-	public Event(String name, String id, String image, String eventType, 
-			 String site, Date date, int length_days, int length_hours, int length_minutes,
-			 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo, int score){
+		this.creatorId = nameCreator;
+		this.description = eventInfo;
 	
-	this.name = name;
-	this._id = id;
-	this.imagePath = image;
-	this.eventType = eventType;
-	this.site = site;
-	this.date = date;
-	this.length_days = length_days;
-	this.length_hours = length_hours;
-	this.length_minutes = length_minutes;
-	this.price = price;
-	this.confirmedPeople = confirmedPeople;
-	this.capacity = capacity;
-	this.nameCreator = nameCreator;
-	this.eventInfo = eventInfo;
-	this.score = score;
-	
-} // DatosEvento
+	} // DatosEvento*/
 	
 	// GETTERS
 	// ************************************************************************
 	
-	public String getName() {
-		return name;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -89,15 +146,47 @@ public class Event implements Parcelable{
 		return image;
 	}
 
-	public String getEventType() {
-		return eventType;
+	public int getScore() {
+		return score;
 	}
 
-	public String getSite() {
-		return site;
+	public String getTitle() {
+		return title;
 	}
 
-	public Date getDate() {
+	public String getCreatorId() {
+		return creatorId;
+	}
+
+	public String get_id() {
+		return _id;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public int getPostalCode() {
+		return postalCode;
+	}
+
+	public int getProvince() {
+		return province;
+	}
+
+	public long getDate() {
 		return date;
 	}
 
@@ -113,100 +202,26 @@ public class Event implements Parcelable{
 		return capacity;
 	}
 
-	public String getNameCreator() {
-		return nameCreator;
-	}
-
-	public String getEventInfo() {
-		return eventInfo;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
 	public int getLength_days() {
-		return length_days;
+		return days_duration;
 	}
 
 	public int getLength_hours() {
-		return length_hours;
+		return hours_duration;
 	}
 
 	public int getLength_minutes() {
-		return length_minutes;
+		return minutes_duration;
 	}
-	
-	public String getImagePath() {
-		return imagePath;
+
+	public String getDescription() {
+		return description;
 	}
 
 	// SETTERS
 	// ************************************************************************
 	
-	public void setName(String name) {
-		this.name = name;
-	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setImage(int image) {
-		this.image = image;
-	}
-
-	public void setEvent_type(String eventType) {
-		this.eventType = eventType;
-	}
-
-	public void setSite(String site) {
-		this.site = site;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
-	public void setConfirmedPeople(int confirmedPeople) {
-		this.confirmedPeople = confirmedPeople;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
-
-	public void setNameCreator(String nameCreator) {
-		this.nameCreator = nameCreator;
-	}
-
-	public void setEventInfo(String eventInfo) {
-		this.eventInfo = eventInfo;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public void setEventType(String eventType) {
-		this.eventType = eventType;
-	}
-
-	public void setLength_days(int length_days) {
-		this.length_days = length_days;
-	}
-
-	public void setLength_hours(int length_hours) {
-		this.length_hours = length_hours;
-	}
-
-	public void setLength_minutes(int length_minutes) {
-		this.length_minutes = length_minutes;
-	}
 	//---------------------------Metodos de parcelable-----------------------------------------//
 	
 		public Event(Parcel in)
@@ -214,48 +229,63 @@ public class Event implements Parcelable{
 			readFromParcel(in);
 		}
 		
+
+		public static Parcelable.Creator<Event> getCreator() {
+			return CREATOR;
+		}
+
 		@Override
 		public void writeToParcel(Parcel dest, int flags) 
 		{
-			dest.writeString(name);
+			dest.writeString(title);
 			//dest.writeInt(id);
 			dest.writeString(_id);
 			//dest.writeInt(image);
 			dest.writeString(imagePath);
-			dest.writeString(eventType);
-			dest.writeString(site);
-			dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
-			dest.writeInt(length_days);
-			dest.writeInt(length_hours);
-			dest.writeInt(length_minutes);
+			dest.writeString(description);
+			dest.writeString(category);
+			dest.writeString(address);
+			dest.writeInt(province);
+			dest.writeInt(postalCode);
+			dest.writeInt(longitude);
+			dest.writeInt(latitude);
+			dest.writeLong(date);
+			//dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
+			dest.writeInt(days_duration);
+			dest.writeInt(hours_duration);
+			dest.writeInt(minutes_duration);
 			dest.writeFloat(price);
-			dest.writeInt(confirmedPeople);
+			//dest.writeInt(confirmedPeople);
 			dest.writeInt(capacity);
-			dest.writeString(nameCreator);
-			dest.writeString(eventInfo);
-			dest.writeInt(score);
+			dest.writeString(creatorId);
+			
 
 		}
 
 		private void readFromParcel(Parcel in) 
 		{
-			name = in.readString();
+			title = in.readString();
 			//id = in.readInt();
 			_id = in.readString();
 			//image  =  in.readInt();
 			imagePath = in.readString();
-			eventType = in.readString();
-			site = in.readString();
-			date = in.readParcelable(Date.class.getClassLoader());
-			length_days = in.readInt();
-			length_hours = in.readInt();
-			length_minutes = in.readInt();
+			description = in.readString();
+			category = in.readString();
+			address = in.readString();
+			province = in.readInt();
+			postalCode = in.readInt();
+			longitude = in.readInt();
+			latitude = in.readInt();
+			date = in.readLong();
+			//date = in.readParcelable(Date.class.getClassLoader());
+			days_duration = in.readInt();
+			hours_duration = in.readInt();
+			minutes_duration = in.readInt();
 			price = in.readFloat();
-			confirmedPeople = in.readInt();
+			//confirmedPeople = in.readInt();
 			capacity = in.readInt();
-			nameCreator = in.readString();
-			eventInfo = in.readString();
-			score = in.readInt();
+			creatorId = in.readString();
+
 			// si hay objetos de una clase hay que hacer un CREATOR.
 		}
 		

@@ -1,6 +1,8 @@
 package com.biljet.adapters;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -53,7 +55,7 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 			
 			ImageView imageEventView = (ImageView)item.findViewById(R.id.eventList_Image);
 			//imageEvent.setImageResource(events.get(position).getImage());
-			
+
 			File imgFile = new File(events.get(position).getImagePath());
 			Log.d("adapter",imgFile.getAbsolutePath());
 			
@@ -65,16 +67,21 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 				imageEventView.setImageResource(events.get(position).getImage());
 			
 			TextView title = (TextView)item.findViewById(R.id.eventList_TxtTitle);
-			title.setText(events.get(position).getName());
+			title.setText(events.get(position).getTitle());
 			
 			TextView type = (TextView)item.findViewById(R.id.eventList_TxtType);
-			type.setText(events.get(position).getEventType());
+			type.setText(events.get(position).getCategory());
 			
 			TextView date = (TextView)item.findViewById(R.id.eventList_TxtDate);
-			date.setText(events.get(position).getDate().toString());	
+			long timestamp = events.get(position).getDate();
+			
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM, yyyy");
+			String auxDate = dateFormatter.format(new Date(timestamp));
+			
+			date.setText(auxDate);	
 			
 			TextView location = (TextView)item.findViewById(R.id.eventList_TxtPlace);
-			location.setText(events.get(position).getSite());
+			location.setText(events.get(position).getAddress());
 			
 			return item;
 

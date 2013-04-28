@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -24,8 +21,8 @@ public class DayViewActivity extends Activity{
 	// ATRIBUTOS
  	// **************************************************************************************
 	
-	final ArrayList<Event> eventsOwn = getEventsOwned();
-	final ArrayList<Event> eventsToGo = getEventsToGo();
+	final ArrayList<Event> eventsOwn = null;//getEventsOwned();
+	final ArrayList<Event> eventsToGo = null;//getEventsToGo();
 	final UpcomingEventsAdapter adapterToGo = new UpcomingEventsAdapter(this,eventsToGo);
 	final UpcomingEventsAdapter adapterOwned = new UpcomingEventsAdapter(this,eventsOwn);
 	
@@ -45,7 +42,7 @@ public class DayViewActivity extends Activity{
 		actionBar.setTitle("Mi Calendario");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.mas));
+		//actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.mas));
 		
         // DAY SUBTITLE BAR
      	// **************************************************************************************
@@ -93,7 +90,7 @@ public class DayViewActivity extends Activity{
 		}
 			
 	}
-
+/*
     private ArrayList<Event> getEventsToGo() {
 	    
     	ArrayList<Event> sampleItems = new ArrayList<Event>();
@@ -123,7 +120,7 @@ public class DayViewActivity extends Activity{
 	
 	/**
 	 * Actions related to the menu options displayed when you press ··· or Config button on the device
-	 */
+	 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -134,6 +131,6 @@ public class DayViewActivity extends Activity{
 	    }
 	    return true;
 	}
-
+*/
 
 }

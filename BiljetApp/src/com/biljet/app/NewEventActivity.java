@@ -1,24 +1,50 @@
 package com.biljet.app;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
-import android.annotation.SuppressLint;
+import javax.crypto.NoSuchPaddingException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,13 +53,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import com.biljet.types.Date;
+import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
-import com.biljet.types.User;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
-
 
 public class NewEventActivity extends Activity {
 	
@@ -47,13 +72,44 @@ public class NewEventActivity extends Activity {
 	    private static final int DIALOG_TIME = 2;
 		protected static final int RESULT_LOAD_IMAGE = 1;	
 		
+		// Objetos del formulario
 	    private Button buttonDatePicker; 
-	    private Button buttonTimePicker;    
+	    private Button buttonTimePicker;   
+	    private Button buttonCreateEvent;
+	    private Button buttonCancelEvent;
 	    private EditText editTextDate;
 	    private EditText editTextTime;    
+	    private Spinner spinnerCategory;
+	     
+	    // Variables auxiliares para fechas y horas seleccionadas
+	    private int dayPicked;
+	    private int monthPicked;
+	    private int yearPicked;
+	    private int hourPicked;
+	    private int minutePicked;
+	    	
+	    // Variable auxiliar para almacenar el evento creado
+	    private Event newEventOrganized;
 	    
-	    private String typeEvent; //Tipo de evento que vamos a crear.
-	    private int postImage = 0;
+	    private String typeEvent;
+	    private int postImage = 0;	//?¿
+	    
+		private DBConnection connector;				// Tarea en segundo plano para realizar el post a la DB
+		private ProgressDialog postProgress;		// ProgressDialog para mostrar el progreso
+		private boolean connectionAlive;			// Booleano para controlar estado de la conexion
+		
+		// Constanstes para bloquear el sensor de movimiento durante el posteo. Si no se bloquea el
+		// y el usuario gira el telefono, Android destruye la actividad y la vuelve a crear, por lo que
+		// se cancela el posteo y aparecen errores que fuerzan el cierre de la aplicacion
+		final int PORTRAIT = 1;
+		final int LANDSCAPE = 0;
+		final int REVERSE_PORTRAIT = 9;
+		final int REVERSE_LANDSCAPE = 8;
+		final int SENSOR_ON = 4;
+		
+		// Variable que controla que ningún campo se quede sin rellenar y la fecha/hora sea correcta
+	    private boolean emptyFields = false;
+	    private boolean invalidDate = false;
 	    
 	    // Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
 	    final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
@@ -61,45 +117,40 @@ public class NewEventActivity extends Activity {
 	    // Array de tipos de eventos.
 	    final String [] arrayTypeEvents = {"Cine", "Cumpleaños", "Concierto", "Conferencia"}; 
 	       
-	    private User userProfile = getUser();
-	    
-	    //Variable que contrala para que ningún campos se quede sin rellenar
-	    private boolean faltanCamposPorRellenar = false; 
-	    
-	    
-	    // OnCreate()
-	  	// **************************************************************************************
-	 	  
+    // CONSTRUCTOR
+    // **************************************************************************************
+		
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
-	       
 	        setContentView(R.layout.activity_new_event);	        
-	
-	        /*createHeaderView(R.drawable.header_back_button,"Nuevo Evento", -1,false);
-			setBackButton();*/
 			
+	        // ACTION BAR
+			// **************************************************************************************
+
 			ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 			actionBar.setTitle("Crear Nuevo Evento");
 			actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 			actionBar.setDisplayHomeAsUpEnabled(true);
-			
-			
-			// BOTON SET DATE: botón para cambiar la fecha
-			buttonDatePicker = (Button) findViewById(R.id.newEvent_ButtonSetDate);			
-			editTextDate = (EditText) findViewById(R.id.newEvent_EditDate);			
+	        
+			// BOTON: Fijar Fecha
+			// **************************************************************************************
+
+			buttonDatePicker = (Button) findViewById(R.id.newEvent_Button_SetDate);	
+			editTextDate = (EditText) findViewById(R.id.newEvent_EditText_Date);			
 			editTextDate.setText(dateFormatter.format(dateTime.getTime()));	
 			
 			buttonDatePicker.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {
 	                showDialog(DIALOG_DATE);
 	            }
-	        });
-	 
+	        });        
 			
-			// BOTON SET DATE: botón para cambiar la fecha
-			buttonTimePicker = (Button) findViewById(R.id.newEvent_ButtonSetTime);
-			editTextTime = (EditText) findViewById(R.id.newEvent_EditTime);		
+			// BOTON: Fijar Hora
+			// **************************************************************************************
+
+			buttonTimePicker = (Button) findViewById(R.id.newEvent_Button_SetTime);
+			editTextTime = (EditText) findViewById(R.id.newEvent_EditText_Time);		
 			editTextTime.setText(timeFormatter.format(dateTime.getTime()));
 			
 			buttonTimePicker.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +160,9 @@ public class NewEventActivity extends Activity {
 	            }
 	        });			
 			
-			
-			//BOTON  para cambiar la imagen.
+			// BOTON: Cambiar imagen
+			// **************************************************************************************
+
 			Button buttonChangeImage = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
 			buttonChangeImage.setOnClickListener(new View.OnClickListener() {             
 	            public void onClick(View arg0) {
@@ -122,18 +174,69 @@ public class NewEventActivity extends Activity {
 	                startActivityForResult(intent, RESULT_LOAD_IMAGE);
 	            }
 	        });  //Listener buttonChangeImage  
+	
+			// BOTON: Crear Evento
+			// **************************************************************************************
 			
+		    buttonCreateEvent = (Button)this.findViewById(R.id.newEvent_Button_CreateEvent);
+		    buttonCreateEvent.setOnClickListener(new OnClickListener(){
+		        
+		    	@Override
+		        public void onClick(View v){
+						
+		        	// Preparar el dialogo de proceso para el inicio de sesion
+		            postProgress = new ProgressDialog(NewEventActivity.this);
+		            postProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		            postProgress.setMessage("Creando evento...");
+		            postProgress.setCancelable(true);
+		            postProgress.setOnCancelListener(new OnCancelListener(){
+		            
+
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							if (connectionAlive)
+								connector.cancel(true);
+						}
+
+		            });
+		            
+		            setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
+		            postProgress.show();
+		            
+		            newEventOrganized = createNewEvent();
+		            if (newEventOrganized != null){
+		            	connector = new DBConnection();
+						connectionAlive = true;
+			        	connector.execute();
+	            		}
+		            else
+		            	newEventOrganized = null;
+		        }
+		    	
+		    });
 			
+			// BOTON: Cancelar Evento
+			// **************************************************************************************
 			
-			// SPINNER: para TIPO DE EVENT (Cine/Cumpleaños/Concierto/Conferencia)
+		    buttonCancelEvent = (Button)this.findViewById(R.id.newEvent_Button_CancelEvent);
+		    buttonCancelEvent.setOnClickListener(new OnClickListener(){
+		        
+		    	@Override
+		        public void onClick(View v){
+						showCancelEventAlertDialog();
+		        }
+		    	
+		    });
+			
+			// SPINNER: para TIPO DE EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
 	     	// **************************************************************************************
 			
 			ArrayAdapter<String> adaptadorSpinner = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeEvents);	
-			final Spinner spinnerTypesEvent = (Spinner)findViewById(R.id.newEvent_SpinnerEventType);
+			spinnerCategory = (Spinner)findViewById(R.id.newEvent_Spinner_Category);
 			adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerTypesEvent.setAdapter(adaptadorSpinner);		
+			spinnerCategory.setAdapter(adaptadorSpinner);		
 			
-			spinnerTypesEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 				@Override
 				public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
 					
@@ -164,6 +267,9 @@ public class NewEventActivity extends Activity {
 			
 	    }  //onCreate
 	    
+	// GALERIA DE IMAGENES
+    // **************************************************************************************
+		
 	    //Método para cambiar las imagenes, mas adelante utulizaremos el metodo para acceder a la galeria de imagemes.    
 		public void addListenerChangeImage() {				
 				
@@ -203,32 +309,14 @@ public class NewEventActivity extends Activity {
 	        }    
 	    }
 		  */
-		 
-	    @Override
-	    public boolean onCreateOptionsMenu(Menu menu) {
-	        getMenuInflater().inflate(R.menu.new_event, menu);
-	        return true;
-	    }
-	    
-		/**
-		 * Actions related to the menu options displayed when you press ··· or Config button on the device
-		 */
-		@Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
-	        switch (item.getItemId()) {
-		        case R.id.indexSubmenu_optionSettings:
-		        	Intent openSettings = new Intent(NewEventActivity.this,SettingsActivity.class);
-		        	startActivity(openSettings);
-		        	break;
-		    }
-		    return true;
-		}
 
-	    
+	// MOSTRAR DIALOGS: FECHA / HORA
+    // **************************************************************************************
+		
 	    /**
 	     * Method to show the dialog date and time
 	     */
-	    @Override
+	    @Override 
 	    protected Dialog onCreateDialog(int id) {
 	        switch (id) {
 	        
@@ -237,9 +325,11 @@ public class NewEventActivity extends Activity {
 	            return new DatePickerDialog(this, new OnDateSetListener() {                
 	                public void onDateSet(DatePicker view, int year,
 	                        int monthOfYear, int dayOfMonth) {
+	                	dayPicked = dayOfMonth;
+	                	monthPicked = monthOfYear;
+	                	yearPicked = year;
 	                    dateTime.set(year, monthOfYear, dayOfMonth);
-	                    editTextDate.setText(dateFormatter
-	                            .format(dateTime.getTime()));
+	                    editTextDate.setText(dateFormatter.format(dateTime.getTime()));
 	                }
 	            }, dateTime.get(Calendar.YEAR),
 	               dateTime.get(Calendar.MONTH),
@@ -251,6 +341,8 @@ public class NewEventActivity extends Activity {
 	
 	                public void onTimeSet(TimePicker view, int hourOfDay,
 	                        int minute) {
+	                	hourPicked = hourOfDay;
+	                	minutePicked = minute;
 	                    dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
 	                    dateTime.set(Calendar.MINUTE, minute);
 	                    editTextTime.setText(timeFormatter
@@ -262,312 +354,504 @@ public class NewEventActivity extends Activity {
 	        }
 	        return null;
 	    }
-	    
-	    /**
-	     * Method that creates a new event with the data entered by user.
-	     * @param view
-	     */   
-	    @SuppressLint("NewApi")
-		public void buttonCreateNewEvent(View view) {    	
-	    	Intent eventIntent = new Intent(NewEventActivity.this, EventViewActivity.class);    	
-	    	Event NewEvent=createNewEvent();    
-	
-			if(NewEvent!=null){			
-				eventIntent.putExtra("event",NewEvent);			
-				startActivity(eventIntent);
-				finish();
-			}
-			else{			
-				alertRequiredField();
-			}				
-	    }
-	    
-	    /**
-	     * Method alert to cancel
-	     * @param view
-	     */
-	    public void alertCancelNewEvent(View view) {  //Alerta de cancelación del evento 	
-	    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					this);
-	    		//Título
-				alertDialogBuilder.setTitle("Biljet");
-	 
-				// Mensaje del díalogo
-				alertDialogBuilder
-					.setMessage("¿Estás seguro que quieres cancelar la creación del evento "+((EditText) findViewById(R.id.newEvent_EditName)).getText().toString()+"?")
-					.setCancelable(false)
-					.setPositiveButton("Si",new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,int id) {
-							//Si se confirma la cancelacion, termina NewEventActivity
-							NewEventActivity.this.finish();
-						}
-					  })
-					.setNegativeButton("No",new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,int id) {
-							// Si se presiona el boton cancelar, no hace nada, NewEventActivity permanece activa.
-							dialog.cancel();
-						}
-					}); 
-	
-					AlertDialog alertDialog = alertDialogBuilder.create();
-					//Muestra la ventaga de alerta.
-					alertDialog.show();
-			}	    
-	   
-	   /**
-	    * Method alert to required field
-	    */
-	   private void alertRequiredField(){
-		   AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-	        dlgAlert.setMessage("Es obligatorio rellenar todos los campos");
-	        dlgAlert.setTitle("Biljet");
-	        dlgAlert.setPositiveButton("OK", null);
-	        dlgAlert.setCancelable(true);
-	        dlgAlert.create().show();  
-	   }
-	   
-	   //Creación del NUEVO EVENTO.
-	   /**
- 		* Method to create a NEW EVENT
-	    * @return Event object with all data related to it
-	    */
-	   private Event createNewEvent() {  
-		   String nombre = getNameNewEvent();
-		   int id = getIdNewEvent();  	 	   
-		   int logo = getImageNewEvent();	   
-		   String site = getSiteNewEvent();
-		   //Date date = getDateNewEvent();	//FIXME Cambiar el formato de fecha de la clase Event
-		   int price = getPriceNewEvent();	    	   
-		   int capacity = getCapacityNewEvent();				
-		   int length_days = getLengthDaysNewEvent();			
-		   int length_hours = getLengthHoursNewEvent();
-		   int length_minutes = getLengthMinutesNewEvent();
-		   String nameCreator = getNameCreatorNewEvent();			// Nombre del Creator - OBTENER LOS DATOS DEL USUARIO, DESDE PERFIL
-		   String eventInfo   = getInfoNewEvent();			 
-	
-		   if(!faltanCamposPorRellenar){ //Si TODOS los campos del "formualario" estan rellenados, SE CREA EL EVENTO
-			   Event NewEvent = new Event(nombre,id ,logo ,typeEvent, site, new Date(20,7,2013,20,30), length_days, length_hours, length_minutes, price, 0, capacity,  nameCreator, eventInfo, 0);
-			  //TODO Aqui se debe añadir el NewEvent a la BBDD. 
-			   return NewEvent;
-		   }
-		   else{ //Si falta campos por rellenar, NO SE CREA EL EVENTO
-			   return null; 
-		   }       
-		}//CrearNewEvent
-	          
-	   
-	// FUNCIONES
+		
+	// MOSTRAR DIALOGS: CAMPOS VACIOS + FECHA INVALIDA + CANCELAR EVENTO
 	// **************************************************************************************
-	   
+		
 	   /**
-	    * Returns the event name.
-	    * @return
+	    * Method alert when user leaves empty fields
 	    */
-	   private String getNameNewEvent(){
-		   EditText editTxtName = (EditText) findViewById(R.id.newEvent_EditName);	   
-		   if(editTxtName.getText().toString().equals("")){
-			   faltanCamposPorRellenar = true;
-		   }
-		   return editTxtName.getText().toString();
-	   }
-	   
-	   /**
-	    * Returns the ID of the event will be the nth event organized by the user.
-	    * @return 
-	    */
-	   private int getIdNewEvent(){   
-		   return userProfile.getEventsOrganized().size()+1;	   
-	   }   
-	   
-	   /**
-	    * Returns the event logo.
-	    * @return
-	    */
-	   private int getImageNewEvent(){
-		 //Usamos imagenes locales que estan en drawable, pero mas adelante habra que coger de la galeria de imgánes del dispositivo móvil
-		   return arrayIMG[postImage];  
-	   }  
-	   
-	   /**
-	    * Returns the event site.
-	    * @return
-	    */
-	   private String getSiteNewEvent(){
-		   EditText editSite = (EditText) findViewById(R.id.newEvent_EditSite);
-		   if(editSite.getText().toString().equals("")){
-			   faltanCamposPorRellenar = true;
-		   }
-		   return editSite.getText().toString();	   
-	   }
-	   
-	   /*
-	    * SE PODRAN UTLIZAR ÉSTOS UNA VEZ CAMBIADO EL FORMATO FECHA DE LA CLASE Event
-	   private String getDateNewEvent(){
-		   EditText editTxtDate = (EditText) findViewById(R.id.newEvent_EditDate);
-		   return editTxtDate.getText().toString();
-	   }
-	   
-	   private String getTimeNewEvent(){
-	   	   EditText editTxtTime = (EditText) findViewById(R.id.newEvent_EditTime);
-	  	   return editTxtTime.getText().toString();	   
-	   }
-	   */
-	   
-	   /**
-	    * Returns the event price.
-	    * @return Ticket price
-	    */
-	   private int getPriceNewEvent(){
-		   EditText editPrice = (EditText) findViewById(R.id.newEvent_EditPrice);	   
-		   if(editPrice.getText().toString().equals("")){
-			   faltanCamposPorRellenar = true;
-			   return 0;
-		   }
-		   else{
-			   return Integer.parseInt(editPrice.getText().toString());			   
-		   } 	   
-	   }  
-	   
-	   /**
-	    * Returns place capacity where the event it's going to be celebrated
-	    * @return capacity
-	    */
-	   private int getCapacityNewEvent(){				// Número de entradas totales (disponibles: capacity - confirmedPeople //AFORO
-		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditCapacity);
-		   if(editCapacity.getText().toString().equals("")){		   
-			   faltanCamposPorRellenar = true;
-			   return 0;
-		   }
-		   else{
-			   return Integer.parseInt(editCapacity.getText().toString());	
-		   }
-	   }   
-	     
-	   /**
-	    * Returns the event length days
-	    * @return
-	    */
-	   private int getLengthDaysNewEvent(){
-		   EditText editDays = (EditText) findViewById(R.id.newEvent_EditLengthDays);
-		   if(editDays.getText().toString().equals("")){
-			   faltanCamposPorRellenar = true;
-			   return 0;
-		   }
-		   else{
-			   return Integer.parseInt(editDays.getText().toString());
-		   }
-	   }
-	   
-	   /**
-	    * Returns the event length hours
-	    * @return
-	    */
-	   private int getLengthHoursNewEvent(){
-		   EditText editHours = (EditText) findViewById(R.id.newEvent_EditLengthHours);
-		   if(editHours.getText().toString().equals("")){
-			   faltanCamposPorRellenar = true;
-			   return 0;
-		   }
-		   else{
-			   return Integer.parseInt(editHours.getText().toString());
-		   }
-	   }
-	   
-	   /**
-	    * Returns the event length minutes
-	    * @return
-	    */
-	   private int getLengthMinutesNewEvent(){
-		   EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditLengthMinutes);
-		   if(editMinutes.getText().toString().equals("")){		   
-			   faltanCamposPorRellenar = true;
-			   return 0;
-		   }
-		   else{
-			   return Integer.parseInt(editMinutes.getText().toString());
-		   }
-	   }
-	   
-	   /**
-	    * Return the name of the creator of the event 
-	    * @return
-	    */
-	   private String getNameCreatorNewEvent(){			// Nombre del creador del evento- OBTENEMOS LOS DATOS DEL USUARIO DESDE SU PERFIL.
-		   return userProfile.getName();
-	   }
-	   
-	   /**
-	    * Returns detailed event information
-	    * @return
-	    */
-	   private String getInfoNewEvent(){			
-		   EditText editInfo = (EditText) findViewById(R.id.newEvent_EditInfo);
-		   if(editInfo.getText().toString().equals("")){
-			   faltanCamposPorRellenar = true;
-		   }
-		   return editInfo.getText().toString();
-	   }	   
-	   
-	
-	   //Nos creamos un perfil de prueba consultar el nombre del usuario y el número de eventos organizados.
-	   /**
-	    * Method to create a user profile
-	    * @return
-	    */
-	   private User getUser(){   	
-		   String lastLogin = "24-2-2013";
-		   ArrayList<Event> eventsFollow = addEventsFollow();
-		   ArrayList<Event> eventsOrganized = addEventsOrganized();
-		   ArrayList<Event> eventsSignup = addEventsSignup();
-		   int image = R.drawable.usr_alan;
-		   String name = "Ramón";
-				String surname = "García";
-				String city = "Madrid";
-				String biography = "Soy Ramón García y me gusta dar las campanadas aunque éste año no me han dejado";
-				String twitter = "ramoncinTwitter";
-				String facebook = "ramoncinFacebook";
-		   	
-		   return new User(lastLogin, eventsFollow, eventsOrganized, eventsSignup, image, name, surname, city, biography, twitter, facebook);
-	   }
-	   
-	   private ArrayList<Event> addEventsFollow(){
-		   ArrayList<Event> sampleEvents = new ArrayList<Event>();
-		    
-		   Event Event1 = new Event("Cine Forum",1 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,30),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
-		   Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		   Event Event3 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
+		private void showEmptyFieldsAlertDialog(){
 			
-		   sampleEvents.add(Event1);
-		   sampleEvents.add(Event2);
-		   sampleEvents.add(Event3);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			
+			builder.setTitle("Biljet");
+			builder.setMessage("Existen campos sin rellenar. Por favor complete el formulario antes de enviarlo");
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
+			builder.setCancelable(true);
+			builder.setPositiveButton("Aceptar",null);
+
+			AlertDialog alert = builder.create();
+			postProgress.dismiss();
+			setRequestedOrientation(SENSOR_ON);
+			alert.show();
+		}
+		
+	   /**
+	    * Method alert when user leaves empty fields
+	    */
+		private void showInvalidDateAlertDialog(){
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			
+			builder.setTitle("Biljet");
+			builder.setMessage("La fecha/hora no puede ser anterior a la actual. Por favor corrija el dato antes de enviar el formulario");
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
+			builder.setCancelable(true);
+			builder.setPositiveButton("Aceptar",null);
+
+			AlertDialog alert = builder.create();
+			postProgress.dismiss();
+			
+			invalidDate = false;
+			setRequestedOrientation(SENSOR_ON);
+			alert.show();
+		}
+
+	   /**
+	    * Method alert when user press Cancel button
+	    */
+		private void showCancelEventAlertDialog(){
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			
+			builder.setTitle("Biljet");
+			builder.setMessage("El evento"+((EditText) findViewById(R.id.newEvent_EditText_Title)).getText().toString()+" se descartará. ¿Desea continuar?");
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
+			builder.setCancelable(true);
+			builder.setPositiveButton("Sí",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							NewEventActivity.this.finish();
+							
+						}
+					});
+			builder.setNegativeButton("No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
+			
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+		
+	// CREAR EVENTO + RECUPERAR DATOS DESDE EL FORMULARIO
+	// **************************************************************************************
 					
-		   return sampleEvents;
+	   /**
+	* Method to create a NEW EVENT with the parameters provided by form user
+	* @return Event object with all data related it
+	* 		  null if some field is empty
+	*/
+	   private Event createNewEvent() { 
+		   
+		   Event newEventOrganized = null;
+		   
+		   String title = getTitleForm();
+		   String address = getAddressForm();
+		   float price = getPriceForm();
+		   long date = getDateForm();
+		   int days_duration = getDaysDurationForm();
+		   int hours_duration = getHoursDurationForm();
+		   int minutes_duration = getMinutesDurationForm();
+		   int capacity = getCapacityForm();
+		   String description = getDescriptionForm();
+		   
+		   if (emptyFields)
+			   showEmptyFieldsAlertDialog();
+		   if (invalidDate)
+			   showInvalidDateAlertDialog();
+		   else {
+			   newEventOrganized = new Event(title,
+				 						     "",  // creator
+		 						     "",  // id evento
+		 						     description,
+		 						     "eventDefault.png",  // imagePath
+		 						     typeEvent,
+		 						     address,
+		 						     "",  // city
+		 						     0,	  // postal code		 						   
+		 						     40,	  // province					   
+		 						     0,	  // latitude			 						   
+		 						     0,	  // longitude			 						   
+				 						     date,				 						   
+				 						     price,				 						   
+				 						     capacity,				 						   				 						   
+				 						     days_duration,				 						   
+				 						     hours_duration,				 						   
+				 						     minutes_duration);		   							   
+		   }
+			
+		   return newEventOrganized;
+	   
+		}//CrearNewEvent
+	        
+	   /**
+	* Returns the event title from user form
+	* @return String
+	*/
+	   private String getTitleForm(){
+		   
+		   EditText editTxtName = (EditText) findViewById(R.id.newEvent_EditText_Title);	   
+		   
+		   if (editTxtName.getText().toString().equals(""))
+			   emptyFields = true;
+		   
+		   return editTxtName.getText().toString();
+		   
+	   }
+	   
+	   /**
+	* Returns the event address from user form
+	* @return
+	*/
+	   private String getAddressForm(){
+		   
+		   EditText editAdress = (EditText) findViewById(R.id.newEvent_EditText_Address);
+		   
+		   String address = editAdress.getText().toString();
+		   
+		   if (address.equals(""))
+			   emptyFields = true;
+		   
+		   return address;
+	   }
+	
+	   /**
+	* Returns the event price from user form
+	* @return
+	*/
+	   private float getPriceForm(){
+		   
+		   EditText editPrice = (EditText) findViewById(R.id.newEvent_EditText_Price);
+		   
+		   String price = editPrice.getText().toString();
+		   
+		   if (price.equals(""))
+			   emptyFields = true;
+		   
+		   return Float.parseFloat(price);
+	   }
+	   
+	   /**
+	* Returns the event Date and Time from user from
+	* @return Timestamp in milliseconds
+	*/
+	   private long getDateForm(){
+		   
+		   Calendar today = Calendar.getInstance();
+		   Calendar aux = Calendar.getInstance();
+		   aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
+		   
+		   if (aux.getTimeInMillis() < today.getTimeInMillis())
+			   invalidDate = true;
+		   
+		   return aux.getTimeInMillis();
+	   }
+	      
+	   /**
+	* Returns the event duration days from user form
+	* @return
+	*/
+	   private int getDaysDurationForm(){
+		   
+		   EditText editDays = (EditText) findViewById(R.id.newEvent_EditText_DaysDuration);
+		   
+		   String days = editDays.getText().toString();
+		   
+		   if (days.equals(""))
+			   emptyFields = true;
+		   
+		   return Integer.parseInt(days);
+	   }
+	   
+	   /**
+	* Returns the event duration hours from user form
+	* @return
+	*/
+	   private int getHoursDurationForm(){
+		   
+		   EditText editHours = (EditText) findViewById(R.id.newEvent_EditText_HoursDuration);
+		   
+		   String hours = editHours.getText().toString();
+		   
+		   if(hours.equals(""))
+			   emptyFields = true;
+		   
+		   return Integer.parseInt(hours);
+	   }
+	   
+	   /**
+	* Returns the event duration minutes from user form
+	* @return
+	*/
+	   private int getMinutesDurationForm(){
+		   
+		   EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditText_MinutesDuration);
+		   
+		   String minutes = editMinutes.getText().toString();
+		   
+		   if(minutes.equals(""))
+			   emptyFields = true;
+		   
+		   return Integer.parseInt(minutes);
+	   }
+	   
+	   /**
+	* Returns the event capacity from user form
+	* @return
+	*/
+	   private int getCapacityForm(){
+		   
+		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Capacity);
+		   
+		   String capacity = editCapacity.getText().toString();
+		   
+		   if(capacity.equals(""))
+			   emptyFields = true;
+		   
+		   return Integer.parseInt(capacity);
+	   }
+	   
+   /**
+    * Returns the event description from user form
+    * @return
+    */
+	   private String getDescriptionForm(){
+		   EditText editDescription = (EditText) findViewById(R.id.newEvent_EditText_Description);
+		   
+			String info = editDescription.getText().toString();
+		
+			if (info.equals(""))
+				emptyFields = true;
+			   
+			   return info;
+	   }
+
+	
+	// CONEXION DB
+	// **************************************************************************************
+		   
+    private int getCurrentOrientation(Context context){
+    	final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (rotation) {
+        	case Surface.ROTATION_0:
+        		Log.d("Orientation","Portrait");
+        		return PORTRAIT;
+            case Surface.ROTATION_90:
+            	Log.d("Orientation","Landscape");
+                return LANDSCAPE;
+            case Surface.ROTATION_180:
+            	Log.d("Orientation","Reverse Portrait");
+                return REVERSE_PORTRAIT;
+            default:
+            	Log.d("Orientation","Reverse Landscpae");
+                return REVERSE_LANDSCAPE;
+            }
+        }  
+    
+    private String[] prepareAuthentication(){
+    	
+		String path = null;
+		String[] authentication = new String[2];
+		
+		try {
+			path = new EncryptedData(NewEventActivity.this).decrypt();
+			if (path != null){
+				File monitorFile = new File(path);
+				Scanner s = new Scanner(monitorFile);
+				s.nextLine(); // Descartado
+				authentication[1] = s.nextLine();
+				authentication[0] = s.nextLine();
+				return authentication;
+				} 
+
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
+		
+		return null;
+	
+	}
+    
+    private int postEventToDB() {
+	    
+		// CONEXION CON DB
+		// **************************************************************************************
+		InputStream is = null;
+		String[] authentication = prepareAuthentication();
+		int statusCode = -3; // Error desconocido!
+		
+		if (authentication == null)
+			return -1;	// Error: No se ha podido obtener la autenticación
+		
+		HttpParams myParams = new BasicHttpParams();
+
+    	HttpConnectionParams.setSoTimeout(myParams, 10000);
+    	HttpConnectionParams.setConnectionTimeout(myParams, 10000); // Timeout
+
+
+        /* Creamos el objeto cliente que realiza la petición al servidor */
+        DefaultHttpClient client = new DefaultHttpClient(myParams);
+        /* Definimos la ruta al servidor. En mi caso, es un servlet. */
+        HttpPost post = new HttpPost("http://www.biljetapp.com/api/event");
+
+		try {
+			
+			Log.d("POST","\nEntra en el try1 ");	
+			JSONObject jsonObject = new JSONObject();
+                  	
+			// CAMPOS JSON REQUERIDOS            	
+			// **********************************************************  
+			jsonObject.put("title", newEventOrganized.getTitle() );
+        	jsonObject.put("_id", authentication[0] );
+        	jsonObject.put("creator", authentication[0]);
+        	jsonObject.put("password", authentication[1]);
+        	jsonObject.put("price", newEventOrganized.getPrice() );
+            jsonObject.put("province", String.valueOf(newEventOrganized.getProvince()) );
+            jsonObject.put("capacity", String.valueOf(newEventOrganized.getCapacity()) );
+        	jsonObject.put("finishAt", newEventOrganized.getDate() );
+            jsonObject.put("description", newEventOrganized.getDescription() );
+            jsonObject.put("category", newEventOrganized.getCategory() );
+        	jsonObject.put("imageName", newEventOrganized.getImagePath() );
+            
+            Log.d("POST","\nObjeto construido ");
+            Log.d("POST",jsonObject.toString());
+            
+            // CAMPOS JSON NO REQUERIDOS
+            // **********************************************************
+            /*
+            HttpPost post = new HttpPost("http://www.biljetapp.com/api/event");
+            // post.setEntity(new StringEntity(request.toString(), "utf-8"));
+            StringEntity entity = new StringEntity(jsonObject.toString(), "UTF-8");
+            entity.setContentType("application/json");
+            entity.setContentEncoding("gzip");
+            entity.setChunked(true);
+            post.setHeader("transfer-encoding","chunked");
+            post.setHeader("Content-Type", "application/json");
+            post.setHeader("Accept", "application/json");
+            post.setEntity(entity);
+            
+            HttpResponse response = httpclient.execute(post);
+			StatusLine responseStatus = response.getStatusLine();
+			statusCode = responseStatus.getStatusCode();
+            */
+            
+            // Damos formato al JSON a enviar o el servidor lo rechazará
+            StringEntity entity = new StringEntity(jsonObject.toString());
+            entity.setChunked(true);
+            entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
+            entity.setContentType("application/json");
+            post.setHeader("Content-Type", "application/json");
+            post.setEntity(entity);
+            
+            // Ejecuto la petición, y guardo la respuesta 
+			HttpResponse response = client.execute(post);
+			StatusLine responseStatus = response.getStatusLine();
+			statusCode = responseStatus.getStatusCode();
+			
+			Log.d("Login","Status Code:"+String.valueOf(statusCode));
+			Log.d("POST","Status Code: "+String.valueOf(statusCode));
+			
+        } catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			Log.e("ERROR","No soportado codificacion: "+e.getMessage());
+			return -2; // Error: Excepcion lanzada
+		} catch (IOException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("ERROR","Entrada-Salida: "+e.getMessage());
+			return -2; // Error: Excepcion lanzada
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("ERROR","JSON error "+e.getMessage());
+			return -2;
+		}
+		
+		return statusCode;	   
+    }  
+
+	// CONEXION DB
+	// **************************************************************************************
+		        
+    /*  Se instancia con 3 tipos:
+	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
+	2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
+	3º - Tipo de datos de SALIDA de doInBackground() y de ENTRADA en onPostExecute() => Datos para mostrar el fin de la tarea	
+    */
+	private class DBConnection extends AsyncTask<Void,Integer,Integer> {
+		
+		@Override
+		protected void onPreExecute() {
+			// Actualizar mensaje en el dialogo de proceso
+			postProgress.setTitle("Enviando evento al servidor...");
+			postProgress.show();
+		}
+		
+		@Override
+		protected Integer doInBackground(Void... args) {
+			return postEventToDB();
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+		
+		}
+		
+		@Override
+		protected void onPostExecute(Integer statusCode) {
+			// Dejar de mostrar el dialogo, marcar la conexion como no activa y desbloquear sensor
+			postProgress.dismiss();
+			connectionAlive = false;
+			setRequestedOrientation(SENSOR_ON);
+			
+			// Devolver resultado
+			switch(statusCode){
+				case 200: Intent showEvent = new Intent(NewEventActivity.this,EventViewActivity.class);
+						  showEvent.putExtra("NEW_EVENT", newEventOrganized);
+						  startActivity(showEvent);
+						  NewEventActivity.this.finish();
+						  break;
+				case -2:  Toast.makeText(NewEventActivity.this, "Error: No se pudo codificar envío", Toast.LENGTH_LONG).show();
+						  break;
+				default:  Toast.makeText(NewEventActivity.this, "Error: No se pudo contactar con el servidor!", Toast.LENGTH_LONG).show();
+						  break;
+			}
+
+		}
+		
+		@Override
+		protected void onCancelled() {
+			Log.d("Debug","Cancelar posteo");
+			postProgress.dismiss();
+			connectionAlive = false;
+			setRequestedOrientation(SENSOR_ON);
+			Toast.makeText(NewEventActivity.this, " ! : Envío de evento cancelado por el usuario", Toast.LENGTH_LONG).show();
+		}
+
+	}
+	   
+	// BOTON MENU TELEFONO
+	// **************************************************************************************
+		/* 
+	    @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+	        getMenuInflater().inflate(R.menu.new_event, menu);
+	        return true;
 	    }
 	    
-	   private ArrayList<Event> addEventsOrganized(){
-		   ArrayList<Event> sampleEvents = new ArrayList<Event>();
-	    	
-		   Event Event1 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
-		   Event Event2 = new Event("Cine Forum",1 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
-		    
-		   sampleEvents.add(Event1);
-		   sampleEvents.add(Event2);
-		    
-		   return sampleEvents;
-	   }
-	    
-	   private ArrayList<Event> addEventsSignup(){
-		   ArrayList<Event> sampleEvents = new ArrayList<Event>();
-		    
-		   Event Event1 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		   Event Event2 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
-		   Event Event3 = new Event("Cine Forum",4 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),2,0,0, 3, 10, 5, "ONG", "organiza un cine fórum sobre la conocida película de Luis García Berlanga “Bienvenido Mr. Marshall” en el Ensanche de Vallecas, a la salida del metro Valdecarros (Avenida del Ensanche s/n), uno de los terrenos barajados en la Comunidad de Madrid como posible ubicación de Eurovegas", 7);
-		    
-		   sampleEvents.add(Event1);
-		   sampleEvents.add(Event2);
-		   sampleEvents.add(Event3);
-		    
-		   return sampleEvents;
-	   }
-   
+		/**
+		 * Actions related to the menu options displayed when you press ··· or Config button on the device
+		 
+		@Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        switch (item.getItemId()) {
+		        case R.id.indexSubmenu_optionSettings:
+		        	Intent openSettings = new Intent(NewEventActivity.this,SettingsActivity.class);
+		        	startActivity(openSettings);
+		        	break;
+		    }
+		    return true;
+		}
+		 */
+
 }//NewEventActivity

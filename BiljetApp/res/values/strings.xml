@@ -24,8 +24,7 @@
     <!-- MyEventsActivity -->
     <!-- *********************************************************************** -->
 
-    <string name="myEvents_TxtEventsToGo"> > Eventos a los que voy: </string>
-    <string name="myEvents_TxtSelect"> > ¿Que eventos quieres mostrar?</string>
+    <string name="myEvents_Label_Select"> > ¿Que eventos quieres mostrar?</string>
 
     <!-- CalendarViewActivity -->
     <!-- *********************************************************************** -->
@@ -49,15 +48,14 @@
     <!-- EventsViewActivity -->
     <!-- *********************************************************************** -->
 
-    <string name="eventView_LabelType">Tipo: </string>
-    <string name="eventView_LabelSite">Lugar: </string>
-    <string name="eventView_LabelDate">Fecha: </string>
-    <string name="eventView_LabelLength">Duración aprox: </string>
-    <string name="eventView_LabelPrice">Por sólo: </string>
+    <string name="eventView_Label_Category">Tipo: </string>
+    <string name="eventView_Label_Address">Dirección: </string>
+    <string name="eventView_Label_Date">Fecha: </string>
+    <string name="eventView_Label_Duration">Duración aprox: </string>
+    <string name="eventView_Label_Price">Precio: </string>
     <string name="eventView_LabelConfirmedPeople">Asisten: </string>
-    <string name="eventView_LabelCapacity">Aforo Total: </string>
-    <string name="eventView_LabelInfo">Info: </string>
-    <string name="eventView_LabelBtnReadQR"> Leer lista de invitados</string>
+    <string name="eventView_Label_Capacity">Aforo Total: </string>
+    <string name="eventView_Label_Description">Info: </string>
 
     <!-- FriendViewActivity  TODO -->
     <!-- *********************************************************************** -->
@@ -96,6 +94,9 @@
     <!-- MyProfileActivity -->
     <!-- *********************************************************************** -->
 
+  	<string name="myProfile_Label_Username">> Usuario: </string>
+   	<string name="myProfile_Label_Email">> E-mail: </string>
+   	
     <string name="myProfile_LabelCity">Ciudad: </string>
     <string name="myProfile_LabelBio">Biografía: </string>
     <string name="myProfile_find_me">Me puedes encontrar en: </string>
@@ -109,22 +110,22 @@
     <!-- NewEventActivity -->
     <!-- *********************************************************************** -->
 
-    <string name="newEvent_LabelName">Nombre del evento: </string>
-    <string name="newEvent_LabelEventType">"Tipo:"</string>
-    <string name="newEvent_LabelSite">"Lugar:"</string>
-    <string name="newEvent_LabelPrice">"Precio:"</string>
-    <string name="newEvent_LabelLength">"Duración aproximada:"</string>
-    <string name="newEvent_LabelLengthDays">"Días:"</string>
-    <string name="newEvent_LabelLengthHours">"Horas"</string>
-    <string name="newEvent_LabelLengthMinutes">"Min:"</string>
-    <string name="newEvent_LabelCapacity">"Aforo:"</string>
-    <string name="newEvent_LabelInfo">"Observaciones:"</string>
-    <string name="newEvent_LabelDate">"Fecha:"</string>
-    <string name="newEvent_LabelTime">"Hora:"</string>
-    <string name="newEvent_ButtonSetDate">"Fijar fecha" </string>
-    <string name="newEvent_ButtonSetTime">"Fijar hora" </string>
-    <string name="newEvent_ButtonCreateEvent">"Crear" </string>
-    <string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
+    <string name="newEvent_Label_Title">Nombre del evento: </string>
+    <string name="newEvent_Label_Category">"Tipo:"</string>
+    <string name="newEvent_Label_Address">"Dirección:"</string>
+    <string name="newEvent_Label_Price">"Precio:"</string>
+    <string name="newEvent_Label_Duration">"Duración aproximada:"</string>
+    <string name="newEvent_Label_DaysDuration">"Días:"</string>
+    <string name="newEvent_Label_HoursDuration">"Horas"</string>
+    <string name="newEvent_Label_MinutesDuration">"Min:"</string>
+    <string name="newEvent_Label_Capacity">"Aforo:"</string>
+    <string name="newEvent_Label_Description">"Descripción:"</string>
+    <string name="newEvent_Label_Date">"Fecha:"</string>
+    <string name="newEvent_Label_Time">"Hora:"</string>
+    <string name="newEvent_Button_SetDate">"Fijar fecha" </string>
+    <string name="newEvent_Button_SetTime">"Fijar hora" </string>
+    <string name="newEvent_Button_CreateEvent">"Crear" </string>
+    <string name="newEvent_Button_CancelEvent">"Cancelar" </string>
 
     <!-- SettingsActivity -->
     <!-- *********************************************************************** -->

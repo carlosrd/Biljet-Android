@@ -32,7 +32,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -44,7 +43,10 @@ public class UpcomingEventsActivity extends Activity {
 	UpcomingEventsAdapter eventListAdapter;
 	boolean connectionAlive;
 	ArrayList<Event> itemsEvent;// = getEvents();
-
+	
+	// Necesario en caso de fallo en la descarga del avatar del evento. Si falla, borramos el archivo
+	String imagePath;			
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class UpcomingEventsActivity extends Activity {
 							Event e = itemsEvent.get(idEvent);
 							intentEvent.putExtra("event",e);
 							intentEvent.putExtra("OWN?", false);
+							intentEvent.putExtra("NO_TICKET", true);
 							
 							startActivity(intentEvent);
 										
@@ -154,72 +157,128 @@ public class UpcomingEventsActivity extends Activity {
 		if (connector.isCancelled())
 			return false;
 		
-		String title, creator,province, category,_id, imageName, 
-					  longitude, latitude, finishAt;
-		long createdAt;
-		int __v;
-		JSONArray attendee, followers, comments;
+		
+		String title, creatorId, _id, description, imageName, category, address;
+		int postalCode, province, latitude, longitude, capacity;
 		double price;
-		ArrayList<Event> events = new ArrayList<Event>();
-			
+		long date;
+		
+		
+		
 		itemsEvent.clear();
 		
 		try {
-			Log.d("tag","\nEntra en el try3");
+			Log.d("ProxEventos","Entra bucle JSON");
 			JSONArray jsonArray = new JSONArray(result);
 			JSONObject jsonObject = null;
 			for(int i = 0; i < jsonArray.length(); i++){
 				jsonObject = jsonArray.getJSONObject(i);
 				
+				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+				// ************************************************************************
 				title = jsonObject.getString("title");
-				createdAt = jsonObject.getLong("createdAt");
-				price = jsonObject.getDouble("price");
-				creator = jsonObject.getString("creator");
-				province = jsonObject.getString("province"); 
-				category = jsonObject.getString("category");
+				creatorId = jsonObject.getString("creator");
 				_id = jsonObject.getString("_id");
-				__v = jsonObject.getInt("__v");
-				imageName = jsonObject.getString("imageName");
+				description = jsonObject.getString("description");		
+				category = jsonObject.getString("category");
+				province = jsonObject.getInt("province"); 
+				capacity = jsonObject.getInt("capacity"); 
+				date = jsonObject.getLong("finishAt");
+				price = jsonObject.getDouble("price");
 				
 				// CACHING IMAGENES EVENTOS
+				// ************************************************************************
+				imageName = jsonObject.getString("imageName");
+				
 				String imageURL = "http://www.biljetapp.com/img/" + imageName;
-				String imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
 				
 				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
 				if(!imgFolder.exists())
 					imgFolder.mkdir();
 				
 				File imgFile = new File(imagePath);
-				if(!imgFile.exists())
-					saveImageFromURL(imageURL,imagePath);
+					
+				try {
+					// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+					if(!imgFile.exists())
+						saveImageFromURL(imageURL,imagePath);
+					
+				} catch(IOException e2) {
+						runOnUiThread(new Runnable() {
+							  public void run() {
+								  // Notificar error al guardar avatar
+								  Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+								  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+								  File fileToDelete = new File(imagePath);
+								  if (fileToDelete.exists())
+									  fileToDelete.delete();
+							  }
+						});
 
-				// SEGUIR EXTRAYENDO DATOS JSON
+				} // catch
+									
+				// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+				// ************************************************************************
 				
-				//comments = jsonObject.getJSONArray("comments");
-				//longitude = jsonObject.getString("longitude"); 
-				//latitude = jsonObject.getString("latitude"); 
-				//followers= jsonObject.getJSONArray("followers");
-				//attendee = jsonObject.getJSONArray("attendee");
-				//finishAt = jsonObject.getString("finishAt");
+				// Direccion (String => No lanza excepcion si es null)
+				// ---------
+				address = jsonObject.getString("address");
+				if (address.equals("null"))
+					address = "No especificado";
+			
 				
-				Event event = new Event(title, _id , imagePath ,category,""+province,new Date(0,0,0,0,0),0,0,0,(int) price,0,0,"","",0);
+				// Codigo postal (Numero => Lanza excepcion si es null)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
+				} catch (JSONException e){
+					postalCode = 0;
+				}
 				
+				// Longitud
+				// -------------
+				try{
+					latitude = jsonObject.getInt("latitude");;
+				} catch (JSONException e){
+					latitude = 0;
+				}
+				
+				// Latitud
+				// -------------
+				try{
+					longitude = jsonObject.getInt("longitude"); 
+				} catch (JSONException e){
+					longitude = 0;
+				}
+
+				Event event = new Event(title,
+									    creatorId,
+									   _id,
+									   description,
+									   imagePath,
+									   category,
+									   address,
+									   "",
+									   postalCode,
+									   province,
+									   longitude,
+									   latitude,
+									   date,
+									   (float)price,
+									   capacity,
+									   0,0,0);
+									
 				itemsEvent.add(event);
 				
-				Log.d("tag3","\nAñadido el evento "+ title +" al array");
-				}
+				Log.d("UpcomingEvents","\nAñadido el evento "+ title +" al array");
+				
+			} // for
 			
-		} catch(IOException e2) {
-			runOnUiThread(new Runnable() {
-				  public void run() {
-					  Toast.makeText(UpcomingEventsActivity.this, "Error al guardar avatar para el evento!", Toast.LENGTH_SHORT).show();
-				  }
-				});
-
 		} catch (JSONException e1) {
 			runOnUiThread(new Runnable() {
 				  public void run() {
-					  Toast.makeText(getBaseContext(), "Error al traducir los datos!", Toast.LENGTH_SHORT).show();
+					  Toast.makeText(getBaseContext(), "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
 				  }
 				});	
 		}

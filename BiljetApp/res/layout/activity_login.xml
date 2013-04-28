@@ -29,7 +29,7 @@
 	    
 	    <TextView
 	        android:id="@+id/login_Label_User"
-	        style="@style/loginLabel"
+	        style="@style/formLabel"
 	        android:text="@string/login_Label_User" />
 	
 	    <EditText
@@ -42,12 +42,12 @@
 	        <requestFocus />
 	    </EditText>
 	    
-		<!-- Campo Texto Usuario -->
+		<!-- Campo Texto Pasword -->
 	    <!-- **************************************************** -->
 	    
 	    <TextView
 	        android:id="@+id/login_Label_Password"
-	        style="@style/loginLabel"
+	        style="@style/formLabel"
 	        android:text="@string/login_Label_Password" />
 	
 	    <EditText
@@ -57,7 +57,7 @@
 	        android:ems="10"
 	        android:inputType="textPassword" />
 			
-		<!-- Campo Texto Password -->
+		<!-- Botones -->
 	    <!-- **************************************************** -->
 	    
 	    <RelativeLayout

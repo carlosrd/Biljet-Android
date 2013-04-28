@@ -15,9 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.biljet.adapters.FriendsAdapter;
 import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
 import com.biljet.types.Event;
 import com.biljet.types.Friend;
 import com.markupartist.android.widget.ActionBar;
@@ -154,7 +152,7 @@ public class SearchActivity extends Activity {
 				filterText = (EditText) findViewById(R.id.filterText);
 				String ev = filterText.getText().toString();
 				
-				ArrayList<Event> eventsList = getEvents();
+				ArrayList<Event> eventsList = null;//getEvents();
 				eventsArray = filterEvents(ev,eventsList);	// Rellenamos la lista de eventos con los eventos encontrados
 
 				break;
@@ -184,7 +182,7 @@ public class SearchActivity extends Activity {
 		ArrayList<Event> resultado = new ArrayList<Event>();
 		
 		for(Event e:eventsList)		
-			if(e.getName().contains(s))	 
+			if(e.getTitle().contains(s))	 
 				resultado.add(e);
 		
 		return resultado;
@@ -205,7 +203,7 @@ public class SearchActivity extends Activity {
 		
 		return resultado;
 	}// filterFriends	
-	
+	/*
 	private ArrayList<Event> getEvents(){
 		ArrayList<Event> sampleItems = new ArrayList<Event>();
 
@@ -213,7 +211,7 @@ public class SearchActivity extends Activity {
 		Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
 		Event Event3 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
 		Event Event4 = new Event("Cine Forum",4 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),2,0,0, 3, 10, 5, "ONG", "organiza un cine fórum sobre la conocida película de Luis García Berlanga “Bienvenido Mr. Marshall” en el Ensanche de Vallecas, a la salida del metro Valdecarros (Avenida del Ensanche s/n), uno de los terrenos barajados en la Comunidad de Madrid como posible ubicación de Eurovegas", 7);
-	    
+	   
 		sampleItems.add(Event1);
 	    sampleItems.add(Event2);
 	    sampleItems.add(Event3);
@@ -221,7 +219,7 @@ public class SearchActivity extends Activity {
 	    
 		return sampleItems;
 	}// getEvents
-	
+	*/
 	private ArrayList<Friend> getFriends(){
 		ArrayList<Friend> Samples = new ArrayList<Friend>();
 	     Samples.add(new Friend(1, "Alan sdfds", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));

@@ -15,7 +15,7 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item> 
     </style>
     
     <!-- ACTION BAR STYLE (OVERRIDE)
@@ -29,10 +29,10 @@
     </style>
     
     
-   <!-- ESTILOS LOGIN ACTIVITY (Y MAS??)
+   <!-- ESTILO ETIQUETAS DE FORMULARIOS (LABEL FORMS)
 	 	 *********************************************************************************** -->      
     
-    <style name="loginLabel">
+    <style name="formLabel">
 	    <item name="android:layout_width">wrap_content</item>
     	<item name="android:layout_height">wrap_content</item>
     	<item name="android:textStyle">bold</item>

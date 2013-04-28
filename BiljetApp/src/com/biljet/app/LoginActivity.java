@@ -1,22 +1,30 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -67,13 +75,13 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		connectionAlive = false;
-		
+
 		editTextUsername = (EditText)this.findViewById(R.id.login_EditText_User);
 	    editTextPassword = (EditText)this.findViewById(R.id.login_EditText_Password);
 	    
 	    // TODO Quitar!! Solo para ahorrar el escribirlo en debug
-	    editTextUsername.setText("android");
-	    editTextPassword.setText("android");
+	 //   editTextUsername.setText("test");
+	//    editTextPassword.setText("test");
 	    
 	    buttonLogin = (Button)this.findViewById(R.id.login_Button_Login);
 	    buttonLogin.setOnClickListener(new OnClickListener(){
@@ -122,24 +130,37 @@ public class LoginActivity extends Activity {
 		
         /* Comprobamos que no venga alguno en blanco. */
         if (!username.equals("") && !pass.equals("")){
+        	
+        	HttpParams myParams = new BasicHttpParams();
+
+        	HttpConnectionParams.setSoTimeout(myParams, 10000);
+        	HttpConnectionParams.setConnectionTimeout(myParams, 10000); // Timeout
+
+
             /* Creamos el objeto cliente que realiza la petición al servidor */
-            HttpClient client = new DefaultHttpClient();
+            DefaultHttpClient client = new DefaultHttpClient(myParams);
             /* Definimos la ruta al servidor. En mi caso, es un servlet. */
             HttpPost post = new HttpPost("http://www.biljetapp.com/login");
  
             try{
-                /* Defino los parámetros que enviaré. Primero el nombre del parámetro, seguido por el valor.*/
-                List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-                nvp.add(new BasicNameValuePair("username", username));
-                /* Encripto la contraseña en MD5. Definición más abajo */
-                nvp.add(new BasicNameValuePair("password", toMd5(pass)));
-                /* Agrego los parámetros a la petición */
-                post.setEntity(new UrlEncodedFormEntity(nvp));
-                /* Ejecuto la petición, y guardo la respuesta */
+                // Agrego los parámetros a la petición 
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("username", username );
+                jsonObject.put("password", toMd5(pass) );
+
+                // Damos formato al JSON a enviar o el servidor lo rechazará
+                StringEntity entity = new StringEntity(jsonObject.toString());
+                entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
+                entity.setContentType("application/json");
+                post.setHeader("Content-Type", "application/json");
+                post.setEntity(entity);
+                
+                // Ejecuto la petición, y guardo la respuesta 
     			HttpResponse response = client.execute(post);
     			StatusLine responseStatus = response.getStatusLine();
     			statusCode = responseStatus.getStatusCode();
     			
+    			Log.d("Login","Status Code:"+String.valueOf(statusCode));
             	}
             catch (Exception e) {
             	Log.e("Exception",e.getMessage());
@@ -152,26 +173,26 @@ public class LoginActivity extends Activity {
     }
 	
 	private String toMd5(String pass){
-        try{
-            //Creando Hash MD5
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            digest.update(pass.getBytes());
-            byte messageDigest[] = digest.digest();
- 
-            //Creando Hex String
-            StringBuffer hexString = new StringBuffer();
-            for(int i=0; i<messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            Log.w("Pass en MD5: ", hexString.toString());
-            return hexString.toString();
-            
+		
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+		    md.update(pass.getBytes());
+	
+		    byte byteData[] = md.digest();
+	
+		    StringBuffer hexString = new StringBuffer();
+		    for (int i = 0; i < byteData.length; i++)
+		        hexString.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+	        
+		    Log.w("Pass en MD5: ", hexString.toString());
+	        return hexString.toString();
         }catch(NoSuchAlgorithmException ex){
             Log.w("NoSuchAlgorithmException", ex.toString());
             return null;
         }
     }
-	
-    public int getCurrentOrientation(Context context){
+
+    private int getCurrentOrientation(Context context){
     	final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
         	case Surface.ROTATION_0:
@@ -189,6 +210,77 @@ public class LoginActivity extends Activity {
             }
         }
     
+    private String getUserId(String username){
+    	
+		// CONEXION CON DB
+		// **************************************************************************************
+		InputStream is = null;
+		
+		if (username.equals(""))
+			return "CANCELED";
+		
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/user/u/"+username);
+			HttpResponse response = httpclient.execute(getRequest);
+			StatusLine responseStatus = response.getStatusLine();
+			int statusCode = responseStatus.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				is = entity.getContent();
+				}
+			}
+		catch(Exception e) {
+			return "EXCEPTION";
+			// En esta captura de excepción podemos ver que hay un problema con la
+			// conexión e intentarlo más adelante.	
+		}
+
+		if (connector.isCancelled())
+			return "CANCELED";
+	
+
+		String result = "";
+
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+			StringBuilder sb = new StringBuilder();
+			sb.append(reader.readLine() + "\n");
+			String line="0";
+
+			while ((line = reader.readLine()) != null) 
+				sb.append(line + "\n");
+			
+			is.close();
+			result = sb.toString();
+			}
+		catch(Exception e) {
+			return "EXCEPTION";
+		} // catch
+
+		if (connector.isCancelled())
+			return "CANCELED";
+		
+		String _id = "CANCELED";
+		
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			_id = jsonObject.getString("_id");
+			Log.d("UserID",_id);
+		} catch (JSONException e1) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(LoginActivity.this, "Error al traducir los datos!", Toast.LENGTH_LONG).show();
+				  }
+			});	
+		} //catch
+	
+		if (connector.isCancelled())
+			return "CANCELED";
+
+		return _id;
+    }
+    
     /*  Se instancia con 3 tipos:
 	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
 	2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
@@ -199,6 +291,7 @@ public class LoginActivity extends Activity {
 		String user;
 		String password;
 		String hash;
+		String id;
 		
 		@Override
 		protected void onPreExecute() {
@@ -216,19 +309,24 @@ public class LoginActivity extends Activity {
 			
 			int statusCode = validateLogin(user,password);
 			if (statusCode == 200 && !connector.isCancelled()){
-				EncryptedData userData = new EncryptedData(LoginActivity.this);
-				try {
-					userData.encrypt(user,hash);
-				} catch (InvalidKeyException e) {
-					Log.e("Error","Clave de cifrado no valida");
-				} catch (NoSuchAlgorithmException e) {
-					Log.e("Error","El algoritmo no existe");
-				} catch (NoSuchPaddingException e) {
-					Log.e("Error","No such padding: "+e.getMessage());
-				} catch (IOException e) {
-					Log.e("Error","Entrada y salida");
-				}
-			}
+				
+				id = getUserId(user);
+				
+				if (!connector.isCancelled()){
+					EncryptedData userData = new EncryptedData(LoginActivity.this);
+					try {
+						userData.encrypt(user,hash,id);
+					} catch (InvalidKeyException e) {
+						Log.e("Error","Clave de cifrado no valida");
+					} catch (NoSuchAlgorithmException e) {
+						Log.e("Error","El algoritmo no existe");
+					} catch (NoSuchPaddingException e) {
+						Log.e("Error","No such padding: "+e.getMessage());
+					} catch (IOException e) {
+						Log.e("Error","Entrada y salida");
+					}
+				} //if
+			} //if
 			
 			return statusCode;
 		}
@@ -255,7 +353,7 @@ public class LoginActivity extends Activity {
 						  break;
 				case -2:  Toast.makeText(LoginActivity.this, " ! : Campos vacíos", Toast.LENGTH_LONG).show();
 						  break;
-				default:  Toast.makeText(LoginActivity.this, "Error: No se puedo contactar con el servidor!", Toast.LENGTH_LONG).show();
+				default:  Toast.makeText(LoginActivity.this, "Error: No se pudo contactar con el servidor!", Toast.LENGTH_LONG).show();
 						  break;
 			}
 
@@ -318,8 +416,8 @@ public class LoginActivity extends Activity {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
-		builder.setMessage("Por el momento, el registro solo se puede llevar a cabo a través de nuestro sitio web. ¿Quieres abrir el navegador y continuar con el proceso?");
 		builder.setTitle("Biljet");
+		builder.setMessage("Por el momento, el registro solo se puede llevar a cabo a través de nuestro sitio web. ¿Quieres abrir el navegador y continuar con el proceso?");
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 		builder.setCancelable(false);
 		builder.setPositiveButton("Sí",
