@@ -105,8 +105,7 @@ public class NewEventActivity extends Activity {
 		// Variable que controla que ningún campo se quede sin rellenar y la fecha/hora sea correcta
 	    private boolean emptyFields = false;
 	    private boolean invalidDate = false;
-	    private boolean invalidData = false;
-	    
+
 	    // Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
 	    final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
 	    
@@ -409,6 +408,7 @@ public class NewEventActivity extends Activity {
 			postProgress.dismiss();
 			setRequestedOrientation(SENSOR_ON);
 			alert.show();
+			emptyFields = false;
 		}
 		
 	   /**
@@ -441,13 +441,13 @@ public class NewEventActivity extends Activity {
 			
 			builder.setTitle("Biljet");
 			builder.setMessage("Los datos introducidos en el campo "+ field +" no son válidos. Por favor, revise los datos y reintentelo de nuevo!");
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
 			builder.setCancelable(true);
 			builder.setPositiveButton("Aceptar",null);
 
 			AlertDialog alert = builder.create();
 			postProgress.dismiss();
 			
-			invalidDate = false;
 			setRequestedOrientation(SENSOR_ON);
 			alert.show();
 		}
@@ -509,8 +509,6 @@ public class NewEventActivity extends Activity {
 			   showEmptyFieldsAlertDialog();
 		   else if (invalidDate)
 			   showInvalidDateAlertDialog();
-		   else if (invalidData)
-			   return null;
 		   else {
 			   newEventOrganized = new Event(title,
 				 						     "",  // creator
@@ -563,14 +561,7 @@ public class NewEventActivity extends Activity {
 		   try {
 			   price = Float.parseFloat(editPrice.getText().toString());
 		   } catch (Exception e){
-			   invalidData = true;
 			   showInvalidDataAlertDialog("Precio");
-		   }
-		   
-		   // Si el precio es negativo
-		   if (Float.compare(price,0) < -1){
-			   invalidData = true;
-		   	   showInvalidDataAlertDialog("Precio");
 		   }
 		   
 		   return price;
@@ -582,19 +573,13 @@ public class NewEventActivity extends Activity {
 	*/
 	   private int getCapacityForm(){
 		   
-		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Price);
+		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Capacity);
 		   
 		   int capacity = 0;
 		   try {
 			   capacity = Integer.parseInt(editCapacity.getText().toString());
 		   } catch (Exception e){
-			   invalidData = true;
 			   showInvalidDataAlertDialog("Aforo");
-		   }
-		   
-		   if (capacity < 1){
-			   invalidData = true;
-		   	   showInvalidDataAlertDialog("Aforo");
 		   }
 		   
 		   return capacity;
@@ -627,12 +612,6 @@ public class NewEventActivity extends Activity {
 		   try {
 			   daysDuration = Integer.parseInt(editDays.getText().toString());
 		   } catch (Exception e){
-			   invalidData = true;
-			   showInvalidDataAlertDialog("Duración Días");
-		   }
- 
-		   if (daysDuration < 0){
-			   invalidData = true;
 			   showInvalidDataAlertDialog("Duración Días");
 		   }
 		   
@@ -651,12 +630,6 @@ public class NewEventActivity extends Activity {
 		   try {
 			   hoursDuration = Integer.parseInt(editHours.getText().toString());
 		   } catch (Exception e){
-			   invalidData = true;
-			   showInvalidDataAlertDialog("Duración Horas");
-		   }
- 
-		   if (hoursDuration < 0){
-			   invalidData = true;
 			   showInvalidDataAlertDialog("Duración Horas");
 		   }
    
@@ -675,15 +648,9 @@ public class NewEventActivity extends Activity {
 		   try {
 			   minutesDuration = Integer.parseInt(editMinutes.getText().toString());
 		   } catch (Exception e){
-			   invalidData = true;
 			   showInvalidDataAlertDialog("Duración Minutos");
 		   }
- 
-		   if (minutesDuration < 0){
-			   invalidData = true;
-			   showInvalidDataAlertDialog("Duración Minutos");
-		   }
-			   
+		   
 		   
 		   return minutesDuration;
 	   }
@@ -747,13 +714,9 @@ public class NewEventActivity extends Activity {
 		   try {
 			   postalCode = Integer.parseInt(editPostalCode.getText().toString());
 		   } catch (Exception e){
-			   invalidData = true;
 			   showInvalidDataAlertDialog("Código Postal");
 		   }
-		   
-		   if (postalCode == -1)
-			   invalidData = true;
-		   
+
 		   return postalCode;
 	   }
 		      	   
@@ -780,21 +743,9 @@ public class NewEventActivity extends Activity {
         }  
     
     private String[] prepareAuthentication(){
-    	
-		//String[] params = new String[4];
-		
+    		
 		try {
 			return new EncryptedData(NewEventActivity.this).decrypt();
-
-			/*if (path != null){
-				File monitorFile = new File(path);
-				Scanner s = new Scanner(monitorFile);
-				s.nextLine(); // Descartado
-				authentication[1] = s.nextLine();
-				authentication[0] = s.nextLine();
-				return authentication;
-				} */
-
 		} catch (InvalidKeyException e) {
 			Log.e("Error","Clave de cifrado no valida");
 		} catch (NoSuchAlgorithmException e) {
@@ -827,7 +778,6 @@ public class NewEventActivity extends Activity {
 
 		try {
 			
-			Log.d("POST","\nEntra en el try1 ");	
 			JSONObject jsonObject = new JSONObject();
                   	
 			// CAMPOS JSON REQUERIDOS            	
@@ -860,7 +810,7 @@ public class NewEventActivity extends Activity {
 			StatusLine responseStatus = response.getStatusLine();
 			statusCode = responseStatus.getStatusCode();
 			
-			Log.d("POST","Status Code: "+String.valueOf(statusCode));
+			Log.d("POST-EVENT","Status Code: "+String.valueOf(statusCode));
 
 		} catch (IOException e) {
 			Log.e("ERROR","Entrada-Salida: "+e.getMessage());
@@ -885,8 +835,6 @@ public class NewEventActivity extends Activity {
 		
 		@Override
 		protected void onPreExecute() {
-			// Actualizar mensaje en el dialogo de proceso
-			//postProgress.setTitle("Enviando evento al servidor...");
 			postProgress.show();
 			setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
 		}
@@ -915,7 +863,7 @@ public class NewEventActivity extends Activity {
 						  startActivity(showEvent);
 						  NewEventActivity.this.finish();
 						  break;
-				case -2:  Toast.makeText(NewEventActivity.this, "Error: No se pudo codificar envío", Toast.LENGTH_LONG).show();
+				case -2:  Toast.makeText(NewEventActivity.this, "Error: No se pudo codificar envío. Reintentelo de nuevo...", Toast.LENGTH_LONG).show();
 						  break;
 				default:  Toast.makeText(NewEventActivity.this, "Error: No se pudo contactar con el servidor!", Toast.LENGTH_LONG).show();
 						  break;

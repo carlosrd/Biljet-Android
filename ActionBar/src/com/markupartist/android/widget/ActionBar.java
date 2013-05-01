@@ -18,7 +18,6 @@ package com.markupartist.android.widget;
 
 import java.util.LinkedList;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -100,7 +99,14 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
         // TODO: Add possibility to add an IntentAction as well.
         mLogoView.setImageResource(resId);
         mLogoView.setVisibility(View.VISIBLE);
-        mTitleView.setPadding(75, 0, 0, 0);		// TODO ARREGLAR!! Añadida para que no se muestre encima del logo de biljet
+        
+        // AJUSTES PROPIOS
+        int paddingPixel = 75;
+        float density = this.getResources().getDisplayMetrics().density;
+        int paddingDp = (int)(paddingPixel * density);
+        mTitleView.setPadding(paddingDp, 0, 0, 0);
+        // ------------------------------
+        
         mHomeLayout.setVisibility(View.GONE);
     }
 

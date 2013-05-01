@@ -136,7 +136,7 @@
                 android:gravity="top"     	
             	android:inputType="text|textMultiLine" />
             
-            			<!-- > Separador: Donde sera? -->
+            <!-- > Separador: Donde sera? -->
             <!-- ******************************************************* -->
 
             <TextView
