@@ -10,7 +10,6 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -115,7 +114,7 @@ public class MyEventsActivity extends Activity {
 							Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
 					
 							Event e = eventsToGo.get(eventId);
-							eventIntent.putExtra("event",e);
+							eventIntent.putExtra("EVENT",e);
 							eventIntent.putExtra("OWN?", isOwn);
 							eventIntent.putExtra("NO_TICKET",false);
 							
@@ -161,22 +160,34 @@ public class MyEventsActivity extends Activity {
 										  });
 		
 	} // OnCreate()
+
+	@Override
+	protected void onRestart() {
+	    super.onRestart();  // Always call the superclass method first
+	    
+	    // Activity being restarted from stopped state    
 	
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
+		Log.d("RESTART","\nComienzo seccion conexion DB");
+		eventsToGo = new ArrayList<Event>();
+		eventsOrganized = new ArrayList<Event>();
+		
+		connector = new DBConnection();
+		connectionAlive = true;
+		connector.execute();
+
+	}
 	// METODOS PARA CONEXION DB
  	// **************************************************************************************
 	  
 	private String prepareUser(){
 		
-		String path = null;
+		String[] params = null;
 	
 		try {
-			path = new EncryptedData(MyEventsActivity.this).decrypt();
-			if (path != null){
-				File monitorFile = new File(path);
-				Scanner s = new Scanner(monitorFile);
-				return s.nextLine();
-				} 
-
+			params = new EncryptedData(MyEventsActivity.this).decrypt();
+			return params[0];
 		} catch (InvalidKeyException e) {
 			Log.e("Error","Clave de cifrado no valida");
 		} catch (NoSuchAlgorithmException e) {
@@ -226,12 +237,13 @@ public class MyEventsActivity extends Activity {
 
 		if (connector.isCancelled())
 			return false;
-	
+		
+		// TRADUCCION DE LOS BYTES DESCARGADOS A STRING (JSON)
+		// **************************************************************************************
 
 		String result = "";
 
 		try {
-			//BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
 			StringBuilder sb = new StringBuilder();
 			sb.append(reader.readLine() + "\n");
@@ -253,7 +265,10 @@ public class MyEventsActivity extends Activity {
 
 		if (connector.isCancelled())
 			return false;
-			
+		
+		// EXTRACCION DE LOS DATOS DEL JSON OBTENIDO
+		// **************************************************************************************
+		
 		String title, creatorId, _id, description, imageName, category, address;
 		int postalCode, province, latitude, longitude, capacity;
 		double price;
@@ -271,6 +286,7 @@ public class MyEventsActivity extends Activity {
 
 				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
 				// ************************************************************************
+				
 				title = jsonObject.getString("title");
 				creatorId = jsonObject.getString("creator");
 				_id = jsonObject.getString("_id");
@@ -283,6 +299,7 @@ public class MyEventsActivity extends Activity {
 				
 				// CACHING IMAGENES EVENTOS
 				// ************************************************************************
+				
 				imageName = jsonObject.getString("imageName");
 				
 				String imageURL = "http://www.biljetapp.com/img/" + imageName;
@@ -511,16 +528,17 @@ public class MyEventsActivity extends Activity {
 		URL url = new URL(imageURL);
 		File imgFile = new File(destinationPath);
 		imgFile.createNewFile();
+		
 		InputStream input = null;
 		FileOutputStream output = null;
-		Log.d("tag3","Inicio try saveImage");
+		Log.d("SaveImage","Inicio try saveImage");
 		try {
 			
 		    input = url.openConnection().getInputStream();
 			Log.d("tag3","Conexion hecha!");
 		    output = new FileOutputStream(imgFile);
 
-			Log.d("tag3","Abierto output!");
+			Log.d("SaveImage","Abierto output!");
 			
 		    int read;
 		    byte[] data = new byte[1024];
@@ -528,7 +546,7 @@ public class MyEventsActivity extends Activity {
 		    while ((read = input.read(data)) != -1)
 		        output.write(data, 0, read);
 		    
-			Log.d("tag3","Termina bucle saveImage");
+			Log.d("SaveImage","Termina bucle saveImage");
 			
 		} finally {
 		    if (output != null)
@@ -582,6 +600,8 @@ public class MyEventsActivity extends Activity {
 	
 	}
 	
+	// BOTON MENU TELEFONO
+	// **************************************************************************************
 	
 	/*
     @Override

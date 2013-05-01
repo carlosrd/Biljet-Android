@@ -1,13 +1,11 @@
 package com.biljet.app;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -17,7 +15,6 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,13 +23,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.biljet.types.EncryptedData;
-import com.biljet.types.Event;
-import com.biljet.types.User;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
@@ -72,10 +66,11 @@ public class MyProfileActivity extends Activity {
 
     private String prepareUser(){
 		
-		String path = null;
+		String[] params = new String[4];
 		try {
-			path = new EncryptedData(MyProfileActivity.this).decrypt();
-			if (path != null){
+			params = new EncryptedData(MyProfileActivity.this).decrypt();
+			return params[2];
+			/*if (path != null){
 				File monitorFile = new File(path);
 				Scanner s = new Scanner(monitorFile);
 				s.nextLine();
@@ -83,7 +78,7 @@ public class MyProfileActivity extends Activity {
 				return s.nextLine();
 				
 				} 
-
+*/
 		} catch (InvalidKeyException e) {
 			Log.e("Error","Clave de cifrado no valida");
 		} catch (NoSuchAlgorithmException e) {

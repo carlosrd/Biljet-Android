@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.biljet.app.R;
 import com.biljet.types.Event;
+import com.biljet.types.Province;
 
 public class UpcomingEventsAdapter extends BaseAdapter{
 		
@@ -81,7 +82,10 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 			date.setText(auxDate);	
 			
 			TextView location = (TextView)item.findViewById(R.id.eventList_TxtPlace);
-			location.setText(events.get(position).getAddress());
+			String site = events.get(position).getAddress()+", ";
+			Province p = new Province();
+			site += p.toString(events.get(position).getProvince());
+			location.setText(site);
 			
 			return item;
 

@@ -6,7 +6,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -72,7 +71,7 @@ public class EventViewActivity extends Activity {
         // ACTION BAR
      	// **************************************************************************************
         
-		currentEvent = getIntent().getParcelableExtra("event");
+		currentEvent = getIntent().getParcelableExtra("EVENT");
 		
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Evento: "+ currentEvent.getTitle());
@@ -141,17 +140,22 @@ public class EventViewActivity extends Activity {
 		TextView txtEventType = (TextView)findViewById(R.id.eventView_TextView_Category);
 		txtEventType.setText(currentEvent.getCategory());
 		
-		TextView txtSite = (TextView)findViewById(R.id.eventView_TextView_Address);
-		txtSite.setText(currentEvent.getAddress());
+		TextView txtAddress = (TextView)findViewById(R.id.eventView_TextView_Address);
+		txtAddress.setText(currentEvent.getAddress()+"\n"+currentEvent.getPostalCode()+" "+currentEvent.getCity());
 	
 		TextView txtPrice = (TextView)findViewById(R.id.eventView_TextView_Price);
 		String auxString2 = "";
 		float auxFloat = currentEvent.getPrice();
-		auxString2 = auxFloat+" €";
+		
+		if (Float.compare(0, auxFloat) ==  0)
+			auxString2 = "Gratis!";
+		else
+			auxString2 = auxFloat+" €";
+		
 		txtPrice.setText(auxString2);
 		
 		TextView txtDate = (TextView)findViewById(R.id.eventView_TextView_Date);
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM, yyyy");
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM, yyyy - HH:mm");
 		String auxDate = dateFormatter.format(new Timestamp(currentEvent.getDate()));
 		auxDate = auxDate+"";
 		txtDate.setText(auxDate);
@@ -226,21 +230,8 @@ public class EventViewActivity extends Activity {
     
 	private String[] prepareUser(){
 		
-		String path = null;
-		String[] params = new String[2];
 		try {
-			path = new EncryptedData(EventViewActivity.this).decrypt();
-			if (path != null){
-				File monitorFile = new File(path);
-				Scanner s = new Scanner(monitorFile);
-				s.nextLine();
-				
-				params[0] = s.nextLine();
-				params[1] = s.nextLine();
-				
-				return params;
-				} 
-
+			return new EncryptedData(EventViewActivity.this).decrypt();
 		} catch (InvalidKeyException e) {
 			Log.e("Error","Clave de cifrado no valida");
 		} catch (NoSuchAlgorithmException e) {
@@ -263,7 +254,6 @@ public class EventViewActivity extends Activity {
         /* Definimos la ruta al servidor. En mi caso, es un servlet. */
         HttpPost post = new HttpPost("http://www.biljetapp.com/api/event/go/"+ currentEvent.get_id());
         
-        Log.d("POST","http://www.biljetapp.com/api/event/go/"+ currentEvent.get_id());
         try{
             // Agrego los parámetros a la petición 
             JSONObject jsonObject = new JSONObject();
@@ -312,8 +302,8 @@ public class EventViewActivity extends Activity {
 		protected Integer doInBackground(Boolean... params) {
 
 			String[] authentication = prepareUser();
-			String user = authentication[1];
-			String pass = authentication[0];
+			String user = authentication[0];
+			String pass = authentication[1];
 			boolean toGo = params[0]; 
 			int statusCode = -1;
 			

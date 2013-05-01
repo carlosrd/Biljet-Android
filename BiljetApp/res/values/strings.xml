@@ -109,10 +109,20 @@
 
     <!-- NewEventActivity -->
     <!-- *********************************************************************** -->
-
+    
+    <string name="newEvent_LabelHeader_BasicData"> Datos básicos del evento </string>
+    <string name="newEvent_LabelHeader_When"> ¿Cuando será? </string>
+    <string name="newEvent_LabelHeader_Where"> ¿Donde será? </string>
+    <string name="newEvent_LabelHeader_Duration"> ¿Cuanto durará aprox.? </string>
+    <string name="newEvent_LabelHeader_Image"> Elige una imagen... </string>
+    <string name="newEvent_LabelHeader_Confirm"> ¡Confirma tu evento! </string>
+    
     <string name="newEvent_Label_Title">Nombre del evento: </string>
-    <string name="newEvent_Label_Category">"Tipo:"</string>
+    <string name="newEvent_Label_Category">"Categoría:"</string>
     <string name="newEvent_Label_Address">"Dirección:"</string>
+    <string name="newEvent_Label_City">"Ciudad:"</string>
+    <string name="newEvent_Label_PostalCode">"Código Postal:"</string>
+    <string name="newEvent_Label_Province">"Provincia":"</string>
     <string name="newEvent_Label_Price">"Precio:"</string>
     <string name="newEvent_Label_Duration">"Duración aproximada:"</string>
     <string name="newEvent_Label_DaysDuration">"Días:"</string>

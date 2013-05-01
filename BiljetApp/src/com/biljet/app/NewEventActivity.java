@@ -1,28 +1,18 @@
 package com.biljet.app;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Scanner;
 
 import javax.crypto.NoSuchPaddingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,6 +47,7 @@ import android.widget.Toast;
 
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
+import com.biljet.types.Province;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
@@ -66,8 +57,8 @@ public class NewEventActivity extends Activity {
 	    // **************************************************************************************
 			  
 		private Calendar dateTime = Calendar.getInstance();    
-		private SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd, yyyy");
-	    private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a"); 
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM , yyyy");
+	    private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm"); 
 	    private static final int DIALOG_DATE = 1;
 	    private static final int DIALOG_TIME = 2;
 		protected static final int RESULT_LOAD_IMAGE = 1;	
@@ -80,7 +71,8 @@ public class NewEventActivity extends Activity {
 	    private EditText editTextDate;
 	    private EditText editTextTime;    
 	    private Spinner spinnerCategory;
-	     
+	    private Spinner spinnerProvince;
+	    
 	    // Variables auxiliares para fechas y horas seleccionadas
 	    private int dayPicked;
 	    private int monthPicked;
@@ -90,6 +82,9 @@ public class NewEventActivity extends Activity {
 	    	
 	    // Variable auxiliar para almacenar el evento creado
 	    private Event newEventOrganized;
+	    
+	    // Variable auxiliar para almacenar la provincia seleccionada
+	    private int province = 1;
 	    
 	    private String typeEvent;
 	    private int postImage = 0;	//?¿
@@ -110,6 +105,7 @@ public class NewEventActivity extends Activity {
 		// Variable que controla que ningún campo se quede sin rellenar y la fecha/hora sea correcta
 	    private boolean emptyFields = false;
 	    private boolean invalidDate = false;
+	    private boolean invalidData = false;
 	    
 	    // Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
 	    final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
@@ -200,8 +196,8 @@ public class NewEventActivity extends Activity {
 
 		            });
 		            
-		            setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
-		            postProgress.show();
+		            //setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
+		            //postProgress.show();
 		            
 		            newEventOrganized = createNewEvent();
 		            if (newEventOrganized != null){
@@ -228,13 +224,13 @@ public class NewEventActivity extends Activity {
 		    	
 		    });
 			
-			// SPINNER: para TIPO DE EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
+			// SPINNER: CATEGORIA EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
 	     	// **************************************************************************************
 			
-			ArrayAdapter<String> adaptadorSpinner = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeEvents);	
+			ArrayAdapter<String> spinnerCategoryAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeEvents);	
 			spinnerCategory = (Spinner)findViewById(R.id.newEvent_Spinner_Category);
-			adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerCategory.setAdapter(adaptadorSpinner);		
+			spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinnerCategory.setAdapter(spinnerCategoryAdapter);		
 			
 			spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 				@Override
@@ -262,7 +258,44 @@ public class NewEventActivity extends Activity {
 					// ...
 				}
 				
-		  });		
+		  });	
+			
+		// SPINNER: PROVINCIA
+     	// **************************************************************************************
+		
+		ArrayAdapter<String> spinnerProvinceAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, new Province().toArrayString());	
+		spinnerProvince = (Spinner)findViewById(R.id.newEvent_Spinner_Province);
+		spinnerProvinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerProvince.setAdapter(spinnerProvinceAdapter);		
+		
+		spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
+				
+				province = position+1;
+				switch(position){
+							//Cine
+					case 0: typeEvent = arrayTypeEvents[position]; 
+							break;
+							//Cumpleaños							
+					case 1: typeEvent = arrayTypeEvents[position];
+							break;
+							//Concierto
+					case 2: typeEvent = arrayTypeEvents[position];
+							break;
+							//Conferencia
+					case 3: typeEvent = arrayTypeEvents[position];
+							break;		
+					default:typeEvent = "Otro";		
+				}				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0){
+				// ...
+			}
+			
+	  });
 			addListenerChangeImage();
 			
 	    }  //onCreate
@@ -338,9 +371,10 @@ public class NewEventActivity extends Activity {
 	            //Si se ha presionado el botón SET TIME, se abre la ventana de diálogo para seleccionar la fecha 
 	        case DIALOG_TIME:
 	            return new TimePickerDialog(this, new OnTimeSetListener() {	 
-	
+
 	                public void onTimeSet(TimePicker view, int hourOfDay,
 	                        int minute) {
+	                	
 	                	hourPicked = hourOfDay;
 	                	minutePicked = minute;
 	                    dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -350,7 +384,7 @@ public class NewEventActivity extends Activity {
 	 
 	                }
 	            }, dateTime.get(Calendar.HOUR_OF_DAY),
-	               dateTime.get(Calendar.MINUTE), false);
+	               dateTime.get(Calendar.MINUTE), true);
 	        }
 	        return null;
 	    }
@@ -397,6 +431,26 @@ public class NewEventActivity extends Activity {
 			setRequestedOrientation(SENSOR_ON);
 			alert.show();
 		}
+		
+	   /**
+	    * Method alert when user leaves empty fields
+	    */
+		private void showInvalidDataAlertDialog(String field){
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			
+			builder.setTitle("Biljet");
+			builder.setMessage("Los datos introducidos en el campo "+ field +" no son válidos. Por favor, revise los datos y reintentelo de nuevo!");
+			builder.setCancelable(true);
+			builder.setPositiveButton("Aceptar",null);
+
+			AlertDialog alert = builder.create();
+			postProgress.dismiss();
+			
+			invalidDate = false;
+			setRequestedOrientation(SENSOR_ON);
+			alert.show();
+		}
 
 	   /**
 	    * Method alert when user press Cancel button
@@ -406,7 +460,7 @@ public class NewEventActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			
 			builder.setTitle("Biljet");
-			builder.setMessage("El evento"+((EditText) findViewById(R.id.newEvent_EditText_Title)).getText().toString()+" se descartará. ¿Desea continuar?");
+			builder.setMessage("El evento "+((EditText) findViewById(R.id.newEvent_EditText_Title)).getText().toString()+" se descartará. ¿Desea continuar?");
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 			builder.setCancelable(true);
 			builder.setPositiveButton("Sí",
@@ -436,7 +490,7 @@ public class NewEventActivity extends Activity {
 	*/
 	   private Event createNewEvent() { 
 		   
-		   Event newEventOrganized = null;
+		   newEventOrganized = null;
 		   
 		   String title = getTitleForm();
 		   String address = getAddressForm();
@@ -448,10 +502,15 @@ public class NewEventActivity extends Activity {
 		   int capacity = getCapacityForm();
 		   String description = getDescriptionForm();
 		   
+		   String city = getCityForm();
+		   int postalCode = getPostalCodeForm();
+		   
 		   if (emptyFields)
 			   showEmptyFieldsAlertDialog();
-		   if (invalidDate)
+		   else if (invalidDate)
 			   showInvalidDateAlertDialog();
+		   else if (invalidData)
+			   return null;
 		   else {
 			   newEventOrganized = new Event(title,
 				 						     "",  // creator
@@ -460,17 +519,17 @@ public class NewEventActivity extends Activity {
 		 						     "eventDefault.png",  // imagePath
 		 						     typeEvent,
 		 						     address,
-		 						     "",  // city
-		 						     0,	  // postal code		 						   
-		 						     40,	  // province					   
+		 						     city,  // city
+		 						     postalCode,	  // postal code		 						   
+		 						     province,	  // province					   
 		 						     0,	  // latitude			 						   
 		 						     0,	  // longitude			 						   
-				 						     date,				 						   
-				 						     price,				 						   
-				 						     capacity,				 						   				 						   
-				 						     days_duration,				 						   
-				 						     hours_duration,				 						   
-				 						     minutes_duration);		   							   
+		 						     date,				 						   
+		 						     price,				 						   
+		 						     capacity,				 						   				 						   
+		 						     days_duration,				 						   
+		 						     hours_duration,				 						   
+		 						     minutes_duration);		   							   
 		   }
 			
 		   return newEventOrganized;
@@ -491,6 +550,159 @@ public class NewEventActivity extends Activity {
 		   return editTxtName.getText().toString();
 		   
 	   }
+	 
+	/**
+	* Returns the event price from user form
+	* @return
+	*/
+	   private float getPriceForm(){
+		   
+		   EditText editPrice = (EditText) findViewById(R.id.newEvent_EditText_Price);
+		   
+		   float price = 0;
+		   try {
+			   price = Float.parseFloat(editPrice.getText().toString());
+		   } catch (Exception e){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Precio");
+		   }
+		   
+		   // Si el precio es negativo
+		   if (Float.compare(price,0) < -1){
+			   invalidData = true;
+		   	   showInvalidDataAlertDialog("Precio");
+		   }
+		   
+		   return price;
+	   }
+
+	/**
+	* Returns the event capacity from user form
+	* @return
+	*/
+	   private int getCapacityForm(){
+		   
+		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Price);
+		   
+		   int capacity = 0;
+		   try {
+			   capacity = Integer.parseInt(editCapacity.getText().toString());
+		   } catch (Exception e){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Aforo");
+		   }
+		   
+		   if (capacity < 1){
+			   invalidData = true;
+		   	   showInvalidDataAlertDialog("Aforo");
+		   }
+		   
+		   return capacity;
+	   }
+
+   /**
+    * Returns the event description from user form
+    * @return
+    */
+	   private String getDescriptionForm(){
+		   EditText editDescription = (EditText) findViewById(R.id.newEvent_EditText_Description);
+		   
+			String info = editDescription.getText().toString();
+		
+			if (info.equals(""))
+				emptyFields = true;
+			   
+			   return info;
+	   }
+    
+	   /**
+	* Returns the event duration days from user form
+	* @return
+	*/
+	   private int getDaysDurationForm(){
+		   
+		   EditText editDays = (EditText) findViewById(R.id.newEvent_EditText_DaysDuration);
+		   
+		   int daysDuration = -1;
+		   try {
+			   daysDuration = Integer.parseInt(editDays.getText().toString());
+		   } catch (Exception e){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Duración Días");
+		   }
+ 
+		   if (daysDuration < 0){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Duración Días");
+		   }
+		   
+		   return daysDuration;
+	   }
+	   
+	   /**
+	* Returns the event duration hours from user form
+	* @return
+	*/
+	   private int getHoursDurationForm(){
+		   
+		   EditText editHours = (EditText) findViewById(R.id.newEvent_EditText_HoursDuration);
+		   
+		   int hoursDuration = -1;
+		   try {
+			   hoursDuration = Integer.parseInt(editHours.getText().toString());
+		   } catch (Exception e){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Duración Horas");
+		   }
+ 
+		   if (hoursDuration < 0){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Duración Horas");
+		   }
+   
+		   return hoursDuration;
+	   }
+	   
+	   /**
+	* Returns the event duration minutes from user form
+	* @return
+	*/
+	   private int getMinutesDurationForm(){
+		   
+		   EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditText_MinutesDuration);
+		   
+		   int minutesDuration = -1;
+		   try {
+			   minutesDuration = Integer.parseInt(editMinutes.getText().toString());
+		   } catch (Exception e){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Duración Minutos");
+		   }
+ 
+		   if (minutesDuration < 0){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Duración Minutos");
+		   }
+			   
+		   
+		   return minutesDuration;
+	   }
+	   
+	/**
+	* Returns the event Date and Time from user from
+	* @return Timestamp in milliseconds
+	*/
+	   private long getDateForm(){
+		   
+		   Calendar today = Calendar.getInstance();
+		   Calendar aux = Calendar.getInstance();
+		   aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
+		   
+		   if (aux.getTimeInMillis() < today.getTimeInMillis())
+			   invalidDate = true;
+		   
+		   return aux.getTimeInMillis();
+	   }
 	   
 	   /**
 	* Returns the event address from user form
@@ -507,120 +719,46 @@ public class NewEventActivity extends Activity {
 		   
 		   return address;
 	   }
+	   
+	/**
+	* Returns the event city from user form
+	* @return
+	*/
+	   private String getCityForm(){
+		   
+		   EditText editCity = (EditText) findViewById(R.id.newEvent_EditText_City);
+		   
+		   String city = editCity.getText().toString();
+		   
+		   if (city.equals(""))
+			   emptyFields = true;
+		   
+		   return city;
+	   }
+	 
+	/**
+	* Returns the event postal code from user form
+	* @return
+	*/
+	   private int getPostalCodeForm(){
+		   
+		   EditText editPostalCode = (EditText) findViewById(R.id.newEvent_EditText_PostalCode);
+		   int postalCode = -1;
+		   try {
+			   postalCode = Integer.parseInt(editPostalCode.getText().toString());
+		   } catch (Exception e){
+			   invalidData = true;
+			   showInvalidDataAlertDialog("Código Postal");
+		   }
+		   
+		   if (postalCode == -1)
+			   invalidData = true;
+		   
+		   return postalCode;
+	   }
+		      	   
 	
-	   /**
-	* Returns the event price from user form
-	* @return
-	*/
-	   private float getPriceForm(){
-		   
-		   EditText editPrice = (EditText) findViewById(R.id.newEvent_EditText_Price);
-		   
-		   String price = editPrice.getText().toString();
-		   
-		   if (price.equals(""))
-			   emptyFields = true;
-		   
-		   return Float.parseFloat(price);
-	   }
-	   
-	   /**
-	* Returns the event Date and Time from user from
-	* @return Timestamp in milliseconds
-	*/
-	   private long getDateForm(){
-		   
-		   Calendar today = Calendar.getInstance();
-		   Calendar aux = Calendar.getInstance();
-		   aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
-		   
-		   if (aux.getTimeInMillis() < today.getTimeInMillis())
-			   invalidDate = true;
-		   
-		   return aux.getTimeInMillis();
-	   }
-	      
-	   /**
-	* Returns the event duration days from user form
-	* @return
-	*/
-	   private int getDaysDurationForm(){
-		   
-		   EditText editDays = (EditText) findViewById(R.id.newEvent_EditText_DaysDuration);
-		   
-		   String days = editDays.getText().toString();
-		   
-		   if (days.equals(""))
-			   emptyFields = true;
-		   
-		   return Integer.parseInt(days);
-	   }
-	   
-	   /**
-	* Returns the event duration hours from user form
-	* @return
-	*/
-	   private int getHoursDurationForm(){
-		   
-		   EditText editHours = (EditText) findViewById(R.id.newEvent_EditText_HoursDuration);
-		   
-		   String hours = editHours.getText().toString();
-		   
-		   if(hours.equals(""))
-			   emptyFields = true;
-		   
-		   return Integer.parseInt(hours);
-	   }
-	   
-	   /**
-	* Returns the event duration minutes from user form
-	* @return
-	*/
-	   private int getMinutesDurationForm(){
-		   
-		   EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditText_MinutesDuration);
-		   
-		   String minutes = editMinutes.getText().toString();
-		   
-		   if(minutes.equals(""))
-			   emptyFields = true;
-		   
-		   return Integer.parseInt(minutes);
-	   }
-	   
-	   /**
-	* Returns the event capacity from user form
-	* @return
-	*/
-	   private int getCapacityForm(){
-		   
-		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Capacity);
-		   
-		   String capacity = editCapacity.getText().toString();
-		   
-		   if(capacity.equals(""))
-			   emptyFields = true;
-		   
-		   return Integer.parseInt(capacity);
-	   }
-	   
-   /**
-    * Returns the event description from user form
-    * @return
-    */
-	   private String getDescriptionForm(){
-		   EditText editDescription = (EditText) findViewById(R.id.newEvent_EditText_Description);
-		   
-			String info = editDescription.getText().toString();
-		
-			if (info.equals(""))
-				emptyFields = true;
-			   
-			   return info;
-	   }
-
-	
-	// CONEXION DB
+	// AUXILIARES CONEXION DB
 	// **************************************************************************************
 		   
     private int getCurrentOrientation(Context context){
@@ -643,19 +781,19 @@ public class NewEventActivity extends Activity {
     
     private String[] prepareAuthentication(){
     	
-		String path = null;
-		String[] authentication = new String[2];
+		//String[] params = new String[4];
 		
 		try {
-			path = new EncryptedData(NewEventActivity.this).decrypt();
-			if (path != null){
+			return new EncryptedData(NewEventActivity.this).decrypt();
+
+			/*if (path != null){
 				File monitorFile = new File(path);
 				Scanner s = new Scanner(monitorFile);
 				s.nextLine(); // Descartado
 				authentication[1] = s.nextLine();
 				authentication[0] = s.nextLine();
 				return authentication;
-				} 
+				} */
 
 		} catch (InvalidKeyException e) {
 			Log.e("Error","Clave de cifrado no valida");
@@ -675,22 +813,16 @@ public class NewEventActivity extends Activity {
 	    
 		// CONEXION CON DB
 		// **************************************************************************************
-		InputStream is = null;
+
 		String[] authentication = prepareAuthentication();
 		int statusCode = -3; // Error desconocido!
 		
 		if (authentication == null)
 			return -1;	// Error: No se ha podido obtener la autenticación
-		
-		HttpParams myParams = new BasicHttpParams();
 
-    	HttpConnectionParams.setSoTimeout(myParams, 10000);
-    	HttpConnectionParams.setConnectionTimeout(myParams, 10000); // Timeout
-
-
-        /* Creamos el objeto cliente que realiza la petición al servidor */
-        DefaultHttpClient client = new DefaultHttpClient(myParams);
-        /* Definimos la ruta al servidor. En mi caso, es un servlet. */
+        // Creamos el objeto cliente que realiza la petición al servidor 
+        DefaultHttpClient client = new DefaultHttpClient();
+        // Definimos la ruta al servidor. En mi caso, es un servlet. 
         HttpPost post = new HttpPost("http://www.biljetapp.com/api/event");
 
 		try {
@@ -701,8 +833,8 @@ public class NewEventActivity extends Activity {
 			// CAMPOS JSON REQUERIDOS            	
 			// **********************************************************  
 			jsonObject.put("title", newEventOrganized.getTitle() );
-        	jsonObject.put("_id", authentication[0] );
-        	jsonObject.put("creator", authentication[0]);
+        	jsonObject.put("id", authentication[2] );
+        	jsonObject.put("creator", authentication[2]);
         	jsonObject.put("password", authentication[1]);
         	jsonObject.put("price", newEventOrganized.getPrice() );
             jsonObject.put("province", String.valueOf(newEventOrganized.getProvince()) );
@@ -712,57 +844,28 @@ public class NewEventActivity extends Activity {
             jsonObject.put("category", newEventOrganized.getCategory() );
         	jsonObject.put("imageName", newEventOrganized.getImagePath() );
             
-            Log.d("POST","\nObjeto construido ");
-            Log.d("POST",jsonObject.toString());
-            
-            // CAMPOS JSON NO REQUERIDOS
+            // CAMPOS JSON NO REQUERIDOS (TODO: RAUL AÑADIR!!!)
             // **********************************************************
-            /*
-            HttpPost post = new HttpPost("http://www.biljetapp.com/api/event");
-            // post.setEntity(new StringEntity(request.toString(), "utf-8"));
-            StringEntity entity = new StringEntity(jsonObject.toString(), "UTF-8");
-            entity.setContentType("application/json");
-            entity.setContentEncoding("gzip");
-            entity.setChunked(true);
-            post.setHeader("transfer-encoding","chunked");
-            post.setHeader("Content-Type", "application/json");
-            post.setHeader("Accept", "application/json");
-            post.setEntity(entity);
             
-            HttpResponse response = httpclient.execute(post);
-			StatusLine responseStatus = response.getStatusLine();
-			statusCode = responseStatus.getStatusCode();
-            */
+            jsonObject.put("address", newEventOrganized.getAddress()+", "+ newEventOrganized.getCity());
+            jsonObject.put("postalCode", newEventOrganized.getPostalCode());
             
             // Damos formato al JSON a enviar o el servidor lo rechazará
             StringEntity entity = new StringEntity(jsonObject.toString());
-            entity.setChunked(true);
-            entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
-            entity.setContentType("application/json");
             post.setHeader("Content-Type", "application/json");
             post.setEntity(entity);
-            
+
             // Ejecuto la petición, y guardo la respuesta 
 			HttpResponse response = client.execute(post);
 			StatusLine responseStatus = response.getStatusLine();
 			statusCode = responseStatus.getStatusCode();
 			
-			Log.d("Login","Status Code:"+String.valueOf(statusCode));
 			Log.d("POST","Status Code: "+String.valueOf(statusCode));
-			
-        } catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			Log.e("ERROR","No soportado codificacion: "+e.getMessage());
-			return -2; // Error: Excepcion lanzada
-		} catch (IOException e) {
 
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException e) {
 			Log.e("ERROR","Entrada-Salida: "+e.getMessage());
 			return -2; // Error: Excepcion lanzada
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			Log.e("ERROR","JSON error "+e.getMessage());
 			return -2;
 		}
@@ -783,8 +886,9 @@ public class NewEventActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			// Actualizar mensaje en el dialogo de proceso
-			postProgress.setTitle("Enviando evento al servidor...");
+			//postProgress.setTitle("Enviando evento al servidor...");
 			postProgress.show();
+			setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
 		}
 		
 		@Override
@@ -807,7 +911,7 @@ public class NewEventActivity extends Activity {
 			// Devolver resultado
 			switch(statusCode){
 				case 200: Intent showEvent = new Intent(NewEventActivity.this,EventViewActivity.class);
-						  showEvent.putExtra("NEW_EVENT", newEventOrganized);
+						  showEvent.putExtra("EVENT", newEventOrganized);
 						  startActivity(showEvent);
 						  NewEventActivity.this.finish();
 						  break;

@@ -85,7 +85,7 @@ public class UpcomingEventsActivity extends Activity {
 							Intent intentEvent = new Intent(UpcomingEventsActivity.this, EventViewActivity.class);
 							
 							Event e = itemsEvent.get(idEvent);
-							intentEvent.putExtra("event",e);
+							intentEvent.putExtra("EVENT",e);
 							intentEvent.putExtra("OWN?", false);
 							intentEvent.putExtra("NO_TICKET", true);
 							

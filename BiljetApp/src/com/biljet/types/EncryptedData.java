@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -20,9 +21,14 @@ import android.util.Log;
 
 public class EncryptedData {
 
-	private String dir = "/7a3dd8Z";
-	private String store = "/53a1fd.blj";
-	private String monitor = "/6413dM.blj";
+	// [0] user
+	// [1] hash
+	// [2] id
+	// [3] last login
+
+	private String dir = "/7a3dd8Z";			// Directorio de almacenamiento de la cookie
+	private String store = "/53a1fd.blj";		// Archivo de almacenamiento de la cookie encriptada
+	private String monitor = "/6413dM.blj";		// Archivo temporal donde consultar la cookie desencriptada
 	
 	public EncryptedData(Context c){
 		
@@ -108,8 +114,10 @@ public class EncryptedData {
 	    fis.close();
 	}
 	
-	public String decrypt() throws  NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException {
-	    FileInputStream fis = new FileInputStream(store);
+	public String[] decrypt() throws  NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException {
+	    
+		// Abrir el fichero encriptador y desencriptarlo
+		FileInputStream fis = new FileInputStream(store);
 
 	    FileOutputStream fos = new FileOutputStream(monitor);
 	    Log.d("Cypher","Abierto flujos");
@@ -127,6 +135,25 @@ public class EncryptedData {
 	    fos.close();
 	    cis.close();
 	    
-	    return monitor;
+	    // Extraer los parametros
+	    String[] params = new String[4];
+	    
+		if (monitor != null){
+			File monitorFile = new File(monitor);
+			Scanner s = new Scanner(monitorFile);
+			
+			int i = 0;
+			while (s.hasNext()){
+				params[i] = s.nextLine();
+				i++;
+			}
+			
+			s.close();
+			
+			return params;
+		} 
+
+		return null;
 	}
+
 }

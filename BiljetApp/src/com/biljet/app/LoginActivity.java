@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -18,11 +19,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,8 +79,8 @@ public class LoginActivity extends Activity {
 	    editTextPassword = (EditText)this.findViewById(R.id.login_EditText_Password);
 	    
 	    // TODO Quitar!! Solo para ahorrar el escribirlo en debug
-	 //   editTextUsername.setText("test");
-	//    editTextPassword.setText("test");
+	    editTextUsername.setText("test");
+	    editTextPassword.setText("test");
 	    
 	    buttonLogin = (Button)this.findViewById(R.id.login_Button_Login);
 	    buttonLogin.setOnClickListener(new OnClickListener(){
@@ -130,15 +129,9 @@ public class LoginActivity extends Activity {
 		
         /* Comprobamos que no venga alguno en blanco. */
         if (!username.equals("") && !pass.equals("")){
-        	
-        	HttpParams myParams = new BasicHttpParams();
-
-        	HttpConnectionParams.setSoTimeout(myParams, 10000);
-        	HttpConnectionParams.setConnectionTimeout(myParams, 10000); // Timeout
-
 
             /* Creamos el objeto cliente que realiza la petición al servidor */
-            DefaultHttpClient client = new DefaultHttpClient(myParams);
+            DefaultHttpClient client = new DefaultHttpClient();
             /* Definimos la ruta al servidor. En mi caso, es un servlet. */
             HttpPost post = new HttpPost("http://www.biljetapp.com/login");
  
@@ -149,10 +142,11 @@ public class LoginActivity extends Activity {
                 jsonObject.put("password", toMd5(pass) );
 
                 // Damos formato al JSON a enviar o el servidor lo rechazará
-                StringEntity entity = new StringEntity(jsonObject.toString());
-                entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
-                entity.setContentType("application/json");
+                StringEntity entity = new StringEntity(jsonObject.toString()); 
+               // entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
+                //entity.setContentType("application/json");
                 post.setHeader("Content-Type", "application/json");
+                //post.setHeader("Accept", "application/json");
                 post.setEntity(entity);
                 
                 // Ejecuto la petición, y guardo la respuesta 
@@ -312,10 +306,10 @@ public class LoginActivity extends Activity {
 				
 				id = getUserId(user);
 				
-				if (!connector.isCancelled()){
+				if (!connector.isCancelled() && !id.equals("CANCELED") && !id.equals("EXCEPTION")){
 					EncryptedData userData = new EncryptedData(LoginActivity.this);
 					try {
-						userData.encrypt(user,hash,id);
+						userData.encrypt(user,hash,id,String.valueOf(Calendar.getInstance().getTimeInMillis()));
 					} catch (InvalidKeyException e) {
 						Log.e("Error","Clave de cifrado no valida");
 					} catch (NoSuchAlgorithmException e) {
