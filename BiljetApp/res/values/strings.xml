@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="action_settings">Settings</string>
+    <string name="zero">0</string>
 
     <!-- LoginActivity -->
     <!-- *********************************************************************** -->
@@ -114,7 +115,7 @@
     <string name="newEvent_LabelHeader_When"> ¿Cuando será? </string>
     <string name="newEvent_LabelHeader_Where"> ¿Donde será? </string>
     <string name="newEvent_LabelHeader_Duration"> ¿Cuanto durará aprox.? </string>
-    <string name="newEvent_LabelHeader_Image"> Elige una imagen... </string>
+    <string name="newEvent_LabelHeader_Image"> Elige una imagen&#8230; </string>
     <string name="newEvent_LabelHeader_Confirm"> ¡Confirma tu evento! </string>
     
     <string name="newEvent_Label_Title">Nombre del evento: </string>

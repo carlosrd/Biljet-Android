@@ -89,6 +89,10 @@ public class MyEventsActivity extends Activity {
 		
 		// CONEXION CON DB EN SEGUNDO PLANO
 	   	// **************************************************************************************
+		
+		// Inicializar el listView: Lo volveremos invisible durante las conexiones para no provocar errores
+		eventList = (ListView)findViewById(R.id.myEvents_List);
+		
 		Log.d("tag","\nComienzo seccion conexion DB");
 		eventsToGo = new ArrayList<Event>();
 		eventsOrganized = new ArrayList<Event>();
@@ -99,9 +103,7 @@ public class MyEventsActivity extends Activity {
 
 		// LIST VIEW
 		// **************************************************************************************
-
-		eventList = (ListView)findViewById(R.id.myEvents_List);
-		
+	
 		eventsToGoAdapter = new UpcomingEventsAdapter(this,eventsToGo);
 		eventsOrganizedAdapter = new UpcomingEventsAdapter(this, eventsOrganized);
 		
@@ -111,14 +113,19 @@ public class MyEventsActivity extends Activity {
 						public void onItemClick(AdapterView<?> a, View v, int eventId, long id) {
 						//Acciones necesarias al hacer click
 							
-							Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
-					
-							Event e = eventsToGo.get(eventId);
-							eventIntent.putExtra("EVENT",e);
-							eventIntent.putExtra("OWN?", isOwn);
-							eventIntent.putExtra("NO_TICKET",false);
-							
-							startActivity(eventIntent);
+							if (!connectionAlive){
+								Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
+								
+								Event e = eventsToGo.get(eventId);
+								eventIntent.putExtra("EVENT", e);
+								eventIntent.putExtra("OWN?", isOwn);
+								eventIntent.putExtra("NO_TICKET", false);
+								
+								startActivity(eventIntent);
+							}
+							else
+								 Toast.makeText(MyEventsActivity.this, " ! : Recargando eventos. Espere...", Toast.LENGTH_SHORT).show();
+
 										
 							}
 						});
@@ -170,14 +177,15 @@ public class MyEventsActivity extends Activity {
 		// CONEXION CON DB EN SEGUNDO PLANO
 	   	// **************************************************************************************
 		Log.d("RESTART","\nComienzo seccion conexion DB");
-		eventsToGo = new ArrayList<Event>();
-		eventsOrganized = new ArrayList<Event>();
+		eventsToGo.clear();
+		eventsOrganized.clear();
 		
 		connector = new DBConnection();
 		connectionAlive = true;
 		connector.execute();
 
 	}
+	
 	// METODOS PARA CONEXION DB
  	// **************************************************************************************
 	  
@@ -566,8 +574,8 @@ public class MyEventsActivity extends Activity {
 	
 		@Override
 		protected void onPreExecute() {
+			eventList.setVisibility(View.INVISIBLE);
 			actionBar.setProgressBarVisibility(View.VISIBLE);
-			Toast.makeText(getBaseContext(), "Cargando eventos...", Toast.LENGTH_SHORT).show();
 		}
 		
 		@Override
@@ -583,6 +591,7 @@ public class MyEventsActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			eventList.setVisibility(View.VISIBLE);
 			connectionAlive = false;
 			if (result){
 				eventsToGoAdapter.notifyDataSetChanged();

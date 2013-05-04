@@ -51,7 +51,7 @@
                 android:id="@+id/newEvent_EditText_Title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textCapSentences"
                 android:layout_marginBottom="3dp"/>
       	        
             <!-- Spinner: Tipo del evento -->
@@ -134,7 +134,7 @@
                 android:singleLine="false" 
                 android:lines="3"       
                 android:gravity="top"     	
-            	android:inputType="text|textMultiLine" />
+            	android:inputType="textCapSentences|textMultiLine" />
             
             <!-- > Separador: Donde sera? -->
             <!-- ******************************************************* -->
@@ -198,7 +198,7 @@
 	                android:layout_weight="1" 
 	                android:layout_marginRight="3dp"
 	                android:inputType="number"
-	                android:text="0" /> 
+	                android:text="@string/zero" /> 
 	                         
 	            <EditText 
 	                android:id="@+id/newEvent_EditText_HoursDuration"
@@ -207,7 +207,7 @@
 	                android:layout_weight="1" 
 	                android:layout_marginRight="3dp"
 	                android:inputType="number"
-	                android:text="0"  />     
+	                android:text="@string/zero"  />     
  
 	             <EditText 
 	                android:id="@+id/newEvent_EditText_MinutesDuration"
@@ -215,7 +215,7 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1" 
 	                android:inputType="number"
-	                android:text="0"  />  
+	                android:text="@string/zero"  />  
 	                    
             </LinearLayout>	
             
@@ -251,16 +251,16 @@
                 android:layout_height="wrap_content" />      
             
             <LinearLayout 
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    android:orientation="horizontal"
-		    android:layout_marginBottom="3dp">
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:orientation="horizontal"
+			    android:layout_marginBottom="3dp">
 		    
 			    <EditText
 			        android:id="@+id/newEvent_EditText_Date"
 			        android:layout_width="0dp"
 			        android:layout_height="wrap_content"
-			        android:layout_weight="2"
+			        android:layout_weight="60"
 			        android:clickable="false"
 			        android:cursorVisible="false"
 			        android:focusable="false"
@@ -272,7 +272,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-					android:layout_weight="1"
+					android:layout_weight="40"
                     android:background="@drawable/biljet_gradient"
                     android:onClick="setDate"
                     android:text="@string/newEvent_Button_SetDate"
@@ -297,7 +297,7 @@
 			    
 			    <EditText 
 			        android:id="@+id/newEvent_EditText_Time"	        
-			        android:layout_weight="2"        
+			        android:layout_weight="60"        
 			        android:layout_width="0dp"
 			        android:layout_height="wrap_content"
 			        android:clickable="false"
@@ -311,7 +311,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-					android:layout_weight="1"
+					android:layout_weight="40"
 			        android:text="@string/newEvent_Button_SetTime"
 			        android:onClick="setTime" 
 			        android:background="@drawable/biljet_gradient"
@@ -346,19 +346,34 @@
 			
 			
 			<!-- Dirección -->
-            <!-- ******************************************************* -->    
+            <!-- ******************************************************* -->      
             <TextView 
                 android:text="@string/newEvent_Label_Address" 
                 style="@style/formLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
-    
-            <EditText
-                android:id="@+id/newEvent_EditText_Address" 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:layout_marginBottom="3dp" />
+            
+            <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+   		        
+                <Spinner
+	           		android:id="@+id/newEvent_Spinner_AddressType"
+	           		android:layout_weight="35"
+	           		android:layout_width="0dp"
+	           		android:layout_height="50dp" />
+                
+	            <EditText
+	                android:id="@+id/newEvent_EditText_Address" 
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="65"
+	                android:inputType="textCapSentences"
+	                android:layout_marginBottom="3dp"
+	                android:layout_marginLeft="3dp" />
+	            
+            </LinearLayout>
             		
 			<!-- Ciudad -->
             <!-- ******************************************************* --> 
@@ -373,7 +388,7 @@
 	            android:id="@+id/newEvent_EditText_City" 
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
-	            android:inputType="textPersonName"
+	            android:inputType="textCapSentences"
 	            android:layout_marginBottom="3dp" />
             
             <!-- Cod Postal -->
@@ -427,7 +442,7 @@
             
 			
 	    	
-	    	           	<!-- Imagen del evento -->
+	    	<!-- Imagen del evento -->
             <!-- ******************************************************* -->  
            		
 		 	<ImageView 

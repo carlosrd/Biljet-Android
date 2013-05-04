@@ -40,6 +40,7 @@ public class UpcomingEventsActivity extends Activity {
 
 	ActionBar actionBar;
 	DBConnection connector;
+	ListView eventList;
 	UpcomingEventsAdapter eventListAdapter;
 	boolean connectionAlive;
 	ArrayList<Event> itemsEvent;// = getEvents();
@@ -63,6 +64,10 @@ public class UpcomingEventsActivity extends Activity {
 		
 		// CONEXION CON DB EN SEGUNDO PLANO
 	   	// **************************************************************************************
+		
+		// Inicializar el listView: Lo volveremos invisible durante las conexiones para no provocar errores
+		eventList = (ListView)findViewById(R.id.list_Events);
+		
 		Log.d("tag","\nComienzo seccion conexion DB");
 		itemsEvent = new ArrayList<Event>();
 		
@@ -74,7 +79,6 @@ public class UpcomingEventsActivity extends Activity {
 		// **************************************************************************************
 		
 		eventListAdapter = new UpcomingEventsAdapter(this,itemsEvent);
-        ListView eventList = (ListView)findViewById(R.id.list_Events);
         
 		// Setear oyentes OnClick
         
@@ -97,17 +101,52 @@ public class UpcomingEventsActivity extends Activity {
         eventList.setAdapter(eventListAdapter);
     }
 
+	@Override
+	protected void onRestart() {
+	    super.onRestart();  // Always call the superclass method first
+	    
+	    // Activity being restarted from stopped state    
+	
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
+		Log.d("tag","\nComienzo seccion conexion DB");
+		itemsEvent = new ArrayList<Event>();
+		
+		connector = new DBConnection();
+		connectionAlive = true;
+		connector.execute();
+
+	}
+   
+	// BOTON "ATRAS"
+   	// **************************************************************************************
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_BACK:
+					if (connectionAlive)
+						connector.cancel(true);
+					else
+						finish();
+					break;
+			}
+
+			return true;
+	}
+
+	// AUXILIARES PARA CONEXION CON DB 
+   	// **************************************************************************************
+	
     private boolean getEventsFromDB() {
 	    
 		// CONEXION CON DB
-	   	// **************************************************************************************
-		InputStream is = null;
-		
-		try {
-			Log.d("tag","\nEntra en el try1");
+	   	// **************************************************************************************		
+    	InputStream is = null;
+    	
+    	try {
 			HttpClient httpclient = new DefaultHttpClient();
-			//HttpPost httppost = new HttpPost("http://www.biljetapp.com/api/event");
-			//HttpResponse response = httpclient.execute(httppost);
 			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/event");
 			HttpResponse response = httpclient.execute(getRequest);
 			StatusLine responseStatus = response.getStatusLine();
@@ -123,6 +162,8 @@ public class UpcomingEventsActivity extends Activity {
 					  Toast.makeText(UpcomingEventsActivity.this,"Error al conectar con el servidor!",Toast.LENGTH_SHORT).show(); 
 				  }
 				});	
+			
+			return false;
 			// En esta captura de excepción podemos ver que hay un problema con la
 			// conexión e intentarlo más adelante.
 		}
@@ -133,7 +174,6 @@ public class UpcomingEventsActivity extends Activity {
 		String result = "";
 		
 		try {
-			//BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
 			StringBuilder sb = new StringBuilder();
 			sb.append(reader.readLine() + "\n");
@@ -149,9 +189,10 @@ public class UpcomingEventsActivity extends Activity {
 		catch(Exception e) {
 			runOnUiThread(new Runnable() {
 				  public void run() {
-					  Toast.makeText(UpcomingEventsActivity.this,"Error al obtener la cadena desde el buffer!",Toast.LENGTH_SHORT).show(); 
+					  Toast.makeText(UpcomingEventsActivity.this,"Error: No se ha podido completar la operacion!",Toast.LENGTH_SHORT).show(); 
 				  }
 				});	
+			return false;
 		}
 		
 		if (connector.isCancelled())
@@ -162,9 +203,7 @@ public class UpcomingEventsActivity extends Activity {
 		int postalCode, province, latitude, longitude, capacity;
 		double price;
 		long date;
-		
-		
-		
+			
 		itemsEvent.clear();
 		
 		try {
@@ -208,7 +247,7 @@ public class UpcomingEventsActivity extends Activity {
 						runOnUiThread(new Runnable() {
 							  public void run() {
 								  // Notificar error al guardar avatar
-								  Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+								  //Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
 								  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
 								  File fileToDelete = new File(imagePath);
 								  if (fileToDelete.exists())
@@ -281,6 +320,8 @@ public class UpcomingEventsActivity extends Activity {
 					  Toast.makeText(getBaseContext(), "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
 				  }
 				});	
+			
+			return false;
 		}
 
 		
@@ -322,8 +363,10 @@ public class UpcomingEventsActivity extends Activity {
 		}
     	
     }
-   
-    
+	
+    // CONEXION CON DB EN SEGUNDO PLANO
+   	// **************************************************************************************
+	
     /*  Se instancia con 3 tipos:
     		1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
     		2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
@@ -334,6 +377,7 @@ public class UpcomingEventsActivity extends Activity {
 	    @Override
 	    protected void onPreExecute() {
 			actionBar.setProgressBarVisibility(View.VISIBLE);
+			eventList.setVisibility(View.INVISIBLE);
 	    }
 	 
 		@Override
@@ -351,6 +395,7 @@ public class UpcomingEventsActivity extends Activity {
 	    protected void onPostExecute(Boolean result) {
 			actionBar.setProgressBarVisibility(View.INVISIBLE);
 			connectionAlive = false;
+			eventList.setVisibility(View.VISIBLE);
 			eventListAdapter.notifyDataSetChanged();
 			
 	    }
@@ -364,22 +409,7 @@ public class UpcomingEventsActivity extends Activity {
 
 
     }
-    
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-			switch (keyCode) {
-				case KeyEvent.KEYCODE_BACK:
-					if (connectionAlive)
-						connector.cancel(true);
-					else
-						finish();
-					break;
-			}
-
-			return true;
-	}
-    
+     
 	// TECLA MENU ó ···
 	// **************************************************************************************
     /*

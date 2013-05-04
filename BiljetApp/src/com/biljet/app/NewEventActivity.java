@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.crypto.NoSuchPaddingException;
@@ -16,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -51,214 +53,207 @@ import com.biljet.types.Province;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
+@SuppressLint("SimpleDateFormat")
 public class NewEventActivity extends Activity {
 	
-		// ATRIBUTOS
-	    // **************************************************************************************
-			  
-		private Calendar dateTime = Calendar.getInstance();    
-		private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM , yyyy");
-	    private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm"); 
-	    private static final int DIALOG_DATE = 1;
-	    private static final int DIALOG_TIME = 2;
-		protected static final int RESULT_LOAD_IMAGE = 1;	
-		
-		// Objetos del formulario
-	    private Button buttonDatePicker; 
-	    private Button buttonTimePicker;   
-	    private Button buttonCreateEvent;
-	    private Button buttonCancelEvent;
-	    private EditText editTextDate;
-	    private EditText editTextTime;    
-	    private Spinner spinnerCategory;
-	    private Spinner spinnerProvince;
-	    
-	    // Variables auxiliares para fechas y horas seleccionadas
-	    private int dayPicked;
-	    private int monthPicked;
-	    private int yearPicked;
-	    private int hourPicked;
-	    private int minutePicked;
-	    	
-	    // Variable auxiliar para almacenar el evento creado
-	    private Event newEventOrganized;
-	    
-	    // Variable auxiliar para almacenar la provincia seleccionada
-	    private int province = 1;
-	    
-	    private String typeEvent;
-	    private int postImage = 0;	//?¿
-	    
-		private DBConnection connector;				// Tarea en segundo plano para realizar el post a la DB
-		private ProgressDialog postProgress;		// ProgressDialog para mostrar el progreso
-		private boolean connectionAlive;			// Booleano para controlar estado de la conexion
-		
-		// Constanstes para bloquear el sensor de movimiento durante el posteo. Si no se bloquea el
-		// y el usuario gira el telefono, Android destruye la actividad y la vuelve a crear, por lo que
-		// se cancela el posteo y aparecen errores que fuerzan el cierre de la aplicacion
-		final int PORTRAIT = 1;
-		final int LANDSCAPE = 0;
-		final int REVERSE_PORTRAIT = 9;
-		final int REVERSE_LANDSCAPE = 8;
-		final int SENSOR_ON = 4;
-		
-		// Variable que controla que ningún campo se quede sin rellenar y la fecha/hora sea correcta
-	    private boolean emptyFields = false;
-	    private boolean invalidDate = false;
+	// ATRIBUTOS
+    // **************************************************************************************
+	
+	// Atributos para los Date y Time Pickers
+	private Calendar dateTime = Calendar.getInstance();    
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM , yyyy");
+    private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm"); 
+    private SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd MMMM yyyy - HH:mm");
+    private static final int DIALOG_DATE = 1;
+    private static final int DIALOG_TIME = 2;
+	protected static final int RESULT_LOAD_IMAGE = 1;	
+	
+	// Objetos del formulario
+    private Button buttonDatePicker; 
+    private Button buttonTimePicker;   
+    private Button buttonCreateEvent;
+    private Button buttonCancelEvent;
+    private EditText editTextDate;
+    private EditText editTextTime;    
+    private Spinner spinnerCategory;
+    private Spinner spinnerProvince;
+    private Spinner spinnerAddress;
+    
+    // Variables auxiliares para almacenar datos de los formularios
+    private int dayPicked;
+    private int monthPicked;
+    private int yearPicked;
+    private int hourPicked;
+    private int minutePicked;
+    private String addressPrefix;
+    private int province = 1;
+    private String category;
+    private int postImage = 0;	//?¿
+    
+    // Variable auxiliar para almacenar el evento creado
+    private Event newEventOrganized;
+    
+    // Variables para la conexion con la BD
+	private DBConnection connector;				// Tarea en segundo plano para realizar el post a la DB
+	private ProgressDialog postProgress;		// ProgressDialog para mostrar el progreso
+	private boolean connectionAlive;			// Booleano para controlar estado de la conexion
+	
+	// Constanstes para bloquear el sensor de movimiento durante el posteo. Si no se bloquea el
+	// y el usuario gira el telefono, Android destruye la actividad y la vuelve a crear, por lo que
+	// se cancela el posteo y aparecen errores que fuerzan el cierre de la aplicacion
+	final int PORTRAIT = 1;
+	final int LANDSCAPE = 0;
+	final int REVERSE_PORTRAIT = 9;
+	final int REVERSE_LANDSCAPE = 8;
+	final int SENSOR_ON = 4;
+	
+	// Variable que controla que ningún campo se quede sin rellenar y la fecha/hora sea correcta
+    private boolean invalidFields = false;
+    private ArrayList<String> fields = new ArrayList<String>();
+    private boolean invalidDate = false;
 
-	    // Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
-	    final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
-	    
-	    // Array de tipos de eventos.
-	    final String [] arrayTypeEvents = {"Cine", "Cumpleaños", "Concierto", "Conferencia"}; 
-	       
+    // Array de imagales(locales) que vamos a utlizar como el logo del nuevo evento que vamos a crear.
+    final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
+    
+    // Spinner: Array de tipos de eventos.
+    final String [] arrayTypeEvents = {"Cine", "Cumpleaños", "Concierto", "Conferencia"}; 
+    // Spinner: Array prefijo de direccion
+    final String[] arrayAddressPrefix = {"C/","Avda.","Plaza","Urb.","Paseo","Otro"};
+       
     // CONSTRUCTOR
     // **************************************************************************************
 		
-	    @Override
-	    public void onCreate(Bundle savedInstanceState) {
-	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.activity_new_event);	        
-			
-	        // ACTION BAR
-			// **************************************************************************************
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_event);	        
+		
+        // ACTION BAR
+		// **************************************************************************************
 
-			ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
-			actionBar.setTitle("Crear Nuevo Evento");
-			actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
-			actionBar.setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Crear Nuevo Evento");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+        
+		// BOTON: Fijar Fecha
+		// **************************************************************************************
+
+		buttonDatePicker = (Button) findViewById(R.id.newEvent_Button_SetDate);	
+		editTextDate = (EditText) findViewById(R.id.newEvent_EditText_Date);			
+		editTextDate.setText(dateFormatter.format(dateTime.getTime()));	
+		
+		buttonDatePicker.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(DIALOG_DATE);
+            }
+        });        
+		
+		// BOTON: Fijar Hora
+		// **************************************************************************************
+
+		buttonTimePicker = (Button) findViewById(R.id.newEvent_Button_SetTime);
+		editTextTime = (EditText) findViewById(R.id.newEvent_EditText_Time);		
+		editTextTime.setText(timeFormatter.format(dateTime.getTime()));
+		
+		buttonTimePicker.setOnClickListener(new View.OnClickListener() {
+ 
+            public void onClick(View v) {
+                showDialog(DIALOG_TIME);
+            }
+        });			
+		
+		// BOTON: Cambiar imagen
+		// **************************************************************************************
+
+		Button buttonChangeImage = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
+		buttonChangeImage.setOnClickListener(new View.OnClickListener() {             
+            public void onClick(View arg0) {
+                 
+                Intent intent = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                 
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+            }
+        });  //Listener buttonChangeImage  
+
+		// BOTON: Crear Evento
+		// **************************************************************************************
+		
+	    buttonCreateEvent = (Button)this.findViewById(R.id.newEvent_Button_CreateEvent);
+	    buttonCreateEvent.setOnClickListener(new OnClickListener(){
 	        
-			// BOTON: Fijar Fecha
-			// **************************************************************************************
-
-			buttonDatePicker = (Button) findViewById(R.id.newEvent_Button_SetDate);	
-			editTextDate = (EditText) findViewById(R.id.newEvent_EditText_Date);			
-			editTextDate.setText(dateFormatter.format(dateTime.getTime()));	
-			
-			buttonDatePicker.setOnClickListener(new View.OnClickListener() {
-	            public void onClick(View v) {
-	                showDialog(DIALOG_DATE);
-	            }
-	        });        
-			
-			// BOTON: Fijar Hora
-			// **************************************************************************************
-
-			buttonTimePicker = (Button) findViewById(R.id.newEvent_Button_SetTime);
-			editTextTime = (EditText) findViewById(R.id.newEvent_EditText_Time);		
-			editTextTime.setText(timeFormatter.format(dateTime.getTime()));
-			
-			buttonTimePicker.setOnClickListener(new View.OnClickListener() {
-	 
-	            public void onClick(View v) {
-	                showDialog(DIALOG_TIME);
-	            }
-	        });			
-			
-			// BOTON: Cambiar imagen
-			// **************************************************************************************
-
-			Button buttonChangeImage = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
-			buttonChangeImage.setOnClickListener(new View.OnClickListener() {             
-	            public void onClick(View arg0) {
-	                 
-	                Intent intent = new Intent(
-	                        Intent.ACTION_PICK,
-	                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	                 
-	                startActivityForResult(intent, RESULT_LOAD_IMAGE);
-	            }
-	        });  //Listener buttonChangeImage  
-	
-			// BOTON: Crear Evento
-			// **************************************************************************************
-			
-		    buttonCreateEvent = (Button)this.findViewById(R.id.newEvent_Button_CreateEvent);
-		    buttonCreateEvent.setOnClickListener(new OnClickListener(){
-		        
-		    	@Override
-		        public void onClick(View v){
-						
-		        	// Preparar el dialogo de proceso para el inicio de sesion
-		            postProgress = new ProgressDialog(NewEventActivity.this);
-		            postProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		            postProgress.setMessage("Creando evento...");
-		            postProgress.setCancelable(true);
-		            postProgress.setOnCancelListener(new OnCancelListener(){
-		            
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							if (connectionAlive)
-								connector.cancel(true);
-						}
-
-		            });
-		            
-		            //setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
-		            //postProgress.show();
-		            
-		            newEventOrganized = createNewEvent();
-		            if (newEventOrganized != null){
-		            	connector = new DBConnection();
-						connectionAlive = true;
-			        	connector.execute();
-	            		}
-		            else
-		            	newEventOrganized = null;
-		        }
-		    	
-		    });
-			
-			// BOTON: Cancelar Evento
-			// **************************************************************************************
-			
-		    buttonCancelEvent = (Button)this.findViewById(R.id.newEvent_Button_CancelEvent);
-		    buttonCancelEvent.setOnClickListener(new OnClickListener(){
-		        
-		    	@Override
-		        public void onClick(View v){
-						showCancelEventAlertDialog();
-		        }
-		    	
-		    });
-			
-			// SPINNER: CATEGORIA EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
-	     	// **************************************************************************************
-			
-			ArrayAdapter<String> spinnerCategoryAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeEvents);	
-			spinnerCategory = (Spinner)findViewById(R.id.newEvent_Spinner_Category);
-			spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerCategory.setAdapter(spinnerCategoryAdapter);		
-			
-			spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-				@Override
-				public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
+	    	@Override
+	        public void onClick(View v){
 					
-					switch(position){
-								//Cine
-						case 0: typeEvent = arrayTypeEvents[position]; 
-								break;
-								//Cumpleaños							
-						case 1: typeEvent = arrayTypeEvents[position];
-								break;
-								//Concierto
-						case 2: typeEvent = arrayTypeEvents[position];
-								break;
-								//Conferencia
-						case 3: typeEvent = arrayTypeEvents[position];
-								break;		
-						default:typeEvent = "Otro";		
-					}				
-				}
-	
-				@Override
-				public void onNothingSelected(AdapterView<?> arg0){
-					// ...
-				}
+	        	// Preparar el dialogo de proceso para el inicio de sesion
+	            postProgress = new ProgressDialog(NewEventActivity.this);
+	            postProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	            postProgress.setMessage("Envíando evento...");
+	            postProgress.setCancelable(true);
+	            postProgress.setOnCancelListener(new OnCancelListener(){
+	            
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						if (connectionAlive)
+							connector.cancel(true);
+					}
+
+	            });
+	            
+	            //setRequestedOrientation(getCurrentOrientation(NewEventActivity.this));
+	            //postProgress.show();
+	            
+	            createNewEvent();
+	           /* if (newEventOrganized != null){
+	            	connector = new DBConnection();
+					connectionAlive = true;
+		        	connector.execute();
+            		}
+	            else
+	            	newEventOrganized = null;*/
+	        }
+	    	
+	    });
+		
+		// BOTON: Cancelar Evento
+		// **************************************************************************************
+		
+	    buttonCancelEvent = (Button)this.findViewById(R.id.newEvent_Button_CancelEvent);
+	    buttonCancelEvent.setOnClickListener(new OnClickListener(){
+	        
+	    	@Override
+	        public void onClick(View v){
+					showCancelEventAlertDialog();
+	        }
+	    	
+	    });
+		
+		// SPINNER: CATEGORIA EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
+     	// **************************************************************************************
+		
+		ArrayAdapter<String> spinnerCategoryAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeEvents);	
+		spinnerCategory = (Spinner)findViewById(R.id.newEvent_Spinner_Category);
+		spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerCategory.setAdapter(spinnerCategoryAdapter);		
+		
+		spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
 				
-		  });	
+				category = arrayTypeEvents[position];
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0){
+				// ...
+			}
 			
+	  });	
+		
 		// SPINNER: PROVINCIA
      	// **************************************************************************************
 		
@@ -270,23 +265,33 @@ public class NewEventActivity extends Activity {
 		spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
+			
+				province = position+1;		
 				
-				province = position+1;
-				switch(position){
-							//Cine
-					case 0: typeEvent = arrayTypeEvents[position]; 
-							break;
-							//Cumpleaños							
-					case 1: typeEvent = arrayTypeEvents[position];
-							break;
-							//Concierto
-					case 2: typeEvent = arrayTypeEvents[position];
-							break;
-							//Conferencia
-					case 3: typeEvent = arrayTypeEvents[position];
-							break;		
-					default:typeEvent = "Otro";		
-				}				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0){
+				// ...
+			}
+			
+	  });
+			addListenerChangeImage();
+		
+		// SPINNER: PREFIJO DE DIRECCION (C/, Pza, Avda, ... etc)
+     	// **************************************************************************************
+		
+		ArrayAdapter<String> spinnerAddressAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayAddressPrefix);	
+		spinnerAddress = (Spinner)findViewById(R.id.newEvent_Spinner_AddressType);
+		spinnerAddressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerAddress.setAdapter(spinnerAddressAdapter);		
+		
+		spinnerAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
+			
+				addressPrefix = arrayAddressPrefix[position];
+				
 			}
 
 			@Override
@@ -302,20 +307,20 @@ public class NewEventActivity extends Activity {
 	// GALERIA DE IMAGENES
     // **************************************************************************************
 		
-	    //Método para cambiar las imagenes, mas adelante utulizaremos el metodo para acceder a la galeria de imagemes.    
-		public void addListenerChangeImage() {				
-				
-				final ImageView image = (ImageView) findViewById(R.id.newEvent_Image);	 
-				Button button = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
-				
-				button.setOnClickListener(new OnClickListener() {				
-					public void onClick(View arg0) {
-						postImage = (postImage+1)%(arrayIMG.length);
-						image.setImageResource(arrayIMG[postImage]);
-					}
-				});
-		}
-		 
+    //Método para cambiar las imagenes, mas adelante utulizaremos el metodo para acceder a la galeria de imagemes.    
+	public void addListenerChangeImage() {				
+			
+			final ImageView image = (ImageView) findViewById(R.id.newEvent_Image);	 
+			Button button = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
+			
+			button.setOnClickListener(new OnClickListener() {				
+				public void onClick(View arg0) {
+					postImage = (postImage+1)%(arrayIMG.length);
+					image.setImageResource(arrayIMG[postImage]);
+				}
+			});
+	}
+	 
 		 /*
 		  * PARA ACCEDER A GALERIA DE IMAGENES
 	   @Override
@@ -345,32 +350,32 @@ public class NewEventActivity extends Activity {
 	// MOSTRAR DIALOGS: FECHA / HORA
     // **************************************************************************************
 		
-	    /**
-	     * Method to show the dialog date and time
-	     */
-	    @Override 
-	    protected Dialog onCreateDialog(int id) {
-	        switch (id) {
+	/**
+    * Method to show the dialog date and time
+    */
+	@Override 
+	protected Dialog onCreateDialog(int id) {
+	    switch (id) {
+	    
+	    //Si se ha presionado el botón SET DATE, se abre la ventana de diálogo(Calendario) para seleccionar la fecha
+	    case DIALOG_DATE:
+	        return new DatePickerDialog(this, new OnDateSetListener() {                
+	            public void onDateSet(DatePicker view, int year,
+	                    int monthOfYear, int dayOfMonth) {
+	            	dayPicked = dayOfMonth;
+	            	monthPicked = monthOfYear;
+	            	yearPicked = year;
+	                dateTime.set(year, monthOfYear, dayOfMonth);
+	                editTextDate.setText(dateFormatter.format(dateTime.getTime()));
+	            }
+	        }, dateTime.get(Calendar.YEAR),
+	           dateTime.get(Calendar.MONTH),
+	           dateTime.get(Calendar.DAY_OF_MONTH));
 	        
-	        //Si se ha presionado el botón SET DATE, se abre la ventana de diálogo(Calendario) para seleccionar la fecha
-	        case DIALOG_DATE:
-	            return new DatePickerDialog(this, new OnDateSetListener() {                
-	                public void onDateSet(DatePicker view, int year,
-	                        int monthOfYear, int dayOfMonth) {
-	                	dayPicked = dayOfMonth;
-	                	monthPicked = monthOfYear;
-	                	yearPicked = year;
-	                    dateTime.set(year, monthOfYear, dayOfMonth);
-	                    editTextDate.setText(dateFormatter.format(dateTime.getTime()));
-	                }
-	            }, dateTime.get(Calendar.YEAR),
-	               dateTime.get(Calendar.MONTH),
-	               dateTime.get(Calendar.DAY_OF_MONTH));
-	            
-	            //Si se ha presionado el botón SET TIME, se abre la ventana de diálogo para seleccionar la fecha 
+	        //Si se ha presionado el botón SET TIME, se abre la ventana de diálogo para seleccionar la fecha 
 	        case DIALOG_TIME:
 	            return new TimePickerDialog(this, new OnTimeSetListener() {	 
-
+	
 	                public void onTimeSet(TimePicker view, int hourOfDay,
 	                        int minute) {
 	                	
@@ -391,95 +396,134 @@ public class NewEventActivity extends Activity {
 	// MOSTRAR DIALOGS: CAMPOS VACIOS + FECHA INVALIDA + CANCELAR EVENTO
 	// **************************************************************************************
 		
-	   /**
-	    * Method alert when user leaves empty fields
-	    */
-		private void showEmptyFieldsAlertDialog(){
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			
-			builder.setTitle("Biljet");
-			builder.setMessage("Existen campos sin rellenar. Por favor complete el formulario antes de enviarlo");
-			builder.setIcon(android.R.drawable.ic_dialog_alert);
-			builder.setCancelable(true);
-			builder.setPositiveButton("Aceptar",null);
-
-			AlertDialog alert = builder.create();
-			postProgress.dismiss();
-			setRequestedOrientation(SENSOR_ON);
-			alert.show();
-			emptyFields = false;
-		}
+	/**
+	* Method alert when user leaves empty fields
+	*/
+	private void showInvalidFieldsAlertDialog(){
 		
-	   /**
-	    * Method alert when user leaves empty fields
-	    */
-		private void showInvalidDateAlertDialog(){
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			
-			builder.setTitle("Biljet");
-			builder.setMessage("La fecha/hora no puede ser anterior a la actual. Por favor corrija el dato antes de enviar el formulario");
-			builder.setIcon(android.R.drawable.ic_dialog_alert);
-			builder.setCancelable(true);
-			builder.setPositiveButton("Aceptar",null);
-
-			AlertDialog alert = builder.create();
-			postProgress.dismiss();
-			
-			invalidDate = false;
-			setRequestedOrientation(SENSOR_ON);
-			alert.show();
-		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
-	   /**
-	    * Method alert when user leaves empty fields
-	    */
-		private void showInvalidDataAlertDialog(String field){
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			
-			builder.setTitle("Biljet");
-			builder.setMessage("Los datos introducidos en el campo "+ field +" no son válidos. Por favor, revise los datos y reintentelo de nuevo!");
-			builder.setIcon(android.R.drawable.ic_dialog_alert);
-			builder.setCancelable(true);
-			builder.setPositiveButton("Aceptar",null);
-
-			AlertDialog alert = builder.create();
-			postProgress.dismiss();
-			
-			setRequestedOrientation(SENSOR_ON);
-			alert.show();
-		}
-
-	   /**
-	    * Method alert when user press Cancel button
-	    */
-		private void showCancelEventAlertDialog(){
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			
-			builder.setTitle("Biljet");
-			builder.setMessage("El evento "+((EditText) findViewById(R.id.newEvent_EditText_Title)).getText().toString()+" se descartará. ¿Desea continuar?");
-			builder.setIcon(android.R.drawable.ic_dialog_alert);
-			builder.setCancelable(true);
-			builder.setPositiveButton("Sí",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							NewEventActivity.this.finish();
-							
-						}
-					});
-			builder.setNegativeButton("No",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-						}
-					});
-			
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
+		builder.setTitle("Biljet");
 		
+		String message = "Los campos: \n"; 
+		for (int i = 0; i < fields.size(); i++)
+			message += "> " + fields.get(i) + "\n";
+		message += "están vacíos o contienen datos invalidos. Revise el formulario y reintentelo de nuevo";
+		builder.setMessage(message);
+		
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setCancelable(true);
+		builder.setPositiveButton("Aceptar",null);
+	
+		AlertDialog alert = builder.create();
+		postProgress.dismiss();
+		setRequestedOrientation(SENSOR_ON);
+		alert.show();
+		invalidFields = false;
+	}
+		
+   /**
+    * Method alert when user leaves empty fields
+    */
+	private void showInvalidDateAlertDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setTitle("Biljet");
+		builder.setMessage("La fecha/hora no puede ser anterior a la actual. Por favor corrija el dato antes de enviar el formulario");
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setCancelable(true);
+		builder.setPositiveButton("Aceptar",null);
+
+		AlertDialog alert = builder.create();
+		postProgress.dismiss();
+		
+		invalidDate = false;
+		setRequestedOrientation(SENSOR_ON);
+		alert.show();
+	}
+		
+   /**
+    * Method alert when user press Cancel button
+    */
+	private void showCancelEventAlertDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setTitle("Biljet");
+		builder.setMessage("El evento "+((EditText) findViewById(R.id.newEvent_EditText_Title)).getText().toString()+" se descartará. ¿Desea continuar?");
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setCancelable(true);
+		builder.setPositiveButton("Sí",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						NewEventActivity.this.finish();
+						
+					}
+				});
+		builder.setNegativeButton("No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	 /** 
+	  * Method to show a confirm dialog before to post it to DB
+	  */
+	private void showConfirmEventDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setTitle("Biljet - Confirmar evento");
+		String message = "Confirme los siguientes datos:\n";
+		message += " > Título: " + newEventOrganized.getTitle() + "\n";
+		message += " > Categoría: " + newEventOrganized.getCategory() + "\n";
+		message += " > Precio: " + newEventOrganized.getPrice() + "\n";
+		message += " > Aforo: " + newEventOrganized.getCapacity() + "\n";
+		message += " > Fecha: " + dateTimeFormatter.format(newEventOrganized.getDate()) + "\n";
+		
+		int days = newEventOrganized.getDaysDuration();
+		int hours = newEventOrganized.getHoursDuration();
+		int minutes = newEventOrganized.getMinutesDuration();
+		
+		if (days == 0 && hours == 0 && minutes == 0)
+			message += " > Duración: Indeterminado\n";
+		else
+			message += " > Duración: " + days +" días " + hours + " h " + minutes + " min";
+		
+		message += " > Dirección: " + newEventOrganized.getAddress() + ", " + newEventOrganized.getCity() + "\n";
+		message += " > Código Postal: " + newEventOrganized.getPostalCode() + "\n";
+		message += " > Provincia: " + new Province().toString(newEventOrganized.getProvince()) + "\n";
+		message += " > Descripción: " + newEventOrganized.getDescription() + "\n\n";
+		message += "Si son correctos, pulse 'Enviar'. Si necesita corregir alguno, pulse 'Cancelar'";
+		
+		builder.setMessage(message);
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+		builder.setCancelable(false);
+		builder.setPositiveButton("Enviar...",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+		            	
+						connector = new DBConnection();
+						connectionAlive = true;
+			        	connector.execute();
+						
+					}
+				});
+		builder.setNegativeButton("Cancelar",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
 	// CREAR EVENTO + RECUPERAR DATOS DESDE EL FORMULARIO
 	// **************************************************************************************
 					
@@ -488,237 +532,264 @@ public class NewEventActivity extends Activity {
 	* @return Event object with all data related it
 	* 		  null if some field is empty
 	*/
-	   private Event createNewEvent() { 
-		   
-		   newEventOrganized = null;
-		   
-		   String title = getTitleForm();
-		   String address = getAddressForm();
-		   float price = getPriceForm();
-		   long date = getDateForm();
-		   int days_duration = getDaysDurationForm();
-		   int hours_duration = getHoursDurationForm();
-		   int minutes_duration = getMinutesDurationForm();
-		   int capacity = getCapacityForm();
-		   String description = getDescriptionForm();
-		   
-		   String city = getCityForm();
-		   int postalCode = getPostalCodeForm();
-		   
-		   if (emptyFields)
-			   showEmptyFieldsAlertDialog();
-		   else if (invalidDate)
-			   showInvalidDateAlertDialog();
-		   else {
-			   newEventOrganized = new Event(title,
-				 						     "",  // creator
-		 						     "",  // id evento
-		 						     description,
-		 						     "eventDefault.png",  // imagePath
-		 						     typeEvent,
-		 						     address,
-		 						     city,  // city
-		 						     postalCode,	  // postal code		 						   
-		 						     province,	  // province					   
-		 						     0,	  // latitude			 						   
-		 						     0,	  // longitude			 						   
-		 						     date,				 						   
-		 						     price,				 						   
-		 						     capacity,				 						   				 						   
-		 						     days_duration,				 						   
-		 						     hours_duration,				 						   
-		 						     minutes_duration);		   							   
-		   }
-			
-		   return newEventOrganized;
+	private void createNewEvent() { 
 	   
-		}//CrearNewEvent
-	        
+		newEventOrganized = null;
+		fields.clear();
+		
+		String title = getTitleForm();
+		String address = getAddressForm();
+		float price = getPriceForm();
+		long date = getDateForm();
+		int days_duration = getDaysDurationForm();
+		int hours_duration = getHoursDurationForm();
+		int minutes_duration = getMinutesDurationForm();
+		int capacity = getCapacityForm();
+		String description = getDescriptionForm();
+	   
+		String city = getCityForm();
+		int postalCode = getPostalCodeForm();	
+		
+		if (invalidFields)
+			showInvalidFieldsAlertDialog();
+		else if (invalidDate)
+			showInvalidDateAlertDialog();
+		else {
+			newEventOrganized = new Event(title,
+										  "",  // creator
+										  "",  // id evento
+										  description,
+										  "eventDefault.png",  // imagePath
+										  category,
+										  address,
+										  city,  // city
+										  postalCode,	  // postal code		 						   
+										  province,	  // province					   
+										  0,	  // latitude			 						   
+										  0,	  // longitude			 						   
+										  date,				 						   
+										  price,				 						   
+										  capacity,				 						   				 						   
+										  days_duration,				 						   
+										  hours_duration,				 						   
+										  minutes_duration);
+			
+			showConfirmEventDialog();
+		} // else
+		
+	   //return newEventOrganized;
+   
+	} //CrearNewEvent
+    
 	   /**
 	* Returns the event title from user form
 	* @return String
 	*/
-	   private String getTitleForm(){
-		   
-		   EditText editTxtName = (EditText) findViewById(R.id.newEvent_EditText_Title);	   
-		   
-		   if (editTxtName.getText().toString().equals(""))
-			   emptyFields = true;
-		   
-		   return editTxtName.getText().toString();
-		   
-	   }
+	private String getTitleForm(){
+	   
+		EditText editTxtName = (EditText) findViewById(R.id.newEvent_EditText_Title);	   
+	   
+		if (editTxtName.getText().toString().equals("")){
+			invalidFields = true;
+			fields.add("Titulo");
+		}
+		
+		return editTxtName.getText().toString();
+	   
+	}
 	 
 	/**
 	* Returns the event price from user form
 	* @return
 	*/
-	   private float getPriceForm(){
-		   
-		   EditText editPrice = (EditText) findViewById(R.id.newEvent_EditText_Price);
-		   
-		   float price = 0;
-		   try {
-			   price = Float.parseFloat(editPrice.getText().toString());
-		   } catch (Exception e){
-			   showInvalidDataAlertDialog("Precio");
-		   }
-		   
-		   return price;
-	   }
+	private float getPriceForm(){
+	   
+		EditText editPrice = (EditText) findViewById(R.id.newEvent_EditText_Price);
+	   
+		float price = 0;
+		try {
+			price = Float.parseFloat(editPrice.getText().toString());
+		} catch (Exception e){
+			invalidFields = true;
+			fields.add("Precio");
+		}
+	   
+		return price;
+	}
 
 	/**
 	* Returns the event capacity from user form
 	* @return
 	*/
-	   private int getCapacityForm(){
-		   
-		   EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Capacity);
-		   
-		   int capacity = 0;
-		   try {
-			   capacity = Integer.parseInt(editCapacity.getText().toString());
-		   } catch (Exception e){
-			   showInvalidDataAlertDialog("Aforo");
-		   }
-		   
-		   return capacity;
-	   }
+	private int getCapacityForm(){
+		
+		EditText editCapacity = (EditText) findViewById(R.id.newEvent_EditText_Capacity);
+	   
+		int capacity = 0;
+		try {
+			capacity = Integer.parseInt(editCapacity.getText().toString());
+		} catch (Exception e){
+			invalidFields = true;
+			fields.add("Aforo");
+		}
+	   
+		return capacity;
+	}
 
    /**
     * Returns the event description from user form
     * @return
     */
-	   private String getDescriptionForm(){
-		   EditText editDescription = (EditText) findViewById(R.id.newEvent_EditText_Description);
+	private String getDescriptionForm(){
+	   
+		EditText editDescription = (EditText) findViewById(R.id.newEvent_EditText_Description);
+	   
+		String info = editDescription.getText().toString();
+	
+		if (info.equals("")){
+			invalidFields = true;
+			fields.add("Descripción");
+		}
 		   
-			String info = editDescription.getText().toString();
-		
-			if (info.equals(""))
-				emptyFields = true;
-			   
-			   return info;
-	   }
-    
+		return info;
+	}
+
 	   /**
 	* Returns the event duration days from user form
 	* @return
 	*/
-	   private int getDaysDurationForm(){
-		   
-		   EditText editDays = (EditText) findViewById(R.id.newEvent_EditText_DaysDuration);
-		   
-		   int daysDuration = -1;
-		   try {
-			   daysDuration = Integer.parseInt(editDays.getText().toString());
-		   } catch (Exception e){
-			   showInvalidDataAlertDialog("Duración Días");
-		   }
-		   
-		   return daysDuration;
-	   }
+	private int getDaysDurationForm(){	   
+	   
+		EditText editDays = (EditText) findViewById(R.id.newEvent_EditText_DaysDuration);
+	   
+		int daysDuration = -1;
+		try {
+			daysDuration = Integer.parseInt(editDays.getText().toString());
+		} catch (Exception e){
+			invalidFields = true;
+			fields.add("Duración (Días)");
+		}
+	   
+		return daysDuration;
+	}
 	   
 	   /**
 	* Returns the event duration hours from user form
 	* @return
 	*/
-	   private int getHoursDurationForm(){
-		   
-		   EditText editHours = (EditText) findViewById(R.id.newEvent_EditText_HoursDuration);
-		   
-		   int hoursDuration = -1;
-		   try {
-			   hoursDuration = Integer.parseInt(editHours.getText().toString());
-		   } catch (Exception e){
-			   showInvalidDataAlertDialog("Duración Horas");
-		   }
+	private int getHoursDurationForm(){
+	   
+		EditText editHours = (EditText) findViewById(R.id.newEvent_EditText_HoursDuration);
+	   
+		int hoursDuration = -1;
+		try {
+			hoursDuration = Integer.parseInt(editHours.getText().toString());
+		} catch (Exception e){
+			invalidFields = true;
+			fields.add("Duración (Horas)");
+		}
    
-		   return hoursDuration;
-	   }
+		return hoursDuration;
+	}
 	   
 	   /**
 	* Returns the event duration minutes from user form
 	* @return
 	*/
-	   private int getMinutesDurationForm(){
-		   
-		   EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditText_MinutesDuration);
-		   
-		   int minutesDuration = -1;
-		   try {
-			   minutesDuration = Integer.parseInt(editMinutes.getText().toString());
-		   } catch (Exception e){
-			   showInvalidDataAlertDialog("Duración Minutos");
-		   }
-		   
-		   
-		   return minutesDuration;
-	   }
+	private int getMinutesDurationForm(){
+	   
+		EditText editMinutes = (EditText) findViewById(R.id.newEvent_EditText_MinutesDuration);
+	   
+		int minutesDuration = -1;
+		try {
+			minutesDuration = Integer.parseInt(editMinutes.getText().toString());
+		} catch (Exception e){
+			invalidFields = true;
+			fields.add("Duración (Minutos)");
+		}
+	   
+	   
+		return minutesDuration;
+	}
 	   
 	/**
 	* Returns the event Date and Time from user from
 	* @return Timestamp in milliseconds
 	*/
-	   private long getDateForm(){
-		   
-		   Calendar today = Calendar.getInstance();
-		   Calendar aux = Calendar.getInstance();
-		   aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
-		   
-		   if (aux.getTimeInMillis() < today.getTimeInMillis())
-			   invalidDate = true;
-		   
-		   return aux.getTimeInMillis();
-	   }
+	private long getDateForm(){
+	   
+		Calendar today = Calendar.getInstance();
+		Calendar aux = Calendar.getInstance();
+		aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
+	   
+		if (aux.getTimeInMillis() < today.getTimeInMillis())
+			invalidDate = true;
+	   
+		return aux.getTimeInMillis();
+	}
 	   
 	   /**
 	* Returns the event address from user form
 	* @return
 	*/
-	   private String getAddressForm(){
-		   
-		   EditText editAdress = (EditText) findViewById(R.id.newEvent_EditText_Address);
-		   
-		   String address = editAdress.getText().toString();
-		   
-		   if (address.equals(""))
-			   emptyFields = true;
-		   
-		   return address;
-	   }
+	private String getAddressForm(){
+
+		EditText editAdress = (EditText) findViewById(R.id.newEvent_EditText_Address);
+		String address = editAdress.getText().toString();
+		
+		// Comprobamos si el campo esta vacio
+		if (!address.equals("")){
+			
+			address = "";
+			// Añadimos prefijo de direccion si es distinto de "Otro"
+			if (!addressPrefix.equals("Otro"))
+				address = addressPrefix + " ";
+			
+			address += editAdress.getText().toString();
+		}
+		else {
+			invalidFields = true;
+			fields.add("Dirección");
+		}
 	   
+		return address;
+	}
+   
 	/**
 	* Returns the event city from user form
 	* @return
 	*/
-	   private String getCityForm(){
-		   
-		   EditText editCity = (EditText) findViewById(R.id.newEvent_EditText_City);
-		   
-		   String city = editCity.getText().toString();
-		   
-		   if (city.equals(""))
-			   emptyFields = true;
-		   
-		   return city;
-	   }
+	private String getCityForm(){
+	   
+		EditText editCity = (EditText) findViewById(R.id.newEvent_EditText_City);
+	   
+		String city = editCity.getText().toString();
+	   
+		if (city.equals("")){
+			invalidFields = true;
+			fields.add("Ciudad");
+		}
+	   
+		return city;
+	}
 	 
 	/**
 	* Returns the event postal code from user form
 	* @return
 	*/
-	   private int getPostalCodeForm(){
-		   
-		   EditText editPostalCode = (EditText) findViewById(R.id.newEvent_EditText_PostalCode);
-		   int postalCode = -1;
-		   try {
-			   postalCode = Integer.parseInt(editPostalCode.getText().toString());
-		   } catch (Exception e){
-			   showInvalidDataAlertDialog("Código Postal");
-		   }
+	private int getPostalCodeForm(){
+	   
+		EditText editPostalCode = (EditText) findViewById(R.id.newEvent_EditText_PostalCode);
+		int postalCode = -1;
+		try {
+			postalCode = Integer.parseInt(editPostalCode.getText().toString());
+		} catch (Exception e){
+			invalidFields = true;
+			fields.add("Código Postal");
+		}
 
-		   return postalCode;
-	   }
+		return postalCode;
+	}
 		      	   
 	
 	// AUXILIARES CONEXION DB
@@ -865,6 +936,8 @@ public class NewEventActivity extends Activity {
 						  break;
 				case -2:  Toast.makeText(NewEventActivity.this, "Error: No se pudo codificar envío. Reintentelo de nuevo...", Toast.LENGTH_LONG).show();
 						  break;
+				case -1:  Toast.makeText(NewEventActivity.this, "Error: Fallo la autenticación de usuario. Reintentelo de nuevo...", Toast.LENGTH_LONG).show();
+				  		  break;
 				default:  Toast.makeText(NewEventActivity.this, "Error: No se pudo contactar con el servidor!", Toast.LENGTH_LONG).show();
 						  break;
 			}

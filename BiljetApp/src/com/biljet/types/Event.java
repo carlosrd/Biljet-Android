@@ -35,7 +35,6 @@ public class Event implements Parcelable {
 	int id;
 	int image;	
 	int score;					
-	//Date date;					// Fecha del evento [finishAt] => TODO cambiar a java.Date
 	
 	// ATRIBUTOS
 	// ***************************************************************************************************
@@ -202,15 +201,15 @@ public class Event implements Parcelable {
 		return capacity;
 	}
 
-	public int getLength_days() {
+	public int getDaysDuration() {
 		return days_duration;
 	}
 
-	public int getLength_hours() {
+	public int getHoursDuration() {
 		return hours_duration;
 	}
 
-	public int getLength_minutes() {
+	public int getMinutesDuration() {
 		return minutes_duration;
 	}
 
@@ -245,12 +244,12 @@ public class Event implements Parcelable {
 			dest.writeString(description);
 			dest.writeString(category);
 			dest.writeString(address);
+			dest.writeString(city);
 			dest.writeInt(province);
 			dest.writeInt(postalCode);
 			dest.writeInt(longitude);
 			dest.writeInt(latitude);
 			dest.writeLong(date);
-			//dest.writeParcelable(date, flags);//un object de tipo fecha...¿?
 			dest.writeInt(days_duration);
 			dest.writeInt(hours_duration);
 			dest.writeInt(minutes_duration);
@@ -272,12 +271,12 @@ public class Event implements Parcelable {
 			description = in.readString();
 			category = in.readString();
 			address = in.readString();
+			city = in.readString();
 			province = in.readInt();
 			postalCode = in.readInt();
 			longitude = in.readInt();
 			latitude = in.readInt();
 			date = in.readLong();
-			//date = in.readParcelable(Date.class.getClassLoader());
 			days_duration = in.readInt();
 			hours_duration = in.readInt();
 			minutes_duration = in.readInt();

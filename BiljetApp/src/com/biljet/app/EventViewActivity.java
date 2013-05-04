@@ -1,7 +1,10 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -9,13 +12,12 @@ import java.text.SimpleDateFormat;
 
 import javax.crypto.NoSuchPaddingException;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -42,18 +44,26 @@ import android.widget.Toast;
 
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
+import com.biljet.types.Province;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 @SuppressLint("SimpleDateFormat")
 public class EventViewActivity extends Activity {
 
+	ActionBar actionBar;
+	Button buttonMultipurpose;	
+	
 	Event currentEvent;
 	
-	DBConnection connector;			// Tarea en segundo plano para realizar el logueo
+	
+	// Variables para las conexiones con la base de datos
+	DBPost connectorToGo;				// Tarea en segundo plano para adquirir el pase
+	DBGet connectorIsGoing;				// Tarea en segundo plano para saber si el usuario va al evento
 	ProgressDialog postProgress;		// ProgressDialog para mostrar el progreso
-	boolean connectionAlive;			// Booleano para controlar estado de la conexion
-
+	boolean postAlive;					// Booleano para controlar estado de la conexion
+	boolean getAlive;
+	
 	// Constanstes para bloquear el sensor de movimiento durante los posteos. Si no se bloquea el
 	// y el usuario gira el telefono, Android destruye la actividad y la vuelve a crear, por lo que
 	// se cancela el logueo y aparecen errores que fuerzan el cierre de la aplicacion
@@ -62,6 +72,9 @@ public class EventViewActivity extends Activity {
 	final int REVERSE_PORTRAIT = 9;
 	final int REVERSE_LANDSCAPE = 8;
 	final int SENSOR_ON = 4;
+	
+	// CONSTRUCTORA
+   	// **************************************************************************************
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,11 +86,15 @@ public class EventViewActivity extends Activity {
         
 		currentEvent = getIntent().getParcelableExtra("EVENT");
 		
-		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Evento: "+ currentEvent.getTitle());
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
+		
+		// IMAGEN DEL EVENTO
+     	// **************************************************************************************
+
 		int auxInt = 0;
 		
 		ImageView eventImageView = (ImageView)findViewById(R.id.eventView_ImageView_Avatar);
@@ -88,11 +105,20 @@ public class EventViewActivity extends Activity {
 		    eventImageView.setImageBitmap(myBitmap);
 			}
 		
-		eventImageView.setScaleType(ImageView.ScaleType.CENTER);
-	
+		//eventImageView.setScaleType(ImageView.ScaleType.CENTER);
 		
-		Button buttonMultipurpose = (Button)findViewById(R.id.eventView_Button_Multipurpose);
-		if (getIntent().getBooleanExtra("OWN?", true)){
+		// BOTON MULTIPROPOSITO (Ir a evento, leer lista, etc..)
+     	// **************************************************************************************
+		
+		connectorIsGoing = new DBGet();
+		
+		// Si es la vista de un evento para el que no tenemos pase, lo comprobamos
+		// para saber si mostrar el boton de "Adquirir Pase"
+		if (getIntent().getBooleanExtra("NO_TICKET", false))
+			connectorIsGoing.execute(prepareUser());
+		
+		buttonMultipurpose = (Button)findViewById(R.id.eventView_Button_Multipurpose);
+		if (getIntent().getBooleanExtra("OWN?", false)){
 			buttonMultipurpose.setVisibility(View.VISIBLE);
 			buttonMultipurpose.setText("Leer lista de invitados");
 	        buttonMultipurpose.setOnClickListener(new OnClickListener() {
@@ -104,9 +130,8 @@ public class EventViewActivity extends Activity {
 		        							   }
 	        							   });
 			}
-		else
-			if (getIntent().getBooleanExtra("NO_TICKET", true)){
-				buttonMultipurpose.setVisibility(View.VISIBLE);
+		else if (getIntent().getBooleanExtra("NO_TICKET", false)){
+				buttonMultipurpose.setVisibility(View.INVISIBLE);
 				buttonMultipurpose.setText("Adquirir un pase");
 		        buttonMultipurpose.setOnClickListener(new OnClickListener() {
 			        							   public void onClick(View arg0) {
@@ -119,30 +144,48 @@ public class EventViewActivity extends Activity {
 
 			        										@Override
 			        										public void onCancel(DialogInterface dialog) {
-			        											if (connectionAlive)
-			        												connector.cancel(true);
+			        											if (postAlive)
+			        												connectorToGo.cancel(true);
 			        										}
 
 			        						            });
 			        						            
-			        						        	connector = new DBConnection();
-			        									connectionAlive = true;
-			        						        	connector.execute(true);
+			        						        	connectorToGo = new DBPost();
+			        									postAlive = true;
+			        						        	connectorToGo.execute(prepareUser());
 			        							   }
 		        							   });
 				}
-			else
+		else
 			buttonMultipurpose.setVisibility(View.INVISIBLE);
 		
+		
+		// INFORMACION DEL EVENTO
+     	// **************************************************************************************
+
+		// Titulo
+     	// *****************
+
 		TextView txtName = (TextView)findViewById(R.id.eventView_TextView_Title);
 		txtName.setText(currentEvent.getTitle());
 	
+		// Categoria 
+     	// *****************
 		TextView txtEventType = (TextView)findViewById(R.id.eventView_TextView_Category);
 		txtEventType.setText(currentEvent.getCategory());
 		
+		// Direccion
+		// Codigo Postal + Ciudad
+		// Provincia
+     	// *****************
 		TextView txtAddress = (TextView)findViewById(R.id.eventView_TextView_Address);
-		txtAddress.setText(currentEvent.getAddress()+"\n"+currentEvent.getPostalCode()+" "+currentEvent.getCity());
-	
+		String address = currentEvent.getAddress()+"\n";
+		address += currentEvent.getPostalCode()+" "+currentEvent.getCity()+"\n";
+		address += new Province().toString(currentEvent.getProvince());
+		txtAddress.setText(address);
+
+		// Precio
+     	// *****************
 		TextView txtPrice = (TextView)findViewById(R.id.eventView_TextView_Price);
 		String auxString2 = "";
 		float auxFloat = currentEvent.getPrice();
@@ -154,43 +197,47 @@ public class EventViewActivity extends Activity {
 		
 		txtPrice.setText(auxString2);
 		
+		// Fecha
+     	// *****************
 		TextView txtDate = (TextView)findViewById(R.id.eventView_TextView_Date);
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM, yyyy - HH:mm");
 		String auxDate = dateFormatter.format(new Timestamp(currentEvent.getDate()));
 		auxDate = auxDate+"";
 		txtDate.setText(auxDate);
 		
+		// Duracion
+     	// *****************
 		TextView txtLength = (TextView)findViewById(R.id.eventView_TextView_Duration);
 		String auxString = "";
-		auxInt = currentEvent.getLength_days();
+		auxInt = currentEvent.getDaysDuration();
 		if (auxInt > 0)
 			auxString = auxInt+" días ";
-		auxInt = currentEvent.getLength_hours();
+		auxInt = currentEvent.getHoursDuration();
 		if (auxInt > 0)
 			auxString += auxInt+" h ";
-		auxInt = currentEvent.getLength_minutes();
+		auxInt = currentEvent.getMinutesDuration();
 		if (auxInt > 0)
 			auxString += auxInt+" min. ";
 		if (auxString.equals(""))
 			auxString = "Indeterminado";
 		txtLength.setText(auxString);
-		/*
-		TextView txtGuests = (TextView)findViewById(R.id.eventView_TextView_ConfirmedPeople);
-		String auxString3 = "";
-		auxInt = currentEvent.getConfirmedPeople();
-		auxString3 = auxInt+"";
-		txtGuests.setText(auxString3);
-		 */
+		
+		// Aforo
+     	// *****************
 		TextView txtCapacity = (TextView)findViewById(R.id.eventView_TextView_Capacity);
 		String auxString4 = "";
 		auxInt = currentEvent.getCapacity();
 		auxString4 = auxInt+"";
 		txtCapacity.setText(auxString4);
 
-		TextView txtInfo = (TextView)findViewById(R.id.eventView_TxtInfo);
+		// Descripcion
+     	// *****************
+		TextView txtInfo = (TextView)findViewById(R.id.eventView_TextView_Description);
 		txtInfo.setText(currentEvent.getDescription());
 	}
 
+	// RECOGER DATOS QR
+	// ***********************************************************************************
 	// Metodo para recoger los resultados de leer el QR
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		   if (requestCode == 0) {
@@ -209,6 +256,12 @@ public class EventViewActivity extends Activity {
 		      }
 		   }
 		}
+	
+	
+	// AUXILIARES PARA CONEXION CON DB 
+   	// **************************************************************************************
+	
+	//POST
 	
 	private int getCurrentOrientation(Context context){
     	final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
@@ -257,14 +310,12 @@ public class EventViewActivity extends Activity {
         try{
             // Agrego los parámetros a la petición 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("_id", user );
+            jsonObject.put("id", user );
             jsonObject.put("password", password );
             Log.d("POST","ID: "+user+" PASS: "+password);
             
             // Damos formato al JSON a enviar o el servidor lo rechazará
             StringEntity entity = new StringEntity(jsonObject.toString());
-            entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
-            entity.setContentType("application/json");
             post.setHeader("Content-Type", "application/json");
             post.setEntity(entity);
             
@@ -282,13 +333,85 @@ public class EventViewActivity extends Activity {
         return statusCode;
 		
 	}
+	
+	//GET IS-GOING
+	
+	/**
+	 * 
+	 * @param user
+	 * @param password
+	 * @return 0 = false, 1 = true, -1 = error
+	 */
+	private int postIsGoing(String user, String password){
+		
+		InputStream is = null;
+        /* Creamos el objeto cliente que realiza la petición al servidor */
+        DefaultHttpClient client = new DefaultHttpClient();
+        /* Definimos la ruta al servidor. En mi caso, es un servlet. */
+        HttpPost post = new HttpPost("http://www.biljetapp.com/api/event/is-going/"+ currentEvent.get_id());
+        
+        try{
+            // Agrego los parámetros a la petición 
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", user );
+            jsonObject.put("password", password );
+            Log.d("POST","ID: "+user+" PASS: "+password);
+            
+            // Damos formato al JSON a enviar o el servidor lo rechazará
+            StringEntity entity = new StringEntity(jsonObject.toString());
+            post.setHeader("Content-Type", "application/json");
+            post.setEntity(entity);
+            
+            // Ejecuto la petición, y guardo la respuesta 
+			HttpResponse response = client.execute(post);
+			StatusLine responseStatus = response.getStatusLine();
+			int statusCode = responseStatus.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity e = response.getEntity();
+				is = e.getContent();
+				}
+			
+				
+			if (connectorIsGoing.isCancelled())
+				return -1;
+						
+			String result = "";
+			
+			// Volcar la respueta a String
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+			StringBuilder sb = new StringBuilder();
+			sb.append(reader.readLine());
+			is.close();
+			result = sb.toString();
+			
+			Log.d("Is-Going",result);
+			Log.d("equals",String.valueOf(result.equals("true")+" Long: "+result.length()));
+			
+			// Uso "contains()" porque siempre se guarda un caracter mas al final ¿Quiza \n del bucle anterior?
+			if (result.equals("true"))
+				return 1;
+			else 
+				return 0;
 
-    /*  Se instancia con 3 tipos:
+	        }
+        catch (Exception e) {
+        	Log.e("Exception",e.getMessage());
+        	}
+        
+        
+
+        return -1;
+	}
+	
+	// CONEXION CON DB EN SEGUNDO PLANO
+   	// **************************************************************************************
+   
+	/*  Se instancia con 3 tipos:
 	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
 	2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
 	3º - Tipo de datos de SALIDA de doInBackground() y de ENTRADA en onPostExecute() => Datos para mostrar el fin de la tarea	
     */
-	private class DBConnection extends AsyncTask<Boolean,Integer,Integer> {
+	private class DBPost extends AsyncTask<String,Integer,Integer> {
 		
 		@Override
 		protected void onPreExecute() {
@@ -299,18 +422,10 @@ public class EventViewActivity extends Activity {
 		}
 		
 		@Override
-		protected Integer doInBackground(Boolean... params) {
+		protected Integer doInBackground(String... params) {
 
-			String[] authentication = prepareUser();
-			String user = authentication[0];
-			String pass = authentication[1];
-			boolean toGo = params[0]; 
-			int statusCode = -1;
+			return postToGo(params[2],params[1]);
 			
-			if (toGo)
-				statusCode = postToGo(user,pass);
-			
-			return statusCode;
 		}
 		
 		@Override
@@ -322,7 +437,8 @@ public class EventViewActivity extends Activity {
 		protected void onPostExecute(Integer statusCode) {
 			// Dejar de mostrar el dialogo, marcar la conexion como no activa y desbloquear sensor
 			postProgress.dismiss();
-			connectionAlive = false;
+			postAlive = false;
+			buttonMultipurpose.setVisibility(View.INVISIBLE);
 			setRequestedOrientation(SENSOR_ON);
 			
 			// Devolver resultado
@@ -344,12 +460,51 @@ public class EventViewActivity extends Activity {
 		protected void onCancelled() {
 			Log.d("Debug","Cancelar logueo");
 			postProgress.dismiss();
-			connectionAlive = false;
+			postAlive = false;
 			setRequestedOrientation(SENSOR_ON);
 			Toast.makeText(EventViewActivity.this, " ! : Obtener pase descartado por el usuario!", Toast.LENGTH_LONG).show();
 		}
 		
 	}
+	
+    private class DBGet extends AsyncTask<String,Integer,Integer> {
+
+	    @Override
+	    protected void onPreExecute() {
+			actionBar.setProgressBarVisibility(View.VISIBLE);
+			getAlive = true;
+	    }
+	 
+		@Override
+		protected Integer doInBackground(String... params) {
+			return postIsGoing(params[2],params[1]);
+		}
+		
+    	@Override
+	    protected void onProgressUpdate(Integer... values) {
+	
+	    }
+    	
+	    @Override
+	    protected void onPostExecute(Integer result) {
+			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			getAlive = false;
+			if (result == 0)
+				buttonMultipurpose.setVisibility(View.VISIBLE);
+	    }
+	 
+	    @Override
+	    protected void onCancelled() {
+	    	actionBar.setProgressBarVisibility(View.INVISIBLE);
+	    	getAlive = false;
+	    }
+
+
+    }
+	
+	
+	// BOTON "MENU" DEL DISPOSITIVO
+   	// **************************************************************************************
 	
 	/*
 	@Override
