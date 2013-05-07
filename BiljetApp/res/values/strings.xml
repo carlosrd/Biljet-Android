@@ -13,8 +13,8 @@
     <string name="login_Button_Login"> Iniciar Sesión </string>
     <string name="login_Button_SignUp"> ¡Unirme ahora! </string>
     <string name="login_Label_User">Usuario</string>
-    <string name="login_Label_Password">Contraseña</string>  
-    
+    <string name="login_Label_Password">Contraseña</string>
+
     <!-- IndexMenuActivity -->
     <!-- *********************************************************************** -->
 
@@ -40,7 +40,7 @@
     <string name="calendarView_LabelFriday"> Vie </string>
     <string name="calendarView_LabelSaturday"> Sab </string>
     <string name="calendarView_LabelSunday"> Dom </string>
-    
+
     <!-- DayViewActivity -->
     <!-- *********************************************************************** -->
 
@@ -57,7 +57,7 @@
     <string name="eventView_LabelConfirmedPeople">Asisten: </string>
     <string name="eventView_Label_Capacity">Aforo Total: </string>
     <string name="eventView_Label_Description">Info: </string>
-
+    <string name="eventView_Button_HowToArrive">Como llegar&#8230; </string>
     <!-- FriendViewActivity  TODO -->
     <!-- *********************************************************************** -->
 
@@ -76,7 +76,7 @@
 
     <!-- Activities Titles -->
     <!-- *********************************************************************** -->
-    
+
     <string name="title_activity_login">BiljetApp</string>
     <string name="title_activity_my_friends">Biljet - Mis Amigos</string>
     <string name="title_activity_friend_view">Biljet - Detalles Amigo</string>
@@ -95,9 +95,8 @@
     <!-- MyProfileActivity -->
     <!-- *********************************************************************** -->
 
-  	<string name="myProfile_Label_Username">> Usuario: </string>
-   	<string name="myProfile_Label_Email">> E-mail: </string>
-   	
+    <string name="myProfile_Label_Username">> Usuario: </string>
+    <string name="myProfile_Label_Email">> E-mail: </string>
     <string name="myProfile_LabelCity">Ciudad: </string>
     <string name="myProfile_LabelBio">Biografía: </string>
     <string name="myProfile_find_me">Me puedes encontrar en: </string>
@@ -110,16 +109,21 @@
 
     <!-- NewEventActivity -->
     <!-- *********************************************************************** -->
-    
+
     <string name="newEvent_LabelHeader_BasicData"> Datos básicos del evento </string>
     <string name="newEvent_LabelHeader_When"> ¿Cuando será? </string>
     <string name="newEvent_LabelHeader_Where"> ¿Donde será? </string>
     <string name="newEvent_LabelHeader_Duration"> ¿Cuanto durará aprox.? </string>
     <string name="newEvent_LabelHeader_Image"> Elige una imagen&#8230; </string>
     <string name="newEvent_LabelHeader_Confirm"> ¡Confirma tu evento! </string>
-    
+    <string name="newEvent_Label_infoAddress">Para una correcta situación del evento en el mapa, escriba direcciones basadas en el tipo y nombre de la vía y número.</string>
+    <string name="newEvent_Label_infoSite">Opcionalmente, incluye aquí el nombre de las instalaciones</string>
+    <string name="newEvent_Hint_Description">Información del evento</string>
+    <string name="newEvent_Hint_Site">Ej: Facultad de Informática</string>
+    <string name="newEvent_Hint_Address">Ej: Goya 64</string>
     <string name="newEvent_Label_Title">Nombre del evento: </string>
     <string name="newEvent_Label_Category">"Categoría:"</string>
+    <string name="newEvent_Label_Site">Lugar:</string>
     <string name="newEvent_Label_Address">"Dirección:"</string>
     <string name="newEvent_Label_City">"Ciudad:"</string>
     <string name="newEvent_Label_PostalCode">"Código Postal:"</string>
@@ -165,7 +169,6 @@
     <!-- *********************************************************************** -->
 
     <string name="picture">Picture</string>
-
-
+    <string name="title_activity_maps">Biljet - Mapa del Evento</string>
 
 </resources>

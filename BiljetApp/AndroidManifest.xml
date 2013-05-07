@@ -4,10 +4,31 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- Etiquetas necesarias para el funcionamiento de Google Maps API v2 -->
+    <!-- =========================================================== -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
     <!-- Fijar permisos de la app -->
     <!-- =========================================================== -->
+
+
+    <!-- Permisos necesarios para los mapas -->
+    <permission
+        android:name="com.biljet.app.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.biljet.app.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- Permisos para el lector de QR -->
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Permisos para acceder a Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Fijar recursos accedidos por la app -->
     <!-- =========================================================== -->
@@ -32,6 +53,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBTlnWLb4_xrNZAqYQl0EHVD-wkqgOO6Ow" />
 
         <!-- Activity + informacion para el intent SCAN del lector de QR -->
         <!-- =========================================================== -->
@@ -115,6 +139,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.biljet.app.MapsActivity"
+            android:label="@string/title_activity_maps" >
         </activity>
     </application>
 

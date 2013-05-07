@@ -21,7 +21,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Surface;
@@ -45,17 +45,23 @@ import android.widget.Toast;
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.biljet.types.Province;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 @SuppressLint("SimpleDateFormat")
-public class EventViewActivity extends Activity {
+public class EventViewActivity extends FragmentActivity {
 
-	ActionBar actionBar;
-	Button buttonMultipurpose;	
+	private ActionBar actionBar;
+	private Button buttonMultipurpose;	
 	
-	Event currentEvent;
-	
+	private Event currentEvent;
+	private GoogleMap miniMap = null;
 	
 	// Variables para las conexiones con la base de datos
 	DBPost connectorToGo;				// Tarea en segundo plano para adquirir el pase
@@ -174,12 +180,17 @@ public class EventViewActivity extends Activity {
 		TextView txtEventType = (TextView)findViewById(R.id.eventView_TextView_Category);
 		txtEventType.setText(currentEvent.getCategory());
 		
+		// Nombre de lugar
 		// Direccion
 		// Codigo Postal + Ciudad
 		// Provincia
      	// *****************
 		TextView txtAddress = (TextView)findViewById(R.id.eventView_TextView_Address);
-		String address = currentEvent.getAddress()+"\n";
+		 
+		String address = "";
+		if (!currentEvent.getSiteName().equals(""))
+			address = currentEvent.getSiteName()+"\n";
+		address += currentEvent.getAddress()+"\n";
 		address += currentEvent.getPostalCode()+" "+currentEvent.getCity()+"\n";
 		address += new Province().toString(currentEvent.getProvince());
 		txtAddress.setText(address);
@@ -234,8 +245,36 @@ public class EventViewActivity extends Activity {
      	// *****************
 		TextView txtInfo = (TextView)findViewById(R.id.eventView_TextView_Description);
 		txtInfo.setText(currentEvent.getDescription());
+		
+		//INCRUSTAMOS EL MAPA EN LA ACTIVIDAD.
+		 	
+		double latitude = currentEvent.getLatitude();  //e.getAddress().getLatitude();
+		double longitude = currentEvent.getLongitude(); //e.getAddress().getLongitude();
+		
+		miniMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.minimap)).getMap();
+		CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
+		miniMap.animateCamera(camUpd);
+		
+		//Vista normal del mapa
+		miniMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);				
+				
+		//Marcamos el a dirección del evento.
+		miniMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Aquí estamos"));
+		
 	}
-
+	
+	//Método que llama a la  MapsActivity
+	public void showMap(View v){
+	    	Intent intent = new Intent(EventViewActivity.this, MapsActivity.class);
+	    	
+	    	//Pasamos latitud, longitud y nombre a la MapsActivity.
+	    	intent.putExtra("LATITUDE", currentEvent.getLatitude());
+	    	intent.putExtra("LONGITUDE", currentEvent.getLongitude());
+	    	intent.putExtra("TITLE", currentEvent.getTitle());
+	    	
+			startActivity(intent);	    	
+	 } 
+	
 	// RECOGER DATOS QR
 	// ***********************************************************************************
 	// Metodo para recoger los resultados de leer el QR
@@ -261,7 +300,27 @@ public class EventViewActivity extends Activity {
 	// AUXILIARES PARA CONEXION CON DB 
    	// **************************************************************************************
 	
-	//POST
+	// COMUNES
+	
+	private String[] prepareUser(){
+		
+		try {
+			return new EncryptedData(EventViewActivity.this).decrypt();
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
+		
+		return null;
+	
+	}
+
+	// POST
 	
 	private int getCurrentOrientation(Context context){
     	final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
@@ -281,23 +340,7 @@ public class EventViewActivity extends Activity {
             }
         }
     
-	private String[] prepareUser(){
-		
-		try {
-			return new EncryptedData(EventViewActivity.this).decrypt();
-		} catch (InvalidKeyException e) {
-			Log.e("Error","Clave de cifrado no valida");
-		} catch (NoSuchAlgorithmException e) {
-			Log.e("Error","El algoritmo no existe");
-		} catch (NoSuchPaddingException e) {
-			Log.e("Error","No hay padding");
-		} catch (IOException e) {
-			Log.e("Error","Entrada y salida");
-		}
-		
-		return null;
-	
-	}
+
 	
 	private int postToGo(String user, String password){
 		
@@ -334,7 +377,7 @@ public class EventViewActivity extends Activity {
 		
 	}
 	
-	//GET IS-GOING
+	// GET IS-GOING
 	
 	/**
 	 * 

@@ -132,8 +132,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="false" 
-                android:lines="3"       
-                android:gravity="top"     	
+                android:lines="3"     
+                android:gravity="top"       	
+                android:hint="@string/newEvent_Hint_Description"
             	android:inputType="textCapSentences|textMultiLine" />
             
             <!-- > Separador: Donde sera? -->
@@ -345,13 +346,43 @@
             
 			
 			
-			<!-- Dirección -->
+			<!-- Lugar del evento -->
+            <!-- ******************************************************* -->
+            <TextView 
+                android:text="@string/newEvent_Label_Site" 
+                style="@style/formLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            
+            <TextView
+                android:id="@+id/newEvent_Label_infoSite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="8dp"
+                android:text="@string/newEvent_Label_infoSite" />
+            
+            <EditText
+                android:id="@+id/newEvent_EditText_Site" 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:hint="@string/newEvent_Hint_Site"
+                android:layout_marginBottom="3dp" />
+           
+            <!-- Dirección -->
             <!-- ******************************************************* -->      
             <TextView 
                 android:text="@string/newEvent_Label_Address" 
                 style="@style/formLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
+            
+            <TextView
+                android:id="@+id/newEvent_Label_infoAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="8dp"
+                android:text="@string/newEvent_Label_infoAddress" />
             
             <LinearLayout 
 			    android:layout_width="fill_parent"
@@ -370,6 +401,7 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="65"
 	                android:inputType="textCapSentences"
+	                android:hint="@string/newEvent_Hint_Address"
 	                android:layout_marginBottom="3dp"
 	                android:layout_marginLeft="3dp" />
 	            
@@ -388,7 +420,7 @@
 	            android:id="@+id/newEvent_EditText_City" 
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
-	            android:inputType="textCapSentences"
+	            android:inputType="textCapWords"
 	            android:layout_marginBottom="3dp" />
             
             <!-- Cod Postal -->

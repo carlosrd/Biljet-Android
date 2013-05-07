@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -30,6 +31,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -116,9 +119,10 @@ public class NewEventActivity extends Activity {
     final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
     
     // Spinner: Array de tipos de eventos.
-    final String [] arrayTypeEvents = {"Cine", "Cumpleaños", "Concierto", "Conferencia"}; 
+    final String [] arrayTypeEvents = {"Comedia/Monólogos","Cine","Concierto","Conferencia","Cultural","Cumpleaños",
+    								   "Deportivo","Excursión","Exposición","Fiesta","Musical","Ocio","Reunión","Teatro"}; 
     // Spinner: Array prefijo de direccion
-    final String[] arrayAddressPrefix = {"C/","Avda.","Plaza","Urb.","Paseo","Otro"};
+    final String[] arrayAddressPrefix = {"C/","Avda.","Plaza","Urb.","Paseo","Otro (Especificar)"};
        
     // CONSTRUCTOR
     // **************************************************************************************
@@ -482,7 +486,14 @@ public class NewEventActivity extends Activity {
 		String message = "Confirme los siguientes datos:\n";
 		message += " > Título: " + newEventOrganized.getTitle() + "\n";
 		message += " > Categoría: " + newEventOrganized.getCategory() + "\n";
-		message += " > Precio: " + newEventOrganized.getPrice() + "\n";
+		
+		float price = newEventOrganized.getPrice();
+		
+		if (Float.compare(0, price) ==  0)
+			message += " > Precio: Gratis\n";
+		else
+			message += " > Precio: "+ price + "\n";
+		
 		message += " > Aforo: " + newEventOrganized.getCapacity() + "\n";
 		message += " > Fecha: " + dateTimeFormatter.format(newEventOrganized.getDate()) + "\n";
 		
@@ -493,7 +504,7 @@ public class NewEventActivity extends Activity {
 		if (days == 0 && hours == 0 && minutes == 0)
 			message += " > Duración: Indeterminado\n";
 		else
-			message += " > Duración: " + days +" días " + hours + " h " + minutes + " min";
+			message += " > Duración: " + days +" días " + hours + " h " + minutes + " min\n";
 		
 		message += " > Dirección: " + newEventOrganized.getAddress() + ", " + newEventOrganized.getCity() + "\n";
 		message += " > Código Postal: " + newEventOrganized.getPostalCode() + "\n";
@@ -538,7 +549,7 @@ public class NewEventActivity extends Activity {
 		fields.clear();
 		
 		String title = getTitleForm();
-		String address = getAddressForm();
+
 		float price = getPriceForm();
 		long date = getDateForm();
 		int days_duration = getDaysDurationForm();
@@ -546,7 +557,9 @@ public class NewEventActivity extends Activity {
 		int minutes_duration = getMinutesDurationForm();
 		int capacity = getCapacityForm();
 		String description = getDescriptionForm();
-	   
+		
+		String site = getSiteNameForm();
+		String address = getAddressForm();
 		String city = getCityForm();
 		int postalCode = getPostalCodeForm();	
 		
@@ -561,6 +574,7 @@ public class NewEventActivity extends Activity {
 										  description,
 										  "eventDefault.png",  // imagePath
 										  category,
+										  site,
 										  address,
 										  city,  // city
 										  postalCode,	  // postal code		 						   
@@ -727,8 +741,19 @@ public class NewEventActivity extends Activity {
 	   
 		return aux.getTimeInMillis();
 	}
-	   
-	   /**
+	
+	/**
+	* Returns the facilities name where the event is going to be celebrated (Optional)
+	* @return
+	*/
+	private String getSiteNameForm(){
+
+		EditText editSite = (EditText) findViewById(R.id.newEvent_EditText_Site);
+		return editSite.getText().toString();
+		
+	}
+	
+	/**
 	* Returns the event address from user form
 	* @return
 	*/
@@ -742,7 +767,7 @@ public class NewEventActivity extends Activity {
 			
 			address = "";
 			// Añadimos prefijo de direccion si es distinto de "Otro"
-			if (!addressPrefix.equals("Otro"))
+			if (!addressPrefix.equals("Otro (Especificar)"))
 				address = addressPrefix + " ";
 			
 			address += editAdress.getText().toString();
@@ -865,9 +890,12 @@ public class NewEventActivity extends Activity {
             jsonObject.put("category", newEventOrganized.getCategory() );
         	jsonObject.put("imageName", newEventOrganized.getImagePath() );
             
-            // CAMPOS JSON NO REQUERIDOS (TODO: RAUL AÑADIR!!!)
+            // CAMPOS JSON NO REQUERIDOS 
             // **********************************************************
+            jsonObject.put("longitude", newEventOrganized.getLongitude());
+            jsonObject.put("latitude", newEventOrganized.getLatitude());
             
+            // (TODO: RAUL AÑADIR!!! + Campo CITY + SITE!! )
             jsonObject.put("address", newEventOrganized.getAddress()+", "+ newEventOrganized.getCity());
             jsonObject.put("postalCode", newEventOrganized.getPostalCode());
             
@@ -894,6 +922,79 @@ public class NewEventActivity extends Activity {
 		return statusCode;	   
     }  
 
+    private void setPosition(){
+    	
+		String address =  newEventOrganized.getAddress() + ", " +
+						  newEventOrganized.getPostalCode() + " " +
+						  newEventOrganized.getCity() + " " +
+						  new Province().toString(newEventOrganized.getProvince());
+		
+		String siteAddress = null;
+		
+		if (!newEventOrganized.getSiteName().equals(""))
+			siteAddress = newEventOrganized.getSiteName() + " " + address;
+		else
+			siteAddress = "";
+		
+		// Creating an instance of Geocoder class
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses = null;
+        
+        // En caso de fallo o no resultados, intentamos 3 veces buscar la direccion
+        int i = 0;
+        boolean noResults = addresses == null || addresses.size() == 0;
+        
+        while (!siteAddress.equals("") && noResults && i < 3){
+            try {
+                //Buscamos un máximo de 3 direcciones que coincidan con la dirección de entrada.	
+                addresses = geocoder.getFromLocationName(siteAddress, 3);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d("setPostion","Intento A: "+i);
+            noResults = addresses == null || addresses.size() == 0;
+            i++;
+        }
+        
+        i = 0;
+        // Si no encontro resultados con el nombre del lugar + direccion, probamos con solo direccion
+        while (noResults && i < 3){
+            try {
+                //Buscamos un máximo de 3 direcciones que coincidan con la dirección de entrada.	
+                addresses = geocoder.getFromLocationName(address, 3);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d("setPostion","Intento B: "+i);
+            noResults = addresses == null || addresses.size() == 0;
+            i++;
+        }
+  
+        // TODO CLASES: EventView (+ layout) + NUEVA MapsActivity
+        
+        if (noResults){
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(NewEventActivity.this, " ! : No se ha encontrado la dirección especificada para situarla en el mapa", Toast.LENGTH_LONG).show();
+				  }
+			});   
+			
+            newEventOrganized.setLatitude(-1);
+            newEventOrganized.setLongitude(-1);
+             
+        }
+        else {
+        	//Obtenemos la latitud y longitud de la dirección dada.  
+        	Address a = (Address) addresses.get(0);
+        	
+            newEventOrganized.setLatitude(a.getLatitude());
+            newEventOrganized.setLongitude(a.getLongitude());
+
+        }
+      Log.d("setPOsition","Lat: "+newEventOrganized.getLatitude()+"   Long: "+newEventOrganized.getLongitude());
+    }
+    
+    
 	// CONEXION DB
 	// **************************************************************************************
 		        
@@ -912,6 +1013,12 @@ public class NewEventActivity extends Activity {
 		
 		@Override
 		protected Integer doInBackground(Void... args) {
+			// Obtener la longitud y latitud de la localizacion
+			setPosition();
+			
+			if (connector.isCancelled())
+				return -3;
+			
 			return postEventToDB();
 		}
 		
@@ -938,6 +1045,8 @@ public class NewEventActivity extends Activity {
 						  break;
 				case -1:  Toast.makeText(NewEventActivity.this, "Error: Fallo la autenticación de usuario. Reintentelo de nuevo...", Toast.LENGTH_LONG).show();
 				  		  break;
+				case -3:  // Nada (Cancelado por usuario y se notifica en OnCancel())
+						  break;
 				default:  Toast.makeText(NewEventActivity.this, "Error: No se pudo contactar con el servidor!", Toast.LENGTH_LONG).show();
 						  break;
 			}

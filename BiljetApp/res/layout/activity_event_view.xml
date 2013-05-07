@@ -26,7 +26,9 @@
     	    android:orientation="vertical" 
 			 >
 			
-    	    <!-- Foto & boton multiproposito -->
+    	    <!-- Imagen + Boton Multipropósito -->
+         	<!-- ******************************************************* -->  
+            
 	    	<LinearLayout
 	    	    android:layout_width="fill_parent"
 	    	    android:layout_height="wrap_content"
@@ -65,8 +67,9 @@
 			</RelativeLayout>
     	    </LinearLayout>
 
-    	    <!-- Nombre del evento -->
-
+			 <!-- Nombre del evento -->
+         	 <!-- ******************************************************* -->  
+            
     	    <TextView
     	        android:id="@+id/eventView_TextView_Title"
     	        android:layout_width="wrap_content"
@@ -79,14 +82,16 @@
     	        android:textColor="#000033"
     	        android:textSize="30sp"
     	        android:typeface="serif" />
-
+			 
+			 <!-- Categoria -->
+         	 <!-- ******************************************************* -->  
+            
     	    <LinearLayout
     	        android:layout_width="match_parent"
     	        android:layout_height="wrap_content"
     	        android:layout_marginLeft="5dp"
     	        android:orientation="horizontal" >
 
-    	        <!-- Tipo de evento: -->
 
     	        <TextView
     	            android:id="@+id/eventView_Label_Category"
@@ -129,7 +134,9 @@
     	        android:layout_height="3dp"
     	        android:background="@drawable/biljet_gradient"
     	        android:layout_marginBottom="10dp" />
-
+		 
+		 <!-- Fecha/Hora -->
+         <!-- ******************************************************* -->       
     	
 	   	 <TextView
 	        android:id="@+id/eventView_Label_Date"
@@ -141,30 +148,103 @@
 	   	     android:layout_width="wrap_content"
 	   	     android:layout_height="wrap_content"
 	   	     android:layout_marginBottom="3dp" />
-	
+		 
+		 <!-- Dirección  -->
+         <!-- ******************************************************* -->  
+            
 	   	 <TextView
 	        android:id="@+id/eventView_Label_Address"
 	        style="@style/formLabel"
 	        android:text="@string/eventView_Label_Address"
 	         />
-	
-	   	 <TextView
-	   	     android:id="@+id/eventView_TextView_Address"
-	   	     android:layout_width="wrap_content"
-	   	     android:layout_height="wrap_content"
-	   	     android:layout_marginBottom="3dp" />
-    	  
-	   	 <TextView
-	        android:id="@+id/eventView_Label_Price"
-	        style="@style/formLabel"
-	        android:text="@string/eventView_Label_Price" />
-	
-	   	 <TextView
-	   	     android:id="@+id/eventView_TextView_Price"
-	   	     android:layout_width="wrap_content"
-	   	     android:layout_height="wrap_content" 
-	   	     android:layout_marginBottom="3dp" />
 	   	 
+	    <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal">
+           			   	 
+   			<TextView 
+       		   	android:id="@+id/eventView_TextView_Address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="45"
+                 />
+   			<RelativeLayout
+    	        android:layout_width="0dp"
+    	        android:layout_height="wrap_content"
+    	        android:layout_weight="55" >
+   				
+   				<fragment
+					android:id="@+id/minimap"
+					android:layout_width="fill_parent"
+					android:layout_height="150dp"
+					class="com.google.android.gms.maps.SupportMapFragment" /> 
+   			    
+   			    <Button
+			        android:id="@+id/eventView_Button_HowToArrive"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/minimap"
+			        android:layout_marginTop="5dp"
+			        android:background="@drawable/biljet_gradient" 
+			        android:text="@string/eventView_Button_HowToArrive"
+			        android:textColor="#FFFFFF"
+			        android:textStyle="bold"
+
+			        android:onClick="showMap" 		          
+			     />
+   			    </RelativeLayout>
+
+    	</LinearLayout>
+	    
+
+    	 <!-- Precio + Aforo -->
+         <!-- ******************************************************* -->  
+         <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="5dp"
+		    android:orientation="horizontal">
+           			       
+		   	 <TextView
+		        android:id="@+id/eventView_Label_Price"
+		        style="@style/formLabel"
+		        android:layout_width="0dp"
+		        android:layout_weight="50"
+		        android:text="@string/eventView_Label_Price" />
+	   	 
+	   	 	 <TextView
+		        android:id="@+id/eventView_Label_Capacity"
+		        style="@style/formLabel"
+		        android:layout_width="0dp"
+		        android:layout_weight="50"
+		        android:text="@string/eventView_Label_Capacity" />
+	
+	     </LinearLayout>
+	     
+	     <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal">
+           		
+		   	 <TextView
+		   	     android:id="@+id/eventView_TextView_Price"
+		   	     android:layout_width="0dp"
+		   	     android:layout_height="wrap_content" 
+		   	     android:layout_marginBottom="3dp"
+				 android:layout_weight="50" />
+		   	 
+		   	 <TextView
+		   	     android:id="@+id/eventView_TextView_Capacity"
+		   	     android:layout_width="0dp"
+		   	     android:layout_height="wrap_content"
+				 android:layout_weight="50" />
+		   	 
+		</LinearLayout>
+		
+	   	 <!-- Duración -->
+         <!-- ******************************************************* -->  
+            	   	 
 	   	 <TextView
 	        android:id="@+id/eventView_Label_Duration"
 	        style="@style/formLabel"
@@ -174,17 +254,6 @@
 	   	     android:id="@+id/eventView_TextView_Duration"
 	   	     android:layout_width="wrap_content"
 	   	     android:layout_height="wrap_content" />
-	   	 
-	   	 <TextView
-	        android:id="@+id/eventView_Label_Capacity"
-	        style="@style/formLabel"
-	        android:text="@string/eventView_Label_Capacity" />
-	
-	   	 <TextView
-	   	     android:id="@+id/eventView_TextView_Capacity"
-	   	     android:layout_width="wrap_content"
-	   	     android:layout_height="wrap_content"
-	   	      />
 		</LinearLayout>
 	</ScrollView>
 </LinearLayout>

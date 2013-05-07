@@ -45,14 +45,17 @@ public class Event implements Parcelable {
 	String description;
 	String imagePath;			// Ruta de la imagen del evento en el terminal
 	String category;			// Tipo de evento (REQUERIDO)
+	
+	// Datos de la direccion
+	String site;				// Nombre del lugar (Ej: Fac. de Informatica, Museo del Prado)
 	String address;				// Direccion del evento
 	String city;				// Ciudad del evento
 	int postalCode;				// Codigo postal
 	int province;				// Codigo de provincia (REQUERIDO)
 	
 	// Coordenadas geograficas para los mapas
-	int latitude;				// Latitud
-	int longitude;				// Longitud
+	double latitude;				// Latitud
+	double longitude;				// Longitud
 
 	long date;					// Fecha del evento (TIMESTAMP: En miliseg desde 01/01/1970
 	float price;				// Precio de la entrada (REQUERIDO)
@@ -71,12 +74,13 @@ public class Event implements Parcelable {
 				 String description,
 				 String imagePath,
 				 String category,
+				 String site,
 				 String address,
 				 String city,
 				 int postalCode,
 				 int province,
-				 int longitude,
-				 int latitude,
+				 double longitude,
+				 double latitude,
 				 long date,
 				 float price,
 				 int capacity,
@@ -91,6 +95,7 @@ public class Event implements Parcelable {
 		this.imagePath = imagePath;			
 		this.category = category;		
 		
+		this.site = site;
 		this.address = address;				
 		this.city = city;				
 		this.postalCode = postalCode;				
@@ -110,29 +115,6 @@ public class Event implements Parcelable {
 		this.minutes_duration = minutes_duration;		
 			
 	}
-	
-	
-	/*
-	public Event(String title, String id, String image, String eventType, 
-			 String site, Date date, int days_duration, int hours_duration, int minutes_duration,
-			 float price, int confirmedPeople, int capacity, String nameCreator, String eventInfo){
-	
-		this.title = title;
-		this._id = id;
-		this.imagePath = image;
-		this.category = eventType;
-		this.address = site;
-		this.date = date;
-		this.days_duration = days_duration;
-		this.hours_duration = hours_duration;
-		this.minutes_duration = minutes_duration;
-		this.price = price;
-		this.confirmedPeople = confirmedPeople;
-		this.capacity = capacity;
-		this.creatorId = nameCreator;
-		this.description = eventInfo;
-	
-	} // DatosEvento*/
 	
 	// GETTERS
 	// ************************************************************************
@@ -169,6 +151,10 @@ public class Event implements Parcelable {
 		return category;
 	}
 
+	public String getSiteName() {
+		return site;
+	}
+	
 	public String getAddress() {
 		return address;
 	}
@@ -216,11 +202,28 @@ public class Event implements Parcelable {
 	public String getDescription() {
 		return description;
 	}
+	
+	public double getLatitude() {
+		return latitude;
+	}
 
+	public double getLongitude() {
+		return longitude;
+	}
+	
+	
 	// SETTERS
 	// ************************************************************************
-	
 
+	public void setLongitude(double longitude){
+		this.longitude = longitude;
+	}
+	
+	public void setLatitude(double latitude){
+		this.latitude = latitude;
+	}
+	
+	
 	//---------------------------Metodos de parcelable-----------------------------------------//
 	
 		public Event(Parcel in)
@@ -237,18 +240,19 @@ public class Event implements Parcelable {
 		public void writeToParcel(Parcel dest, int flags) 
 		{
 			dest.writeString(title);
-			//dest.writeInt(id);
 			dest.writeString(_id);
-			//dest.writeInt(image);
 			dest.writeString(imagePath);
 			dest.writeString(description);
 			dest.writeString(category);
+			
+			dest.writeString(site);
 			dest.writeString(address);
 			dest.writeString(city);
 			dest.writeInt(province);
 			dest.writeInt(postalCode);
-			dest.writeInt(longitude);
-			dest.writeInt(latitude);
+			dest.writeDouble(longitude);
+			dest.writeDouble(latitude);
+			
 			dest.writeLong(date);
 			dest.writeInt(days_duration);
 			dest.writeInt(hours_duration);
@@ -264,18 +268,17 @@ public class Event implements Parcelable {
 		private void readFromParcel(Parcel in) 
 		{
 			title = in.readString();
-			//id = in.readInt();
 			_id = in.readString();
-			//image  =  in.readInt();
 			imagePath = in.readString();
 			description = in.readString();
 			category = in.readString();
+			site = in.readString();
 			address = in.readString();
 			city = in.readString();
 			province = in.readInt();
 			postalCode = in.readInt();
-			longitude = in.readInt();
-			latitude = in.readInt();
+			longitude = in.readDouble();
+			latitude = in.readDouble();
 			date = in.readLong();
 			days_duration = in.readInt();
 			hours_duration = in.readInt();

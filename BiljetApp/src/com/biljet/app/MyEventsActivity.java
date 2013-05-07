@@ -278,8 +278,8 @@ public class MyEventsActivity extends Activity {
 		// **************************************************************************************
 		
 		String title, creatorId, _id, description, imageName, category, address;
-		int postalCode, province, latitude, longitude, capacity;
-		double price;
+		int postalCode, province, capacity;
+		double price, latitude, longitude;
 		long date;
 		
 		eventsToGo.clear();
@@ -359,17 +359,17 @@ public class MyEventsActivity extends Activity {
 				// Longitud
 				// -------------
 				try{
-					latitude = jsonObject.getInt("latitude");;
+					latitude = jsonObject.getDouble("latitude");;
 				} catch (JSONException e){
-					latitude = 0;
+					latitude = -1;
 				}
 				
 				// Latitud
 				// -------------
 				try{
-					longitude = jsonObject.getInt("longitude"); 
+					longitude = jsonObject.getDouble("longitude"); 
 				} catch (JSONException e){
-					longitude = 0;
+					longitude = -1;
 				}
 
 				Event event = new Event(title,
@@ -378,6 +378,7 @@ public class MyEventsActivity extends Activity {
 									   description,
 									   imagePath,
 									   category,
+									   "",
 									   address,
 									   "",
 									   postalCode,
@@ -481,17 +482,17 @@ public class MyEventsActivity extends Activity {
 				// Longitud
 				// -------------
 				try{
-					latitude = jsonObject.getInt("latitude");;
+					latitude = jsonObject.getDouble("latitude");;
 				} catch (JSONException e){
-					latitude = 0;
+					latitude = -1;
 				}
 				
 				// Latitud
 				// -------------
 				try{
-					longitude = jsonObject.getInt("longitude"); 
+					longitude = jsonObject.getDouble("longitude"); 
 				} catch (JSONException e){
-					longitude = 0;
+					longitude = -1;
 				}
 
 				Event event = new Event(title,
@@ -500,6 +501,7 @@ public class MyEventsActivity extends Activity {
 									   description,
 									   imagePath,
 									   category,
+									   "",
 									   address,
 									   "",
 									   postalCode,
