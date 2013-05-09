@@ -32,13 +32,12 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
  *show map type terrain
  *
  */
-
 public class MapsActivity extends FragmentActivity {
 	
 	// ATRIBUTOS
  	// **************************************************************************************
 	
-	private GoogleMap map,mapa = null;
+	private GoogleMap map = null;
 	
 	//Latitud y longitud de las coordenadas 
 	private double latitude;
@@ -87,8 +86,6 @@ public class MapsActivity extends FragmentActivity {
 		
 		map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(nameEvent));
 		
-		
-
 		// SPINNER: para MODOS DE VISTA DEL map(VISTA map, vista satélite, vista hibrida, vista relieve)
      	// **************************************************************************************
 
@@ -132,62 +129,6 @@ public class MapsActivity extends FragmentActivity {
 			
 		});
 
-		/*
-		//Boton para mostrar el map en 3D
-		Button buttonShow3D = (Button) findViewById(R.id.maps_ButtonShow3D);
-		
-		buttonShow3D.setOnClickListener(new View.OnClickListener() {            
-            public void onClick(View arg0) {
-            	
-            	if(!view3D){
-	            	LatLng latlng = new LatLng(latitude, longitude);  //Coordenadas de la dirección 
-	        		CameraPosition camPos = new CameraPosition.Builder()
-	        			    .target(latlng)   //Centramos el map en la dirección
-	        			    .zoom(17)         //Establecemos el zoom en 17
-	        			    .bearing(45)      //Establecemos la orientación con el noreste arriba
-	        			    .tilt(70)         //Bajamos el punto de vista de la cámara 70 grados
-	        			    .build();
-	        		
-	        		CameraUpdate camUpd = CameraUpdateFactory.newCameraPosition(camPos);	
-	        		//mapa = map;
-	        		map.animateCamera(camUpd);      
-	        		view3D = true;
-	        		Toast.makeText(MapsActivity.this,"Vista 3D activada",Toast.LENGTH_LONG).show();
-	        				   
-            	}
-            	else{
-            		
-            		map.clear();
-            		
-            		map = ((SupportMapFragment) getSupportFragmentManager()
-         				   .findFragmentById(R.id.map)).getMap();
-         		
-         		
-	         		CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
-	         		map.animateCamera(camUpd);		
-	         		
-	         		alternateViewMap(typeView);
-	         		
-	         		map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(nameEvent));
-	        		Toast.makeText(MapsActivity.this,"Vista 3D desactivada",Toast.LENGTH_LONG).show();
-	        		view3D = false;	 
-	        			   
-            	}
-            }
-        });    
-		
-		
-		//Boton para mostrar el mapa modo street view
-		Button buttonStreetView = (Button) findViewById(R.id.maps_ButtonStreetView);
-		
-		buttonStreetView.setOnClickListener(new View.OnClickListener() {            
-            public void onClick(View arg0) {
-            	
-            	Intent streetViewIntent = new Intent(Intent.ACTION_VIEW, 
-        			   Uri.parse("google.streetview:cbll="+latitude+","+longitude+"&cbp=13,198.24,,0,-8.19&mz=7")); 		         
-        		startActivity(streetViewIntent); 
-            }
-        }); */
 	}
 
 	/**

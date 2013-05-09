@@ -66,19 +66,10 @@ public class MyProfileActivity extends Activity {
 
     private String prepareUser(){
 		
-		String[] params = new String[4];
+		String[] params = null;
 		try {
 			params = new EncryptedData(MyProfileActivity.this).decrypt();
 			return params[2];
-			/*if (path != null){
-				File monitorFile = new File(path);
-				Scanner s = new Scanner(monitorFile);
-				s.nextLine();
-				s.nextLine();
-				return s.nextLine();
-				
-				} 
-*/
 		} catch (InvalidKeyException e) {
 			Log.e("Error","Clave de cifrado no valida");
 		} catch (NoSuchAlgorithmException e) {

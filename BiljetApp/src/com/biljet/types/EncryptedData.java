@@ -22,9 +22,12 @@ import android.util.Log;
 public class EncryptedData {
 
 	// [0] user
-	// [1] hash
-	// [2] id
-	// [3] last login
+	// [1] pass
+	// [2] _id (user)
+	// [3] hash (pass)
+	// [4] finish remember (7 days since 1st login) 
+	//     - Si contiene la fecha, esta activado Recordarme
+	//     - Si contiene un 0, no esta activado Recordarme
 
 	private String dir = "/7a3dd8Z";			// Directorio de almacenamiento de la cookie
 	private String store = "/53a1fd.blj";		// Archivo de almacenamiento de la cookie encriptada
@@ -56,8 +59,8 @@ public class EncryptedData {
 		
 		File monitorFile = new File(monitor);
 		try {
-			if (!monitorFile.exists())
-				monitorFile.createNewFile();
+			//if (!monitorFile.exists())
+			monitorFile.createNewFile();
 		} catch (IOException e) {
 			Log.e("Error","No se ha podido crear el monitor de autenticacion");
 		}
@@ -136,7 +139,7 @@ public class EncryptedData {
 	    cis.close();
 	    
 	    // Extraer los parametros
-	    String[] params = new String[4];
+	    String[] params = new String[5];
 	    
 		if (monitor != null){
 			File monitorFile = new File(monitor);
@@ -152,8 +155,11 @@ public class EncryptedData {
 			
 			return params;
 		} 
+		
+		// Eliminar el monitor
+		new File(monitor).delete();
 
 		return null;
 	}
-
+	
 }

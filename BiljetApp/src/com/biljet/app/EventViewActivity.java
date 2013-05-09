@@ -30,7 +30,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Surface;
@@ -91,7 +93,7 @@ public class EventViewActivity extends FragmentActivity {
      	// **************************************************************************************
         
 		currentEvent = getIntent().getParcelableExtra("EVENT");
-		
+
 		actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Evento: "+ currentEvent.getTitle());
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
@@ -164,8 +166,7 @@ public class EventViewActivity extends FragmentActivity {
 				}
 		else
 			buttonMultipurpose.setVisibility(View.INVISIBLE);
-		
-		
+  
 		// INFORMACION DEL EVENTO
      	// **************************************************************************************
 
@@ -251,30 +252,58 @@ public class EventViewActivity extends FragmentActivity {
 		double latitude = currentEvent.getLatitude();  //e.getAddress().getLatitude();
 		double longitude = currentEvent.getLongitude(); //e.getAddress().getLongitude();
 		
-		miniMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.minimap)).getMap();
-		CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
-		miniMap.animateCamera(camUpd);
+		Fragment f = getSupportFragmentManager().findFragmentById(R.id.minimap);
+		Button buttonHowToArrive = (Button)findViewById(R.id.eventView_Button_HowToArrive);
 		
-		//Vista normal del mapa
-		miniMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);				
-				
-		//Marcamos el a dirección del evento.
-		miniMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Aquí estamos"));
+		// Si latitud = long = -1, asumimos que no se ha podido localizar en el mapa
+		if (Double.compare(latitude, -1.0) == 0 && Double.compare(longitude, -1.0) == 0){
+		    
+			// Ocultar el mapa
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();  
+		    ft.hide(f);  
+		    ft.commit(); 
+		    
+		    // Ocultar boton "Como llegar"
+		    buttonHowToArrive.setVisibility(View.INVISIBLE); 
+		    
+		} else {
+			
+			// Preparar el mapa
+			miniMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.minimap)).getMap();
+			CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
+			miniMap.animateCamera(camUpd);
+			
+			// Vista normal del mapa
+			miniMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);				
+					
+			// Marcamos el a dirección del evento.
+			miniMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Aquí estamos"));
+			
+			// Preparar boton "Como llegar"
+			buttonHowToArrive.setVisibility(View.VISIBLE);
+			buttonHowToArrive.setOnClickListener(new OnClickListener() {
+				   public void onClick(View arg0) {
+					   
+				    	Intent intent = new Intent(EventViewActivity.this, MapsActivity.class);
+				    	
+				    	//Pasamos latitud, longitud y nombre a la MapsActivity.
+				    	intent.putExtra("LATITUDE", currentEvent.getLatitude());
+				    	intent.putExtra("LONGITUDE", currentEvent.getLongitude());
+				    	intent.putExtra("TITLE", currentEvent.getTitle());
+				    	
+						startActivity(intent);	    
+				   }
+			   });
+			
+		}
 		
+		
+		
+
+		
+
 	}
-	
-	//Método que llama a la  MapsActivity
-	public void showMap(View v){
-	    	Intent intent = new Intent(EventViewActivity.this, MapsActivity.class);
-	    	
-	    	//Pasamos latitud, longitud y nombre a la MapsActivity.
-	    	intent.putExtra("LATITUDE", currentEvent.getLatitude());
-	    	intent.putExtra("LONGITUDE", currentEvent.getLongitude());
-	    	intent.putExtra("TITLE", currentEvent.getTitle());
-	    	
-			startActivity(intent);	    	
-	 } 
-	
+
 	// RECOGER DATOS QR
 	// ***********************************************************************************
 	// Metodo para recoger los resultados de leer el QR
@@ -340,9 +369,7 @@ public class EventViewActivity extends FragmentActivity {
             }
         }
     
-
-	
-	private int postToGo(String user, String password){
+	private int postToGo(String userId, String password){
 		
 		int statusCode = -1;
         /* Creamos el objeto cliente que realiza la petición al servidor */
@@ -353,9 +380,9 @@ public class EventViewActivity extends FragmentActivity {
         try{
             // Agrego los parámetros a la petición 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", user );
+            jsonObject.put("id", userId );
             jsonObject.put("password", password );
-            Log.d("POST","ID: "+user+" PASS: "+password);
+            Log.d("POST","ID: "+ userId +" PASS: "+password);
             
             // Damos formato al JSON a enviar o el servidor lo rechazará
             StringEntity entity = new StringEntity(jsonObject.toString());
@@ -385,7 +412,7 @@ public class EventViewActivity extends FragmentActivity {
 	 * @param password
 	 * @return 0 = false, 1 = true, -1 = error
 	 */
-	private int postIsGoing(String user, String password){
+	private int postIsGoing(String userId, String password){
 		
 		InputStream is = null;
         /* Creamos el objeto cliente que realiza la petición al servidor */
@@ -396,9 +423,9 @@ public class EventViewActivity extends FragmentActivity {
         try{
             // Agrego los parámetros a la petición 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", user );
+            jsonObject.put("id", userId );
             jsonObject.put("password", password );
-            Log.d("POST","ID: "+user+" PASS: "+password);
+            Log.d("POST","ID: "+ userId +" PASS: "+password);
             
             // Damos formato al JSON a enviar o el servidor lo rechazará
             StringEntity entity = new StringEntity(jsonObject.toString());
@@ -467,7 +494,7 @@ public class EventViewActivity extends FragmentActivity {
 		@Override
 		protected Integer doInBackground(String... params) {
 
-			return postToGo(params[2],params[1]);
+			return postToGo(params[2],params[3]);
 			
 		}
 		
@@ -520,7 +547,7 @@ public class EventViewActivity extends FragmentActivity {
 	 
 		@Override
 		protected Integer doInBackground(String... params) {
-			return postIsGoing(params[2],params[1]);
+			return postIsGoing(params[2],params[3]);
 		}
 		
     	@Override

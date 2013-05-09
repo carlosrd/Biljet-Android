@@ -881,7 +881,7 @@ public class NewEventActivity extends Activity {
 			jsonObject.put("title", newEventOrganized.getTitle() );
         	jsonObject.put("id", authentication[2] );
         	jsonObject.put("creator", authentication[2]);
-        	jsonObject.put("password", authentication[1]);
+        	jsonObject.put("password", authentication[3]);
         	jsonObject.put("price", newEventOrganized.getPrice() );
             jsonObject.put("province", String.valueOf(newEventOrganized.getProvince()) );
             jsonObject.put("capacity", String.valueOf(newEventOrganized.getCapacity()) );

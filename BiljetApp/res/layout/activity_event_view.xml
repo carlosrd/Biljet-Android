@@ -189,11 +189,9 @@
 			        android:background="@drawable/biljet_gradient" 
 			        android:text="@string/eventView_Button_HowToArrive"
 			        android:textColor="#FFFFFF"
-			        android:textStyle="bold"
-
-			        android:onClick="showMap" 		          
-			     />
-   			    </RelativeLayout>
+			        android:textStyle="bold" />
+   			   
+   			</RelativeLayout>
 
     	</LinearLayout>
 	    

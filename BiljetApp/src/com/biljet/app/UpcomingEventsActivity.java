@@ -87,7 +87,7 @@ public class UpcomingEventsActivity extends Activity {
 						//Acciones necesarias al hacer click
 							
 							Intent intentEvent = new Intent(UpcomingEventsActivity.this, EventViewActivity.class);
-							
+
 							Event e = itemsEvent.get(idEvent);
 							intentEvent.putExtra("EVENT",e);
 							intentEvent.putExtra("OWN?", false);

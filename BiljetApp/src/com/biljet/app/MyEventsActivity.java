@@ -112,20 +112,20 @@ public class MyEventsActivity extends Activity {
         eventList.setOnItemClickListener(new OnItemClickListener() {
 						public void onItemClick(AdapterView<?> a, View v, int eventId, long id) {
 						//Acciones necesarias al hacer click
+							Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
+							Event e;
 							
-							if (!connectionAlive){
-								Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
-								
-								Event e = eventsToGo.get(eventId);
-								eventIntent.putExtra("EVENT", e);
-								eventIntent.putExtra("OWN?", isOwn);
-								eventIntent.putExtra("NO_TICKET", false);
-								
-								startActivity(eventIntent);
-							}
+							if (isOwn)
+								e = eventsOrganized.get(eventId);
 							else
-								 Toast.makeText(MyEventsActivity.this, " ! : Recargando eventos. Espere...", Toast.LENGTH_SHORT).show();
-
+								e = eventsToGo.get(eventId);
+							
+							eventIntent.putExtra("EVENT", e);
+							eventIntent.putExtra("OWN?", isOwn);
+							eventIntent.putExtra("NO_TICKET", false);
+							
+							startActivity(eventIntent);
+					
 										
 							}
 						});
@@ -238,7 +238,7 @@ public class MyEventsActivity extends Activity {
 						Toast.makeText(MyEventsActivity.this,"Error al conectar con el servidor!",Toast.LENGTH_LONG).show(); 
 				  }
 			});
-
+			return false;
 			// En esta captura de excepción podemos ver que hay un problema con la
 			// conexión e intentarlo más adelante.	
 		}
@@ -269,6 +269,7 @@ public class MyEventsActivity extends Activity {
 					  Toast.makeText(MyEventsActivity.this,"Error al obtener la cadena desde el buffer!",Toast.LENGTH_LONG).show(); 
 				  }
 			});	
+			return false;
 		} // catch
 
 		if (connector.isCancelled())
@@ -402,6 +403,7 @@ public class MyEventsActivity extends Activity {
 					  Toast.makeText(MyEventsActivity.this, "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
 				  }
 				});	
+			return false;
 		}
 	
 		if (connector.isCancelled())
@@ -525,6 +527,7 @@ public class MyEventsActivity extends Activity {
 					  Toast.makeText(MyEventsActivity.this, "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
 				  }
 				});	
+			return false;
 		}
 		
 		if (connector.isCancelled())
@@ -604,6 +607,7 @@ public class MyEventsActivity extends Activity {
 		@Override
 		protected void onCancelled() {
 			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			eventList.setVisibility(View.INVISIBLE);
 			connectionAlive = false;
 			Toast.makeText(getBaseContext(), "Conexión cancelada por el usuario!", Toast.LENGTH_LONG).show();
 		}

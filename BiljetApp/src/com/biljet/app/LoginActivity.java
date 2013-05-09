@@ -29,6 +29,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +42,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -49,6 +53,7 @@ public class LoginActivity extends Activity {
 	// Campos de texto del formulario y boton de inicio de sesión
 	EditText editTextUsername;
 	EditText editTextPassword;
+	CheckBox checkBoxRemember;
 	Button buttonLogin;
 	Button buttonSignUp;
 	
@@ -56,6 +61,9 @@ public class LoginActivity extends Activity {
 	ProgressDialog loginProgress;		// ProgressDialog para mostrar el progreso
 	boolean connectionAlive;			// Booleano para controlar estado de la conexion
 
+	String userStored = "";
+	String finishRemember;
+	
 	// Constanstes para bloquear el sensor de movimiento durante los logueos. Si no se bloquea el
 	// y el usuario gira el telefono, Android destruye la actividad y la vuelve a crear, por lo que
 	// se cancela el logueo y aparecen errores que fuerzan el cierre de la aplicacion
@@ -71,14 +79,19 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		connectionAlive = false;
-
+		 
+		
+		// TODO Quitar!! Solo para ahorrar el escribirlo en debug
 		editTextUsername = (EditText)this.findViewById(R.id.login_EditText_User);
 	    editTextPassword = (EditText)this.findViewById(R.id.login_EditText_Password);
+	    /*editTextUsername.setText("test");
+	    editTextPassword.setText("test");*/
+	    //*****************************
+	    // Recuperar usuario recordado
 	    
-	    // TODO Quitar!! Solo para ahorrar el escribirlo en debug
-	    editTextUsername.setText("test");
-	    editTextPassword.setText("test");
-	    
+	    checkBoxRemember = (CheckBox)this.findViewById(R.id.login_CheckBox_Remember);
+	    manageRemember();
+	  
 	    buttonLogin = (Button)this.findViewById(R.id.login_Button_Login);
 	    buttonLogin.setOnClickListener(new OnClickListener(){
 	        
@@ -109,7 +122,7 @@ public class LoginActivity extends Activity {
 	    	
 	    });
 	    
-	    
+   
 	    buttonSignUp = (Button)this.findViewById(R.id.login_Button_SignUp);
 	    buttonSignUp.setOnClickListener(new OnClickListener(){
 	        @Override
@@ -272,6 +285,67 @@ public class LoginActivity extends Activity {
 		return _id;
     }
     
+    private boolean isConnectionAvailable(){
+    	
+    	ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    	//mobile
+    	State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+
+    	//wifi
+    	State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+    	
+    	if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING || 
+    	    wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING) 
+    	    return true;
+    	else
+    		return false;
+    	
+    }
+   
+    private void manageRemember(){
+    	
+    	String[] params = null;
+    	try {
+			params = new EncryptedData(LoginActivity.this).decrypt();
+		} catch (InvalidKeyException e) {
+			Log.d("Remember", "Error: Llave de cifrado invalida  | "+ e.getMessage());
+		} catch (NoSuchAlgorithmException e) {
+			Log.d("Remember", "Error: Algoritmo no valido  | "+ e.getMessage());
+		} catch (NoSuchPaddingException e) {
+			Log.d("Remember", "Error: Padding  | "+ e.getMessage());
+		} catch (IOException e) {
+			Log.d("Remember", "Error: Entrada-Salida  | "+ e.getMessage());
+		}
+    	
+    	// Inicialmente no esta marcada y no hay recuerdos validos (0)
+    	checkBoxRemember.setChecked(false);
+    	finishRemember = "0";
+    	
+    	if (params != null && !params[4].equals("0")){
+    		// Obtener fecha de hoy
+    		Calendar today = Calendar.getInstance();
+    	   
+    		// Si el tiempo de recuerdo no ha caducado
+    		if (today.getTimeInMillis() < Long.valueOf(params[4])){
+    			// Marcar como recordado
+    			checkBoxRemember.setChecked(true);
+    			
+    			// Rellenar los campos
+        		editTextUsername.setText(params[0]);
+        		editTextPassword.setText(params[1]);
+        		
+        		// Guardar el usuario recuperado. Si al iniciar sesion no coincide
+        		// habra que setear la fecha para darle 7 dias en lugar de la del anterior usuario
+        		userStored = params[0];
+        		
+        		// Guardar la fecha de caducidad del recuerdo encontrado
+        		finishRemember = params[4];
+    		}
+    	}
+    	
+    }
+    
     /*  Se instancia con 3 tipos:
 	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
 	2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
@@ -279,10 +353,7 @@ public class LoginActivity extends Activity {
     */
 	private class LoginConnection extends AsyncTask<String,Integer,Integer> {
 	
-		String user;
-		String password;
-		String hash;
-		String id;
+
 		
 		@Override
 		protected void onPreExecute() {
@@ -294,19 +365,37 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected Integer doInBackground(String... params) {
-			user = params[0];
-			password = params[1];
-			hash = toMd5(params[1]);
+			String user = params[0];
+			String password = params[1];
+			String hash = toMd5(params[1]);
+			
+			if (!isConnectionAvailable())
+				return -1;
 			
 			int statusCode = validateLogin(user,password);
 			if (statusCode == 200 && !connector.isCancelled()){
 				
-				id = getUserId(user);
+				String id = getUserId(user);
+				
+				// Si ha marcado "Recordarme" AND
+				if (checkBoxRemember.isChecked()){	
+				   // Si no hay ningun recuerdo del anterior usuario OR es otro usuario
+				   if (finishRemember.equals("0") || !user.equals(userStored)){
+						// Obtener la fecha de hoy
+						Calendar c = Calendar.getInstance();
+						// Setear la fecha de caducidad dentro de una semana
+						c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 7);
+						finishRemember = String.valueOf(c.getTimeInMillis());
+					   }
+					}
+				else // Sino esta marcada, guardar un 0 (recuerdo nulo)
+					finishRemember = "0";
+				
 				
 				if (!connector.isCancelled() && !id.equals("CANCELED") && !id.equals("EXCEPTION")){
 					EncryptedData userData = new EncryptedData(LoginActivity.this);
 					try {
-						userData.encrypt(user,hash,id,String.valueOf(Calendar.getInstance().getTimeInMillis()));
+						userData.encrypt(user,password,id,hash,finishRemember);
 					} catch (InvalidKeyException e) {
 						Log.e("Error","Clave de cifrado no valida");
 					} catch (NoSuchAlgorithmException e) {
@@ -344,6 +433,8 @@ public class LoginActivity extends Activity {
 						  break;
 				case -2:  Toast.makeText(LoginActivity.this, " ! : Campos vacíos", Toast.LENGTH_LONG).show();
 						  break;
+				case -1:  showNoConnectionActiveDialog();
+				  		  break;
 				default:  Toast.makeText(LoginActivity.this, "Error: No se pudo contactar con el servidor!", Toast.LENGTH_LONG).show();
 						  break;
 			}
@@ -382,6 +473,23 @@ public class LoginActivity extends Activity {
 					}
 				});
 		
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	private void showNoConnectionActiveDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		String message = "No se ha detectado ninguna conexión a la red.\n"+
+						 "Verifique que dispone de un plan de datos (3G) o "+
+						 "de conexión inalámbrica (Wi-Fi) y dispone de señal suficiente";
+		
+		builder.setMessage(message);
+		builder.setTitle("Biljet - Sin conexión");
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setCancelable(false);
+		builder.setPositiveButton("Aceptar", null);
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
