@@ -5,10 +5,12 @@ public class MenuOption {
 	private int icon;
 	
 	private String title;
+	private String subtitle;
 	
-	public MenuOption(String tit, int ico){
+	public MenuOption(String tit, String sub,int ico){
 		icon = ico;
 		title = tit;
+		subtitle = sub;
 	}
 
 	public int getIcon() {
@@ -19,5 +21,7 @@ public class MenuOption {
 		return title;
 	}
 
-
+	public String getSubtitle() {
+		return subtitle;
+	}
 }

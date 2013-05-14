@@ -90,7 +90,7 @@ public class Province {
 			case 25: return "Huesca";                       
 			case 26: return "Jaén";                         
 			case 27: return "La Rioja";                     
-			case 28: return "Las Palmas de G.C.";                   
+			case 28: return "Las Palmas de Gran Canaria";                   
 			case 29: return "León";                         
 			case 30: return "Lleida";                       
 			case 31: return "Lugo";                         
@@ -103,7 +103,7 @@ public class Province {
 			case 38: return "Palencia";                     
 			case 39: return "Pontevedra";                   
 			case 40: return "Salamanca";                    
-			case 41: return "Sta Cruz de Tenerife";       
+			case 41: return "Santa Cruz de Tenerife";       
 			case 42: return "Segovia";                      
 			case 43: return "Sevilla";                      
 			case 44: return "Soria";                        

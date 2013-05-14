@@ -3,56 +3,51 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:scrollbars="vertical" >
-	
+    
     <!-- Action Bar -->
-
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
 
-	<!-- <ViewStub
-		android:id="@+id/actionBar"
-		android:inflatedId="@+id/header"
-	    android:layout="@layout/header"
-	    android:layout_width="fill_parent"
-	    android:layout_height="60dip" /> -->
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
 	
-		
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:scrollbars="vertical" >
-		    
-	    <AbsoluteLayout 
-		    android:id="@+id/AbsoluteLayout01"
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent">
-		
-			<EditText
-			    android:id="@+id/filterText"
-			    android:layout_width="227dp"
-			    android:layout_height="wrap_content"
-			    android:layout_x="12px"
-			    android:layout_y="12px" />
-		
-			<Button
-			    android:id="@+id/search_button"
-			    android:layout_width="80px"
-			    android:layout_height="wrap_content"
-			    android:layout_x="239dp"
-			    android:layout_y="9dp"
-			    android:text="Buscar" />
-		</AbsoluteLayout>
-		
-		<ListView
-		    android:id="@+id/list"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content">
-		</ListView>
+	 <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="5dp" >
+        
+	    <EditText
+	        android:id="@+id/search_EditText_Input"
+	        android:layout_width="0dp" 
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:ems="10" >
+	        <requestFocus />
+        </EditText>
 
-	</LinearLayout>
+	    <ImageButton
+	        android:id="@+id/search_ImageButton_Search"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:background="@drawable/button_biljet" />
+        
+    </LinearLayout>
+	
+	<ListView
+	    android:id="@+id/search_MatchesList"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	</ListView>
+
 	
 </LinearLayout>

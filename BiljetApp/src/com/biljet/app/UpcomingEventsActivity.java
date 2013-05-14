@@ -199,7 +199,8 @@ public class UpcomingEventsActivity extends Activity {
 			return false;
 		
 		
-		String title, creatorId, _id, description, imageName, category, address;
+		String title, creatorId, _id, description, imageName, category, 
+			   address, city, place;
 		int postalCode, province, capacity;
 		double price, latitude, longitude;
 		long date;
@@ -215,16 +216,36 @@ public class UpcomingEventsActivity extends Activity {
 				
 				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
 				// ************************************************************************
+				
 				title = jsonObject.getString("title");
 				creatorId = jsonObject.getString("creator");
 				_id = jsonObject.getString("_id");
 				description = jsonObject.getString("description");		
 				category = jsonObject.getString("category");
-				province = jsonObject.getInt("province"); 
+
+				address = jsonObject.getString("address");
+				city = jsonObject.getString("city");
+				
+				// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
+				} catch (JSONException e){
+					postalCode = 0;
+				}
+				
+				// Provincia (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					province = jsonObject.getInt("province"); 
+				} catch (JSONException e){
+					province = 0;
+				}
+				
 				capacity = jsonObject.getInt("capacity"); 
 				date = jsonObject.getLong("finishAt");
 				price = jsonObject.getDouble("price");
-				
+
 				// CACHING IMAGENES EVENTOS
 				// ************************************************************************
 				imageName = jsonObject.getString("imageName");
@@ -259,21 +280,12 @@ public class UpcomingEventsActivity extends Activity {
 									
 				// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
 				// ************************************************************************
-				
-				// Direccion (String => No lanza excepcion si es null)
+
+				// Lugar (String => No lanza excepcion si es null)
 				// ---------
-				address = jsonObject.getString("address");
-				if (address.equals("null"))
-					address = "No especificado";
-			
-				
-				// Codigo postal (Numero => Lanza excepcion si es null)
-				// -------------
-				try{
-					postalCode = jsonObject.getInt("postalCode");
-				} catch (JSONException e){
-					postalCode = 0;
-				}
+				place = jsonObject.getString("place");
+				if (place.equals("null"))
+					place = "";		
 				
 				// Longitud
 				// -------------
@@ -297,9 +309,9 @@ public class UpcomingEventsActivity extends Activity {
 									   description,
 									   imagePath,
 									   category,
-									   "",	// TODO site
+									   place,	
 									   address,
-									   "",	// TODO city 
+									   city,	
 									   postalCode,
 									   province,
 									   longitude,

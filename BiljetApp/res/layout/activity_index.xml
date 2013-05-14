@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F0F8FF"
+    android:background="#FFFFFF"
     android:orientation="vertical" 
     tools:context=".IndexActivity" >
     
@@ -11,25 +11,175 @@
 	<com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
-	
-	<!--<ViewStub 
-	    android:id="@+id/actionBar"
-       	android:inflatedId="@+id/header"
-        android:layout="@layout/header"
-        android:layout_width="fill_parent"
-        android:layout_height="60dip" /> -->
-	
+    <View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
+
 	<!-- Menu Principal -->
 	
-    <GridView
-        android:id="@+id/indexActivity_gridMenu"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:numColumns="2" 
-		android:stretchMode="columnWidth" 
-		android:horizontalSpacing="5dp"
-		android:layout_margin="30dp"
-		android:gravity="center" >
-    </GridView>
+	<!-- Opcion Descubrir -->
+	<!-- ********************************************************************* -->
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:layout_marginTop="@dimen/activity_horizontal_margin"
+	    android:layout_marginLeft="@dimen/activity_vertical_margin"
+	    android:layout_marginRight="@dimen/activity_vertical_margin"
+	    android:clickable="true"
+	    android:onClick="onClickDiscover"
+	    android:orientation="horizontal"
+	    android:background="@drawable/button_biljet">
+	
+	    <RelativeLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+	        	<ImageView
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:src="@drawable/index_discover"
+			        android:layout_centerInParent="true"
+			        android:contentDescription="@string/contentDescription_Icon"/>
+	    </RelativeLayout>
 
+	
+	    <RelativeLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+		    <LinearLayout 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="10dp"
+			    android:orientation="vertical" >
+			    
+		        <TextView
+			        android:id="@+id/menuItem_Title"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+					style="@style/menuItem_titleOption"
+			        android:text="@string/menuItem_Title_Discover" />
+		        
+		        <TextView
+			        android:id="@+id/menuItem_Subtitle"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        style="@style/menuItem_subtitleOption"
+			       	android:text="@string/menuItem_Subtitle_Discover" />
+		        
+		    </LinearLayout> 
+		</RelativeLayout>
+	</LinearLayout>
+	
+	<!-- Opcion Mis Eventos -->
+	<!-- ********************************************************************* -->
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:layout_marginTop="@dimen/activity_horizontal_margin"
+	    android:layout_marginLeft="@dimen/activity_vertical_margin"
+	    android:layout_marginRight="@dimen/activity_vertical_margin"
+	    android:clickable="true"
+	    android:onClick="onClickMyEvents"
+	    android:orientation="horizontal"
+	    android:background="@drawable/button_biljet">
+		
+		<RelativeLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+		    
+		    <ImageView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		        android:src="@drawable/index_my_events"
+		        android:contentDescription="@string/contentDescription_Icon"/>
+		</RelativeLayout>
+		
+	    <RelativeLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+		    
+		    <LinearLayout 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="10dp"
+			    android:orientation="vertical" >
+			    
+		        <TextView
+			        android:id="@+id/menuItem_Title"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+					style="@style/menuItem_titleOption"
+			        android:text="@string/menuItem_Title_MyEvents" />
+		        
+		        <TextView
+			        android:id="@+id/menuItem_Subtitle"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        style="@style/menuItem_subtitleOption"
+			       	android:text="@string/menuItem_Subtitle_MyEvents" />
+		        
+		    </LinearLayout> 
+		</RelativeLayout>	
+	</LinearLayout>
+	
+	
+	<!-- Opcion Mi Calendario -->
+	<!-- ********************************************************************* -->
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:layout_margin="@dimen/activity_horizontal_margin"
+	    android:clickable="true"
+	    android:onClick="onClickMyCalendar"
+	    android:orientation="horizontal"
+	    android:background="@drawable/button_biljet">
+		
+		<RelativeLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+		    
+		    <ImageView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		        android:src="@drawable/index_my_calendar"
+		        android:contentDescription="@string/contentDescription_Icon"/>
+		</RelativeLayout>
+	    
+		<RelativeLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+		    
+		    <LinearLayout 
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="10dp"
+			    android:orientation="vertical" >
+			    
+		        <TextView
+			        android:id="@+id/menuItem_Title"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+					style="@style/menuItem_titleOption"
+			        android:text="@string/menuItem_Title_MyCalendar" />
+		        
+		        <TextView
+			        android:id="@+id/menuItem_Subtitle"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        style="@style/menuItem_subtitleOption"
+			       	android:text="@string/menuItem_Subtitle_MyCalendar" />
+		        
+		    </LinearLayout> 
+	    </RelativeLayout>
+	</LinearLayout>
+	
 </LinearLayout>

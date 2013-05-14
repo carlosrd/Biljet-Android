@@ -7,15 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import android.widget.Toast;
 
-import com.biljet.adapters.MenuOptionsAdapter;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
@@ -38,7 +31,7 @@ public class IndexActivity extends Activity {
         // GRID VIEW
 		// **************************************************************************************
         // Acoplar el adaptador al GridView
-        
+        /*
 		MenuOptionsAdapter adapter = new MenuOptionsAdapter(this);
 		GridView gridMenu = (GridView)findViewById(R.id.indexActivity_gridMenu);
 		
@@ -66,9 +59,23 @@ public class IndexActivity extends Activity {
 						}
 		});
 		
-		gridMenu.setAdapter(adapter);
+		gridMenu.setAdapter(adapter);*/
 	}	
 
+	public void onClickDiscover(View v){
+		Intent upcomingEventsOption = new Intent(IndexActivity.this, UpcomingEventsActivity.class);
+		startActivity(upcomingEventsOption);
+	}
+	
+	public void onClickMyEvents(View v){
+		Intent myEventsOption = new Intent(IndexActivity.this, MyEventsActivity.class);
+		startActivity(myEventsOption);
+	}
+	
+	public void onClickMyCalendar(View v){
+		Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
+		startActivity(calendarViewOption);
+	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -124,7 +131,7 @@ public class IndexActivity extends Activity {
     
 	// TECLA SUBMENU / BOTON ···
 	// **************************************************************************************
-	
+/*	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -150,5 +157,5 @@ public class IndexActivity extends Activity {
 	    }
 	    return true;
 	}
-
+*/
 }

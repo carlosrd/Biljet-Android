@@ -17,10 +17,9 @@ public class MenuOptionsAdapter extends ArrayAdapter<MenuOption> {
 		
 		private static MenuOption[] options =
 				new MenuOption[]{
-				new MenuOption("Proximos Eventos",R.drawable.prox_eventos),	// android.R.drawable.ic_menu_today
-				new MenuOption("Mis Eventos",R.drawable.mis_eventos), // android.R.drawable.ic_menu_agenda
-				new MenuOption("Calendario",R.drawable.calendario),
-				new MenuOption("Configuración", R.drawable.amigos)};//, // android.R.drawable.ic_menu_my_calendar	
+				new MenuOption("Descubrir","Busca eventos, adquiere pases...",R.drawable.index_discover),	// android.R.drawable.ic_menu_today
+				new MenuOption("Mis Eventos","Consulta tus pases y tus eventos organizados",R.drawable.index_my_events), // android.R.drawable.ic_menu_agenda
+				new MenuOption("Mi Calendario","Tu agenda Biljet", R.drawable.index_my_calendar)};//, // android.R.drawable.ic_menu_my_calendar	
 
 		
 		public MenuOptionsAdapter(Activity context) {
@@ -39,6 +38,9 @@ public class MenuOptionsAdapter extends ArrayAdapter<MenuOption> {
 			
 			TextView title = (TextView)item.findViewById(R.id.menuItem_Title);
 			title.setText(options[position].getTitle());
+			
+			TextView subtitle = (TextView)item.findViewById(R.id.menuItem_Subtitle);
+			subtitle.setText(options[position].getSubtitle());
 			
 			return item;
 

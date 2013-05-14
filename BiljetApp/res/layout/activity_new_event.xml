@@ -3,19 +3,26 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:scrollbars="vertical" >
     
     <!-- Action Bar -->
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
 	
 	<!-- inicia el ScrollView -->
     <ScrollView android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="@dimen/activity_horizontal_margin">
-       
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_horizontal_margin">
+        
       <LinearLayout android:orientation="vertical"
         	android:layout_width="fill_parent" 
             android:layout_height="wrap_content">   
@@ -52,7 +59,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
-                android:layout_marginBottom="3dp"/>
+                android:layout_marginBottom="3dp" />
+            	<requestFocus />
       	        
             <!-- Spinner: Tipo del evento -->
             <!-- ******************************************************* -->       
@@ -65,8 +73,9 @@
              <Spinner
 				android:id="@+id/newEvent_Spinner_Category"
 				android:layout_width="fill_parent"
-				android:layout_height="50dp"
-				android:layout_marginBottom="3dp" >
+				android:layout_height="48dp"
+				android:layout_marginBottom="3dp"
+				android:prompt="@string/newEvent_Spinner_Prompt_Category"  >
 			</Spinner>
 			
 			<!-- Precio + Aforo -->
@@ -107,7 +116,7 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:inputType="numberDecimal"
-	                android:layout_marginRight="3dp"/>
+	                android:layout_marginRight="3dp" />
 		                 
 
    		        <EditText 
@@ -115,8 +124,8 @@
 					android:layout_width="0dp"
 		            android:layout_height="wrap_content"
 		            android:layout_weight="1"
-                	android:inputType="number" />
-   		        		
+                	android:inputType="number" />	
+                	
 		    </LinearLayout>
             		    
 			<!-- Info del evento -->
@@ -159,6 +168,12 @@
             
             <!-- Duración del evento -->
             <!-- ******************************************************* -->   
+            <TextView
+                android:id="@+id/newEvent_Label_infoDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="8dp"
+                android:text="@string/newEvent_Label_infoDuration" />
             
             <LinearLayout 
 			    android:layout_width="fill_parent"
@@ -208,7 +223,7 @@
 	                android:layout_weight="1" 
 	                android:layout_marginRight="3dp"
 	                android:inputType="number"
-	                android:text="@string/zero"  />     
+	                android:text="@string/zero" />     
  
 	             <EditText 
 	                android:id="@+id/newEvent_EditText_MinutesDuration"
@@ -216,7 +231,7 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1" 
 	                android:inputType="number"
-	                android:text="@string/zero"  />  
+	                android:text="@string/zero" />  
 	                    
             </LinearLayout>	
             
@@ -274,11 +289,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
 					android:layout_weight="40"
-                    android:background="@drawable/biljet_gradient"
-                    android:onClick="setDate"
-                    android:text="@string/newEvent_Button_SetDate"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+					android:text="@string/newEvent_Button_SetDate"
+                    android:onClick="setDate" />
     
 			</LinearLayout>
 			
@@ -314,10 +326,7 @@
                     android:layout_marginLeft="10dp"
 					android:layout_weight="40"
 			        android:text="@string/newEvent_Button_SetTime"
-			        android:onClick="setTime" 
-			        android:background="@drawable/biljet_gradient"
-		    		android:textColor="#FFFFFF" 
-		    		android:textStyle="bold" />
+			        android:onClick="setTime" />
 				    
 			</LinearLayout>	            
             
@@ -393,7 +402,8 @@
 	           		android:id="@+id/newEvent_Spinner_AddressType"
 	           		android:layout_weight="35"
 	           		android:layout_width="0dp"
-	           		android:layout_height="50dp" />
+	           		android:layout_height="48dp"
+	           		android:prompt="@string/newEvent_Spinner_Prompt_AddressType"  />
                 
 	            <EditText
 	                android:id="@+id/newEvent_EditText_Address" 
@@ -451,7 +461,8 @@
 	    	<Spinner
            		android:id="@+id/newEvent_Spinner_Province"
            		android:layout_width="fill_parent"
-           		android:layout_height="50dp" />
+           		android:layout_height="48dp"
+           		android:prompt="@string/newEvent_Spinner_Prompt_Province" />
 	    	
 	    	
 			<!-- > Separador: Imagen -->
@@ -494,10 +505,7 @@
 		        android:layout_marginTop="10dp"
 		        android:layout_weight="0"
 		        android:text="Change Image"
-		        android:layout_gravity="center"
-		        android:background="@drawable/biljet_gradient"
-	    		android:textColor="#FFFFFF" 
-	    		android:textStyle="bold" >        
+		        android:layout_gravity="center" >        
 	    	</Button>
 	
 	
@@ -540,11 +548,7 @@
 			        android:layout_weight="1"
 			        android:layout_marginRight="2dp"
 			        android:text="@string/newEvent_Button_CreateEvent"
-			        android:onClick="buttonCreateNewEvent" 
-
-			        android:background="@drawable/biljet_gradient"
-	    			android:textColor="#FFFFFF" 
-	    			android:textStyle="bold" />
+			        android:onClick="buttonCreateNewEvent" />
 				
 			    <Button
 			        android:id="@+id/newEvent_Button_CancelEvent"
@@ -553,11 +557,7 @@
 			        android:layout_weight="1"
 			        android:layout_marginLeft="2dp"
 			        android:text="@string/newEvent_Button_CancelEvent"
-			        android:onClick="alertCancelNewEvent"
-
-			        android:background="@drawable/biljet_gradient"
-	    			android:textColor="#FFFFFF" 
-	    			android:textStyle="bold" />
+			        android:onClick="alertCancelNewEvent" />
 			    
 			</LinearLayout>			             
         </LinearLayout>        	         

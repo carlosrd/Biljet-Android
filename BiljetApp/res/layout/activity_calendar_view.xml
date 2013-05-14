@@ -39,7 +39,7 @@
 				android:gravity="center"
 		    	android:height="40dp"
 		    	android:width="40dp"
-				android:background="@drawable/blue_gradient"
+				android:background="@drawable/biljet_gradient"
 		    	android:textColor="#FFFFFF" 
 		    	android:textStyle="bold" />
 		    
@@ -75,7 +75,7 @@
 		    	android:gravity="center"
 		    	android:height="40dp"
 		    	android:width="40dp"
-				android:background="@drawable/blue_gradient"
+				android:background="@drawable/biljet_gradient"
 		    	android:textColor="#FFFFFF" 
 		    	android:textStyle="bold" />
 		    

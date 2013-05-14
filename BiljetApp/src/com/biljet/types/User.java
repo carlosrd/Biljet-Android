@@ -1,136 +1,70 @@
 package com.biljet.types;
 
-import java.util.ArrayList;
+public class User {		// datos del usuario que serán usados en el perfil y en la configuración de la cuenta del usuario
+	
+	// ATRIBUTOS
+	// ***************************************************************************************************
+	
+	String username;		// Nombre de usuario (Nick)
+	String mail;			// Email del usuario
+	String hash;			// Hash md5 de la contraseña
 
-public class User{		// datos del usuario que serán usados en el perfil y en la configuración de la cuenta del usuario
+	String name;			// Nombre de la persona
+	String surname;			// Apellidos
+	String facebook;		// Perfil de FB
+	String twitter;			// Perfil de Twitter
 	
-// Atributes 
-	protected long id;
-
-	// atributos que se van a ver en el "perfil"
-	protected String lastLogin;		// tipo Fecha????
-	protected ArrayList<Event> eventsFollow;		// Events a los que sigo
-	protected ArrayList<Event> eventsOrganized;		// Events que organizo yo
-	protected ArrayList<Event> eventsSignup;		// Events en los que estoy registrado
+	// CONSTRUCTORA
+	// ***************************************************************************************************
 	
-	
-	// atributos que se van a ver en el "perfil" y en la "configuración de la cuenta"
-	protected int image;
-	protected String name;
-	protected String surname;
-	protected String city;
-	protected String biography;
-	protected String twitter;
-	protected String facebook;
-	
-	
-	// atributos que se van a ver en la "configuración de la cuenta"
-	protected boolean company;
-	protected String userName;		// es el mismo que "name"??
-	protected String password;
-	protected String email;
-	
-	
-// Constructor
-	
-	// constructora para el perfil
-	public User(String lastLogin, ArrayList<Event> eventsFollow, ArrayList<Event> eventsOrganized, ArrayList<Event> eventsSignup, int image, String name,
-				String surname, String city, String biography, String twitter, String facebook)
-	{
-		super();
-		this.lastLogin = lastLogin;
-		this.eventsFollow = eventsFollow;
-		this.eventsOrganized = eventsOrganized;
-		this.eventsSignup = eventsSignup;
-		this.image = image;
+	public User(String username, 
+				String mail, 
+				String hash,
+				String name,
+				String surname,
+				String facebook,
+				String twitter){
+		
+		this.username = username;
+		this.mail = mail;
+		this.hash = hash;
+		
 		this.name = name;
 		this.surname = surname;
-		this.city = city;
-		this.biography = biography;
-		this.twitter = twitter;
 		this.facebook = facebook;
+		this.twitter = twitter;
+		
 	}
 	
-	// constructora para la configuración de la cuenta
-	public User(int image, String name, String surname, String city, String biography, String twitter, String facebook, boolean company, String userName, String password, String email)
-	{
-		super();
-		this.image = image;
-		this.name = name;
-		this.surname = surname;
-		this.city = city;
-		this.biography = biography;
-		this.twitter = twitter;
-		this.facebook = facebook;
-		this.company = company;
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
+	// CONSULTORAS
+	// ***************************************************************************************************
+	
+	public String getUsername() {
+		return username;
 	}
 
-// Methods
-	public long getId() { return id; }
-	
-	public void setId(long id) { this.id = id; }
-	
-	public String getLastLogin() { return lastLogin; }
-	
-	public void setLastLogin(String lastLogin) { this.lastLogin = lastLogin; }
-	
-	public ArrayList<Event> getEventsFollow() { return eventsFollow; }
-	
-	public void setEventsFollow(ArrayList<Event> eventsFollow) { this.eventsFollow = eventsFollow; }
-	
-	public ArrayList<Event> getEventsOrganized() { return eventsOrganized; }
-	
-	public void setEventsOrganized(ArrayList<Event> eventsOrganized) { this.eventsOrganized = eventsOrganized; }
-	
-	public ArrayList<Event> getEventsSignup() { return eventsSignup; }
-	
-	public void setEventsSignup(ArrayList<Event> eventsSignup) { this.eventsSignup = eventsSignup; }
-	
-	public int getImage() { return image; }
-	
-	public void setImage(int image) { this.image = image; }
-	
-	public String getName() { return name; }
-	
-	public void setName(String name) { this.name = name; }
-	
-	public String getSurname() { return surname; }
-	
-	public void setSurname(String surname) { this.surname = surname; }
-	
-	public String getCity() { return city; }
-	
-	public void setCity(String city) { this.city = city; }
-	
-	public String getBiography() { return biography; }
-	
-	public void setBiography(String biography) { this.biography = biography; }
-	
-	public String getTwitter() { return twitter; }
-	
-	public void setTwitter(String twitter) { this.twitter = twitter; }
-	
-	public String getFacebook() { return facebook; }
-	
-	public void setFacebook(String facebook) { this.facebook = facebook; }
-	
-	public boolean isCompany() { return company; }
-	
-	public void setCompany(boolean company) { this.company = company; }
-	
-	public String getUserName() { return userName; }
-	
-	public void setUserName(String userName) { this.userName = userName; }
-	
-	public String getPassword() { return password; }
-	
-	public void setPassword(String password) { this.password = password; }
-	
-	public String getEmail() { return email; }
-	
-	public void setEmail(String email) { this.email = email; }
-	
+	public String getMail() {
+		return mail;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public String getFacebook() {
+		return facebook;
+	}
+
+	public String getTwitter() {
+		return twitter;
+	}
+
 } // User

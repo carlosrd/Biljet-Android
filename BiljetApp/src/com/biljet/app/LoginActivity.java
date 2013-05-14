@@ -32,7 +32,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,6 +72,9 @@ public class LoginActivity extends Activity {
 	final int REVERSE_LANDSCAPE = 8;
 	final int SENSOR_ON = 4;
 	
+    // CONSTRUCTORA
+	// **************************************************************************************	        
+	  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,18 +82,18 @@ public class LoginActivity extends Activity {
 		
 		connectionAlive = false;
 		 
-		
-		// TODO Quitar!! Solo para ahorrar el escribirlo en debug
 		editTextUsername = (EditText)this.findViewById(R.id.login_EditText_User);
 	    editTextPassword = (EditText)this.findViewById(R.id.login_EditText_Password);
-	    /*editTextUsername.setText("test");
-	    editTextPassword.setText("test");*/
-	    //*****************************
+
 	    // Recuperar usuario recordado
-	    
+		// **************************************************************************************	        
+		  
 	    checkBoxRemember = (CheckBox)this.findViewById(R.id.login_CheckBox_Remember);
 	    manageRemember();
 	  
+	    // BOTON: Iniciar sesion
+		// **************************************************************************************	        
+		  
 	    buttonLogin = (Button)this.findViewById(R.id.login_Button_Login);
 	    buttonLogin.setOnClickListener(new OnClickListener(){
 	        
@@ -122,169 +124,65 @@ public class LoginActivity extends Activity {
 	    	
 	    });
 	    
-   
+	    // BOTON: Registro
+		// **************************************************************************************	        
+		  
 	    buttonSignUp = (Button)this.findViewById(R.id.login_Button_SignUp);
 	    buttonSignUp.setOnClickListener(new OnClickListener(){
 	        @Override
 	        public void onClick(View v){
-	        	showRegisterConfirmDialog();
+	        	Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+	        	startActivity(intent);
 	        }
 	    });
 	    
 	} //onCreate()
 
-	private int validateLogin(String username, String pass){
-		
-		int statusCode = -1;	// -1 el valor por defecto
-		
-        /* Comprobamos que no venga alguno en blanco. */
-        if (!username.equals("") && !pass.equals("")){
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-            /* Creamos el objeto cliente que realiza la petición al servidor */
-            DefaultHttpClient client = new DefaultHttpClient();
-            /* Definimos la ruta al servidor. En mi caso, es un servlet. */
-            HttpPost post = new HttpPost("http://www.biljetapp.com/login");
- 
-            try{
-                // Agrego los parámetros a la petición 
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("username", username );
-                jsonObject.put("password", toMd5(pass) );
-
-                // Damos formato al JSON a enviar o el servidor lo rechazará
-                StringEntity entity = new StringEntity(jsonObject.toString()); 
-               // entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
-                //entity.setContentType("application/json");
-                post.setHeader("Content-Type", "application/json");
-                //post.setHeader("Accept", "application/json");
-                post.setEntity(entity);
-                
-                // Ejecuto la petición, y guardo la respuesta 
-    			HttpResponse response = client.execute(post);
-    			StatusLine responseStatus = response.getStatusLine();
-    			statusCode = responseStatus.getStatusCode();
-    			
-    			Log.d("Login","Status Code:"+String.valueOf(statusCode));
-            	}
-            catch (Exception e) {
-            	Log.e("Exception",e.getMessage());
-            	}
-
-            return statusCode;
-        	}
-        else
-        	return -2; 	// Error -2: Alguno de los campos está vacío
-    }
-	
-	private String toMd5(String pass){
-		
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-		    md.update(pass.getBytes());
-	
-		    byte byteData[] = md.digest();
-	
-		    StringBuffer hexString = new StringBuffer();
-		    for (int i = 0; i < byteData.length; i++)
-		        hexString.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-	        
-		    Log.w("Pass en MD5: ", hexString.toString());
-	        return hexString.toString();
-        }catch(NoSuchAlgorithmException ex){
-            Log.w("NoSuchAlgorithmException", ex.toString());
-            return null;
-        }
-    }
-
-    private int getCurrentOrientation(Context context){
-    	final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
-        switch (rotation) {
-        	case Surface.ROTATION_0:
-        		Log.d("Orientation","Portrait");
-        		return PORTRAIT;
-            case Surface.ROTATION_90:
-            	Log.d("Orientation","Landscape");
-                return LANDSCAPE;
-            case Surface.ROTATION_180:
-            	Log.d("Orientation","Reverse Portrait");
-                return REVERSE_PORTRAIT;
-            default:
-            	Log.d("Orientation","Reverse Landscpae");
-                return REVERSE_LANDSCAPE;
-            }
-        }
-    
-    private String getUserId(String username){
-    	
-		// CONEXION CON DB
-		// **************************************************************************************
-		InputStream is = null;
-		
-		if (username.equals(""))
-			return "CANCELED";
-		
-		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/user/u/"+username);
-			HttpResponse response = httpclient.execute(getRequest);
-			StatusLine responseStatus = response.getStatusLine();
-			int statusCode = responseStatus.getStatusCode();
-			if (statusCode == 200) {
-				HttpEntity entity = response.getEntity();
-				is = entity.getContent();
-				}
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_BACK:
+					if (connectionAlive)
+						connector.cancel(true);
+					else
+						showExitConfirmDialog();
+					break;
 			}
-		catch(Exception e) {
-			return "EXCEPTION";
-			// En esta captura de excepción podemos ver que hay un problema con la
-			// conexión e intentarlo más adelante.	
-		}
 
-		if (connector.isCancelled())
-			return "CANCELED";
+			return true;
+	}
 	
-
-		String result = "";
-
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
-			StringBuilder sb = new StringBuilder();
-			sb.append(reader.readLine() + "\n");
-			String line="0";
-
-			while ((line = reader.readLine()) != null) 
-				sb.append(line + "\n");
-			
-			is.close();
-			result = sb.toString();
-			}
-		catch(Exception e) {
-			return "EXCEPTION";
-		} // catch
-
-		if (connector.isCancelled())
-			return "CANCELED";
-		
-		String _id = "CANCELED";
-		
-		try {
-			JSONObject jsonObject = new JSONObject(result);
-			_id = jsonObject.getString("_id");
-			Log.d("UserID",_id);
-		} catch (JSONException e1) {
-			runOnUiThread(new Runnable() {
-				  public void run() {
-					  Toast.makeText(LoginActivity.this, "Error al traducir los datos!", Toast.LENGTH_LONG).show();
-				  }
-			});	
-		} //catch
 	
-		if (connector.isCancelled())
-			return "CANCELED";
-
-		return _id;
-    }
-    
+	// MOSTRAR DIALOGS: CAMPOS VACIOS + NO 3G/WIFI
+	// **************************************************************************************
+	
+    private void showExitConfirmDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage("¿Seguro que deseas salir?");
+		builder.setTitle("Biljet");
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+		builder.setCancelable(false);
+		builder.setPositiveButton("Sí",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						finish();
+						System.exit(RESULT_OK);
+					}
+				});
+		builder.setNegativeButton("No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+        
     private boolean isConnectionAvailable(){
     	
     	ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -302,7 +200,28 @@ public class LoginActivity extends Activity {
     		return false;
     	
     }
-   
+	
+    private void showNoConnectionActiveDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		String message = "No se ha detectado ninguna conexión a la red.\n"+
+						 "Verifique que dispone de un plan de datos (3G) o "+
+						 "de conexión inalámbrica (Wi-Fi) y dispone de señal suficiente";
+		
+		builder.setMessage(message);
+		builder.setTitle("Biljet - Sin conexión");
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setCancelable(false);
+		builder.setPositiveButton("Aceptar", null);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+    
+	
+    // MANEJO DE LA COOKIE
+	// **************************************************************************************	        
+	  
     private void manageRemember(){
     	
     	String[] params = null;
@@ -345,6 +264,166 @@ public class LoginActivity extends Activity {
     	}
     	
     }
+    
+    
+    // AUXILIARES CONEXION DB
+	// **************************************************************************************	     
+    
+    private int validateLogin(String username, String pass){
+		
+		int statusCode = -1;	// -1 el valor por defecto
+		
+        /* Comprobamos que no venga alguno en blanco. */
+        if (!username.equals("") && !pass.equals("")){
+
+            /* Creamos el objeto cliente que realiza la petición al servidor */
+            DefaultHttpClient client = new DefaultHttpClient();
+            /* Definimos la ruta al servidor. En mi caso, es un servlet. */
+            HttpPost post = new HttpPost("http://www.biljetapp.com/login");
+ 
+            try{
+                // Agrego los parámetros a la petición 
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("username", username );
+                jsonObject.put("password", toMd5(pass) );
+
+                // Damos formato al JSON a enviar o el servidor lo rechazará
+                StringEntity entity = new StringEntity(jsonObject.toString()); 
+               // entity.setContentEncoding(new BasicHeader(HTTP.UTF_8, "application/json"));
+                //entity.setContentType("application/json");
+                post.setHeader("Content-Type", "application/json");
+                //post.setHeader("Accept", "application/json");
+                post.setEntity(entity);
+                
+                // Ejecuto la petición, y guardo la respuesta 
+    			HttpResponse response = client.execute(post);
+    			StatusLine responseStatus = response.getStatusLine();
+    			statusCode = responseStatus.getStatusCode();
+    			
+    			Log.d("Login","Status Code:"+String.valueOf(statusCode));
+            	}
+            catch (Exception e) {
+            	Log.e("Exception",e.getMessage());
+            	}
+
+            return statusCode;
+        	}
+        else
+        	return -2; 	// Error -2: Alguno de los campos está vacío
+    }
+	
+	public static String toMd5(String pass){
+		
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+		    md.update(pass.getBytes());
+	
+		    byte byteData[] = md.digest();
+	
+		    StringBuffer hexString = new StringBuffer();
+		    for (int i = 0; i < byteData.length; i++)
+		        hexString.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+	        
+		    Log.w("Pass en MD5: ", hexString.toString());
+	        return hexString.toString();
+        }catch(NoSuchAlgorithmException ex){
+            Log.w("NoSuchAlgorithmException", ex.toString());
+            return null;
+        }
+    }
+
+    private int getCurrentOrientation(Context context){
+    	final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (rotation) {
+        	case Surface.ROTATION_0:
+        		Log.d("Orientation","Portrait");
+        		return PORTRAIT;
+            case Surface.ROTATION_90:
+            	Log.d("Orientation","Landscape");
+                return LANDSCAPE;
+            case Surface.ROTATION_180:
+            	Log.d("Orientation","Reverse Portrait");
+                return REVERSE_PORTRAIT;
+            default:
+            	Log.d("Orientation","Reverse Landscpae");
+                return REVERSE_LANDSCAPE;
+            }
+        }
+    
+    private String getUserId(String username){
+    	
+ 		// CONEXION CON DB
+ 		// **************************************************************************************
+ 		InputStream is = null;
+ 		
+ 		if (username.equals(""))
+ 			return "CANCELED";
+ 		
+ 		try {
+ 			HttpClient httpclient = new DefaultHttpClient();
+ 			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/user/u/"+username);
+ 			HttpResponse response = httpclient.execute(getRequest);
+ 			StatusLine responseStatus = response.getStatusLine();
+ 			int statusCode = responseStatus.getStatusCode();
+ 			if (statusCode == 200) {
+ 				HttpEntity entity = response.getEntity();
+ 				is = entity.getContent();
+ 				}
+ 			}
+ 		catch(Exception e) {
+ 			return "EXCEPTION";
+ 			// En esta captura de excepción podemos ver que hay un problema con la
+ 			// conexión e intentarlo más adelante.	
+ 		}
+
+ 		if (connector.isCancelled())
+ 			return "CANCELED";
+ 	
+
+ 		String result = "";
+
+ 		try {
+ 			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+ 			StringBuilder sb = new StringBuilder();
+ 			sb.append(reader.readLine() + "\n");
+ 			String line="0";
+
+ 			while ((line = reader.readLine()) != null) 
+ 				sb.append(line + "\n");
+ 			
+ 			is.close();
+ 			result = sb.toString();
+ 			}
+ 		catch(Exception e) {
+ 			return "EXCEPTION";
+ 		} // catch
+
+ 		if (connector.isCancelled())
+ 			return "CANCELED";
+ 		
+ 		String _id = "CANCELED";
+ 		
+ 		try {
+ 			JSONObject jsonObject = new JSONObject(result);
+ 			_id = jsonObject.getString("_id");
+ 			Log.d("UserID",_id);
+ 		} catch (JSONException e1) {
+ 			runOnUiThread(new Runnable() {
+ 				  public void run() {
+ 					  Toast.makeText(LoginActivity.this, "Error al traducir los datos!", Toast.LENGTH_LONG).show();
+ 				  }
+ 			});	
+ 		} //catch
+ 	
+ 		if (connector.isCancelled())
+ 			return "CANCELED";
+
+ 		return _id;
+     }
+
+    
+    // CONEXION DB
+	// **************************************************************************************	     
     
     /*  Se instancia con 3 tipos:
 	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
@@ -452,100 +531,4 @@ public class LoginActivity extends Activity {
 		
 	}
 	
-	private void showExitConfirmDialog(){
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
-		builder.setMessage("¿Seguro que deseas salir?");
-		builder.setTitle("Biljet");
-		builder.setIcon(android.R.drawable.ic_dialog_info);
-		builder.setCancelable(false);
-		builder.setPositiveButton("Sí",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						finish();
-						System.exit(RESULT_OK);
-					}
-				});
-		builder.setNegativeButton("No",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-	
-	private void showNoConnectionActiveDialog(){
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
-		String message = "No se ha detectado ninguna conexión a la red.\n"+
-						 "Verifique que dispone de un plan de datos (3G) o "+
-						 "de conexión inalámbrica (Wi-Fi) y dispone de señal suficiente";
-		
-		builder.setMessage(message);
-		builder.setTitle("Biljet - Sin conexión");
-		builder.setIcon(android.R.drawable.ic_dialog_alert);
-		builder.setCancelable(false);
-		builder.setPositiveButton("Aceptar", null);
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-			switch (keyCode) {
-				case KeyEvent.KEYCODE_BACK:
-					if (connectionAlive)
-						connector.cancel(true);
-					else
-						showExitConfirmDialog();
-					break;
-			}
-
-			return true;
-	}
-	
-	// TEMPORAL!!!
-	
-	private void showRegisterConfirmDialog(){
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
-		builder.setTitle("Biljet");
-		builder.setMessage("Por el momento, el registro solo se puede llevar a cabo a través de nuestro sitio web. ¿Quieres abrir el navegador y continuar con el proceso?");
-		builder.setIcon(android.R.drawable.ic_dialog_info);
-		builder.setCancelable(false);
-		builder.setPositiveButton("Sí",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-			        	Uri uri = Uri.parse("https://www.biljetapp.com/signup");
-		                startActivity(new Intent(Intent.ACTION_VIEW, uri));
-					}
-				});
-		builder.setNegativeButton("No",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-	
-	
-	// TECLA SUBMENU / BOTON ···
-	// **************************************************************************************
-	
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
-	}
-	*/
 }

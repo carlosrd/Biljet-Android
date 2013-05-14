@@ -63,9 +63,8 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 			if(imgFile.exists()){
 			    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 			    imageEventView.setImageBitmap(myBitmap);
-				}
-			else
-				imageEventView.setImageResource(events.get(position).getImage());
+			} else
+				imageEventView.setVisibility(View.INVISIBLE); // TODO Imagen por defecto
 			
 			TextView title = (TextView)item.findViewById(R.id.eventList_TxtTitle);
 			title.setText(events.get(position).getTitle());

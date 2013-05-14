@@ -5,8 +5,6 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -134,10 +132,10 @@ public class CalendarViewActivity extends Activity {
 		calendarGrid.setAdapter(adapter);
 		
 	}
-	
+/*	
 	/**
 	 * Method that creates the menu displayed when you press ··· or Config button on the device
-	 */
+	 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -147,7 +145,7 @@ public class CalendarViewActivity extends Activity {
 
 	/**
 	 * Actions related to the menu options displayed when you press ··· or Config button on the device
-	 */
+	 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -158,7 +156,7 @@ public class CalendarViewActivity extends Activity {
 	    }
 	    return true;
 	}
-
+*/
 	/**
 	 * Refresh the calendar view: It updates month label and fills the calendar with the days in its correct position
 	 */

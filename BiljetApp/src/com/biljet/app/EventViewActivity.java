@@ -88,7 +88,7 @@ public class EventViewActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event_view);
-
+		
         // ACTION BAR
      	// **************************************************************************************
         
@@ -254,7 +254,7 @@ public class EventViewActivity extends FragmentActivity {
 		
 		Fragment f = getSupportFragmentManager().findFragmentById(R.id.minimap);
 		Button buttonHowToArrive = (Button)findViewById(R.id.eventView_Button_HowToArrive);
-		
+
 		// Si latitud = long = -1, asumimos que no se ha podido localizar en el mapa
 		if (Double.compare(latitude, -1.0) == 0 && Double.compare(longitude, -1.0) == 0){
 		    

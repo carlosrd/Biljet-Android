@@ -9,32 +9,32 @@ public class Event implements Parcelable {
 	
 	/** EJEMPLO JSON EVENTO:
 	 * 
-	 *	"title": "IS Demo",
-	 *	"createdAt": 1366903431960,
-	 *	"price": 0,
-     *  "creator": "51794a5a82890e4b08000001",
-     *  "province": "32",
-     *  "category": "Meeting",
-     *  "capacity": "70",
-     *  "description": "Evento para la demostración de IS en clase.",
-     *  "_id": "51794a8782890e4b08000002",
+	 *	"title": "Prueba2sdfs",
+     *  "createdAt": 1368407246265,
+     *  "price": 10,
+     *  "creator": "518b0f03579e4f0000000001",
+     *  "province": "3",
+     *  "city": "Madrid",
+     *  "postalCode": 23003,
+     *  "address": "Calle de la amargura",
+     *  "category": "teatro",
+     *  "capacity": 24,
+     *  "description": "Eventazo para todos",
+     *  "_id": "51903cce086c7b0000000002",
      *  "__v": 0,
      *  "imageName": "eventDefault.png",
      *  "comments": [],
-     *  "address": null,
      *  "longitude": null,
      *  "latitude": null,
-     *  "postalCode": null,
+     *  "place": null,
      *  "followers": [],
      *  "attendee": [],
      *  "duration": null,
-     *  "finishAt": 1369567500000
-	 */
+     *  "finishAt": 23423526346
+	 */				
 	
 	// DEPRECATED
 	int id;
-	int image;	
-	int score;					
 	
 	// ATRIBUTOS
 	// ***************************************************************************************************
@@ -47,7 +47,7 @@ public class Event implements Parcelable {
 	String category;			// Tipo de evento (REQUERIDO)
 	
 	// Datos de la direccion
-	String site;				// Nombre del lugar (Ej: Fac. de Informatica, Museo del Prado)
+	String place;				// Nombre del lugar (Ej: Fac. de Informatica, Museo del Prado)
 	String address;				// Direccion del evento
 	String city;				// Ciudad del evento
 	int postalCode;				// Codigo postal
@@ -74,7 +74,7 @@ public class Event implements Parcelable {
 				 String description,
 				 String imagePath,
 				 String category,
-				 String site,
+				 String place,
 				 String address,
 				 String city,
 				 int postalCode,
@@ -95,7 +95,7 @@ public class Event implements Parcelable {
 		this.imagePath = imagePath;			
 		this.category = category;		
 		
-		this.site = site;
+		this.place = place;
 		this.address = address;				
 		this.city = city;				
 		this.postalCode = postalCode;				
@@ -123,13 +123,6 @@ public class Event implements Parcelable {
 		return id;
 	}
 
-	public int getImage() {
-		return image;
-	}
-
-	public int getScore() {
-		return score;
-	}
 
 	public String getTitle() {
 		return title;
@@ -152,7 +145,7 @@ public class Event implements Parcelable {
 	}
 
 	public String getSiteName() {
-		return site;
+		return place;
 	}
 	
 	public String getAddress() {
@@ -245,7 +238,7 @@ public class Event implements Parcelable {
 			dest.writeString(description);
 			dest.writeString(category);
 			
-			dest.writeString(site);
+			dest.writeString(place);
 			dest.writeString(address);
 			dest.writeString(city);
 			dest.writeInt(province);
@@ -272,7 +265,7 @@ public class Event implements Parcelable {
 			imagePath = in.readString();
 			description = in.readString();
 			category = in.readString();
-			site = in.readString();
+			place = in.readString();
 			address = in.readString();
 			city = in.readString();
 			province = in.readInt();

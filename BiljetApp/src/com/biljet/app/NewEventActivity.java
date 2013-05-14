@@ -41,7 +41,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -50,6 +49,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.biljet.adapters.SpinnerAdapter;
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.biljet.types.Province;
@@ -237,10 +237,10 @@ public class NewEventActivity extends Activity {
 		
 		// SPINNER: CATEGORIA EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
      	// **************************************************************************************
-		
-		ArrayAdapter<String> spinnerCategoryAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeEvents);	
+
+		SpinnerAdapter spinnerCategoryAdapter = new SpinnerAdapter(this, arrayTypeEvents);	
 		spinnerCategory = (Spinner)findViewById(R.id.newEvent_Spinner_Category);
-		spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerCategoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
 		spinnerCategory.setAdapter(spinnerCategoryAdapter);		
 		
 		spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -261,9 +261,9 @@ public class NewEventActivity extends Activity {
 		// SPINNER: PROVINCIA
      	// **************************************************************************************
 		
-		ArrayAdapter<String> spinnerProvinceAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, new Province().toArrayString());	
+		SpinnerAdapter spinnerProvinceAdapter = new SpinnerAdapter(NewEventActivity.this, new Province().toArrayString());	
 		spinnerProvince = (Spinner)findViewById(R.id.newEvent_Spinner_Province);
-		spinnerProvinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerProvinceAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
 		spinnerProvince.setAdapter(spinnerProvinceAdapter);		
 		
 		spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -285,9 +285,9 @@ public class NewEventActivity extends Activity {
 		// SPINNER: PREFIJO DE DIRECCION (C/, Pza, Avda, ... etc)
      	// **************************************************************************************
 		
-		ArrayAdapter<String> spinnerAddressAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayAddressPrefix);	
+		SpinnerAdapter spinnerAddressAdapter = new SpinnerAdapter(NewEventActivity.this, arrayAddressPrefix);	
 		spinnerAddress = (Spinner)findViewById(R.id.newEvent_Spinner_AddressType);
-		spinnerAddressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerAddressAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
 		spinnerAddress.setAdapter(spinnerAddressAdapter);		
 		
 		spinnerAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -412,7 +412,7 @@ public class NewEventActivity extends Activity {
 		String message = "Los campos: \n"; 
 		for (int i = 0; i < fields.size(); i++)
 			message += "> " + fields.get(i) + "\n";
-		message += "están vacíos o contienen datos invalidos. Revise el formulario y reintentelo de nuevo";
+		message += "están vacíos o contienen datos invalidos. Revise el formulario y reinténtelo de nuevo";
 		builder.setMessage(message);
 		
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -883,7 +883,12 @@ public class NewEventActivity extends Activity {
         	jsonObject.put("creator", authentication[2]);
         	jsonObject.put("password", authentication[3]);
         	jsonObject.put("price", newEventOrganized.getPrice() );
+        	
+            jsonObject.put("address", newEventOrganized.getAddress() );
+            jsonObject.put("city",newEventOrganized.getCity() );
+            jsonObject.put("postalCode", newEventOrganized.getPostalCode() );
             jsonObject.put("province", String.valueOf(newEventOrganized.getProvince()) );
+            
             jsonObject.put("capacity", String.valueOf(newEventOrganized.getCapacity()) );
         	jsonObject.put("finishAt", newEventOrganized.getDate() );
             jsonObject.put("description", newEventOrganized.getDescription() );
@@ -895,12 +900,9 @@ public class NewEventActivity extends Activity {
             jsonObject.put("longitude", newEventOrganized.getLongitude());
             jsonObject.put("latitude", newEventOrganized.getLatitude());
             
-            // (TODO: RAUL AÑADIR!!! + Campo CITY + SITE!! )
-            jsonObject.put("address", newEventOrganized.getAddress()+", "+ newEventOrganized.getCity());
-            jsonObject.put("postalCode", newEventOrganized.getPostalCode());
-            
             // Damos formato al JSON a enviar o el servidor lo rechazará
-            StringEntity entity = new StringEntity(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(),"UTF-8");
+           
             post.setHeader("Content-Type", "application/json");
             post.setEntity(entity);
 

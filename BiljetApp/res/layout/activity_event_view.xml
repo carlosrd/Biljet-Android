@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F0F8FF"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     android:scrollbars="vertical" >
 
@@ -11,7 +11,12 @@
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
-
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
+	
 	<!-- Vista Evento -->
 	
     <ScrollView
@@ -19,12 +24,14 @@
         android:layout_height="fill_parent"
         android:scrollbars="vertical"
         android:padding="@dimen/activity_horizontal_margin" >
-        
+        <FrameLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:background="@android:color/transparent" >
     	<LinearLayout
     	    android:layout_width="fill_parent"
     	    android:layout_height="wrap_content"
-    	    android:orientation="vertical" 
-			 >
+    	    android:orientation="vertical" >
 			
     	    <!-- Imagen + Boton Multipropósito -->
          	<!-- ******************************************************* -->  
@@ -54,14 +61,10 @@
     	        android:layout_height="fill_parent" >
 	    	    <Button
 	    	        android:id="@+id/eventView_Button_Multipurpose"
-	    	        style="@style/button_text"
 	    	        android:layout_width="wrap_content"
 	    	        android:layout_height="wrap_content"
 	    	        android:layout_centerInParent="true"
-	    	        android:layout_marginRight="35dp"
-	    	        android:background="@drawable/biljet_gradient"
-	    	        android:textStyle="bold"
-	    	        android:textColorHighlight="#FFFFFF" />
+	    	        android:layout_marginRight="35dp" />
 				
 
 			</RelativeLayout>
@@ -186,10 +189,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_below="@id/minimap"
 			        android:layout_marginTop="5dp"
-			        android:background="@drawable/biljet_gradient" 
-			        android:text="@string/eventView_Button_HowToArrive"
-			        android:textColor="#FFFFFF"
-			        android:textStyle="bold" />
+			        android:text="@string/eventView_Button_HowToArrive" />
    			   
    			</RelativeLayout>
 
@@ -253,5 +253,6 @@
 	   	     android:layout_width="wrap_content"
 	   	     android:layout_height="wrap_content" />
 		</LinearLayout>
+		</FrameLayout>
 	</ScrollView>
 </LinearLayout>

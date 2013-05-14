@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:orientation="vertical"
     android:scrollbars="vertical" >
     
@@ -11,28 +11,41 @@
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
-
-    <RelativeLayout
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
+	
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:background="#444444" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="5dp" >
 
         <TextView
-            android:id="@+id/myEvents_Label_Select"
+            android:text="@string/myEvents_LabelHeader_Select"
+            style="@style/headerLabel" 
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:text="@string/myEvents_Label_Select"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-        
-    </RelativeLayout>
+            android:layout_height="wrap_content" />
+       
+       <!-- __________________ Linea divisoria ______________ -->
 
-	<Spinner
-	    android:id="@+id/myEvents_Spinner"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" />
+	    <View
+	        android:layout_width="fill_parent"
+	        android:layout_height="3dp"
+	        android:layout_marginBottom="5dp"
+	        android:background="@drawable/biljet_gradient" />
+      	<Spinner
+		    android:id="@+id/myEvents_Spinner"
+		    android:layout_width="fill_parent"
+		    android:layout_height="48dp"
+		    android:prompt="@string/myEvents_Spinner_Prompt"  />
+    </LinearLayout>
+
+
 
 	<ListView 
 	    android:id="@+id/myEvents_List"

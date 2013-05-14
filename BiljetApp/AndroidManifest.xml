@@ -53,16 +53,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
+
         <!-- API Key para GMaps -->
-        	<!-- DEBUG VALUE = AIzaSyBTlnWLb4_xrNZAqYQl0EHVD-wkqgOO6Ow -->
-			<!-- RELEASE VALUE = AIzaSyD_v4Uly4yvjZm12_pwVi2p3hCuAoi1H24  (Alias: biljet)-->
-        
+        <!-- DEBUG VALUE = AIzaSyBTlnWLb4_xrNZAqYQl0EHVD-wkqgOO6Ow -->
+        <!-- RELEASE VALUE = AIzaSyD_v4Uly4yvjZm12_pwVi2p3hCuAoi1H24  (Alias: biljet) -->
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBTlnWLb4_xrNZAqYQl0EHVD-wkqgOO6Ow" />
-					
-			
+            android:value="AIzaSyD_v4Uly4yvjZm12_pwVi2p3hCuAoi1H24" />
+
         <!-- Activity + informacion para el intent SCAN del lector de QR -->
         <!-- =========================================================== -->
 
@@ -149,6 +148,10 @@
         <activity
             android:name="com.biljet.app.MapsActivity"
             android:label="@string/title_activity_maps" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.SignUpActivity"
+            android:label="@string/title_activity_sign_up" >
         </activity>
     </application>
 

@@ -34,10 +34,9 @@
 	
 	    <EditText
 	        android:id="@+id/login_EditText_User"
-	        android:layout_width="match_parent"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginBottom="3dp"
-	        android:ems="10"
 	        android:inputType="text" >
 	        <requestFocus />
 	    </EditText>
@@ -52,9 +51,8 @@
 	
 	    <EditText
 	        android:id="@+id/login_EditText_Password"
-	        android:layout_width="match_parent"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:ems="10"
 	        android:inputType="textPassword" />
 			
 		<!-- Checkbox: Recuerdame -->
@@ -80,7 +78,6 @@
 	            android:layout_height="wrap_content"
 	            android:layout_alignParentRight="true"
 	            android:layout_alignParentTop="true"
-				android:background="@drawable/biljet_gradient"
 				android:textColor="#FFFFFF"
 				android:textStyle="bold"
 	            android:text="@string/login_Button_Login" />
@@ -92,7 +89,6 @@
 	            android:layout_alignParentTop="true"
 	            android:layout_marginRight="5dp"
 	            android:layout_toLeftOf="@+id/login_Button_Login"
-	            android:background="@drawable/biljet_gradient"
 	            android:text="@string/login_Button_SignUp"
 	            android:textColor="#FFFFFF"
 	            android:textStyle="bold" />
