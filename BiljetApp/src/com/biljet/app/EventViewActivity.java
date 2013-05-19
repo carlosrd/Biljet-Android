@@ -30,7 +30,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -38,6 +37,7 @@ import android.view.Gravity;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -112,8 +112,7 @@ public class EventViewActivity extends FragmentActivity {
 		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 		    eventImageView.setImageBitmap(myBitmap);
 			}
-		
-		//eventImageView.setScaleType(ImageView.ScaleType.CENTER);
+
 		
 		// BOTON MULTIPROPOSITO (Ir a evento, leer lista, etc..)
      	// **************************************************************************************
@@ -249,12 +248,12 @@ public class EventViewActivity extends FragmentActivity {
 		
 		//INCRUSTAMOS EL MAPA EN LA ACTIVIDAD.
 		 	
-		double latitude = currentEvent.getLatitude();  //e.getAddress().getLatitude();
-		double longitude = currentEvent.getLongitude(); //e.getAddress().getLongitude();
+		double latitude = currentEvent.getLatitude();  
+		double longitude = currentEvent.getLongitude(); 
 		
-		Fragment f = getSupportFragmentManager().findFragmentById(R.id.minimap);
+		SupportMapFragment f = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.minimap);
 		Button buttonHowToArrive = (Button)findViewById(R.id.eventView_Button_HowToArrive);
-
+		
 		// Si latitud = long = -1, asumimos que no se ha podido localizar en el mapa
 		if (Double.compare(latitude, -1.0) == 0 && Double.compare(longitude, -1.0) == 0){
 		    
@@ -270,6 +269,10 @@ public class EventViewActivity extends FragmentActivity {
 			
 			// Preparar el mapa
 			miniMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.minimap)).getMap();
+			
+			ViewGroup mapHost = (ViewGroup) findViewById(R.id.mapHost);
+			mapHost.requestTransparentRegion(mapHost);
+			
 			CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
 			miniMap.animateCamera(camUpd);
 			
@@ -278,7 +281,8 @@ public class EventViewActivity extends FragmentActivity {
 					
 			// Marcamos el a dirección del evento.
 			miniMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Aquí estamos"));
-			
+		    
+			//fl.setVisibility(View.VISIBLE);
 			// Preparar boton "Como llegar"
 			buttonHowToArrive.setVisibility(View.VISIBLE);
 			buttonHowToArrive.setOnClickListener(new OnClickListener() {

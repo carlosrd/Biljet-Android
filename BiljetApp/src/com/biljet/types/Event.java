@@ -148,6 +148,10 @@ public class Event implements Parcelable {
 		return place;
 	}
 	
+	public String getPlace() {
+		return place;
+	}
+	
 	public String getAddress() {
 		return address;
 	}

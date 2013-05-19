@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.biljet.adapters.SpinnerAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,6 +38,7 @@ public class MapsActivity extends FragmentActivity {
  	// **************************************************************************************
 	
 	private GoogleMap map = null;
+	private Spinner mapTypeSpinner;
 	
 	//Latitud y longitud de las coordenadas 
 	private double latitude;
@@ -71,8 +72,8 @@ public class MapsActivity extends FragmentActivity {
 		actionBar.setTitle("Localización");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new view3DAction(R.drawable.actionbar_3dview_action));
-		actionBar.addAction(new streetViewAction(R.drawable.actionbar_streetview_action));
+		actionBar.addAction(new View3DAction(R.drawable.actionbar_3dview_action));
+		actionBar.addAction(new StreetViewAction(R.drawable.actionbar_streetview_action));
 		
 		
 		map = ((SupportMapFragment) getSupportFragmentManager()
@@ -81,7 +82,6 @@ public class MapsActivity extends FragmentActivity {
 		
 		CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16);
 		map.animateCamera(camUpd);		
-		
 		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 		
 		map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(nameEvent));
@@ -89,37 +89,19 @@ public class MapsActivity extends FragmentActivity {
 		// SPINNER: para MODOS DE VISTA DEL map(VISTA map, vista satélite, vista hibrida, vista relieve)
      	// **************************************************************************************
 
-		ArrayAdapter<String> adaptadorSpinner = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayTypeView);	
-		final Spinner spinnerTypesEvent = (Spinner)findViewById(R.id.maps_SpinnerTypeView);
-		adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerTypesEvent.setAdapter(adaptadorSpinner);		
+		SpinnerAdapter spinnerAdapter = new SpinnerAdapter(this, arrayTypeView);	
+		mapTypeSpinner = (Spinner)findViewById(R.id.maps_SpinnerTypeView);
+		spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
+		mapTypeSpinner.setAdapter(spinnerAdapter);		
 		
 		//Spinner para seleccionar el tipo de vista del mapa que queremos vizualizar. 
-		spinnerTypesEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		mapTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
 				
 				typeView = position;
-				switch(position){
-							
-					case 0: //Vista Normal
-						alternateViewMap(position); 							
-							break;
-														
-					case 1: //Vista híbrida
-							alternateViewMap(position);
-							break;
-							
-					case 2: //Vista satélite
-							alternateViewMap(position);
-							break;
-							
-					case 3: //Vista map
-							alternateViewMap(position);
-							break;		
-					default://Vista normal
-							alternateViewMap(0);
-				}				
+				alternateViewMap(position);
+		
 			}
 
 			@Override
@@ -159,10 +141,10 @@ public class MapsActivity extends FragmentActivity {
 	}		
     
 	// TODO: Deshacer correctamente vista 3D
-    private class view3DAction extends AbstractAction {
+    private class View3DAction extends AbstractAction {
 
 
-        public view3DAction( int drawable) {
+        public View3DAction( int drawable) {
             super(drawable);
 
         }
@@ -206,10 +188,10 @@ public class MapsActivity extends FragmentActivity {
 		}
     }
 	
-    private class streetViewAction extends AbstractAction {
+    private class StreetViewAction extends AbstractAction {
 
 
-        public streetViewAction( int drawable) {
+        public StreetViewAction( int drawable) {
             super(drawable);
 
         }

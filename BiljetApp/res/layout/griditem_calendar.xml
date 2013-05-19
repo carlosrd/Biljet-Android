@@ -3,7 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="8dp"
-	android:background="#F0F8FF"
     android:orientation="vertical" >
     
 	<TextView 
@@ -15,12 +14,19 @@
 	    android:textStyle="bold" >
 	</TextView>
 	
-	<ImageView
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent">
+	    
+	    <ImageView
 			android:id="@+id/calendarItem_IconDay"
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
+			android:layout_margin="1dp"
+		    android:layout_width="25dp"
+		    android:layout_height="25dp"
 		    android:contentDescription="@string/contentDescription_ImageCalendarItem"
-		    android:src="@drawable/icon_calendar2"
+		    android:layout_centerInParent="true"
 			android:visibility="invisible"/>
-	
+	    
+	</RelativeLayout>
+
 </LinearLayout>

@@ -601,14 +601,15 @@ public class NewEventActivity extends Activity {
 	*/
 	private String getTitleForm(){
 	   
-		EditText editTxtName = (EditText) findViewById(R.id.newEvent_EditText_Title);	   
-	   
-		if (editTxtName.getText().toString().equals("")){
+		EditText editTxtTitle = (EditText) findViewById(R.id.newEvent_EditText_Title);	   
+	    String title = editTxtTitle.getText().toString();
+	    
+		if (title.equals("")){
 			invalidFields = true;
 			fields.add("Titulo");
 		}
 		
-		return editTxtName.getText().toString();
+		return adjustString(title);
 	   
 	}
 	 
@@ -748,8 +749,9 @@ public class NewEventActivity extends Activity {
 	*/
 	private String getSiteNameForm(){
 
-		EditText editSite = (EditText) findViewById(R.id.newEvent_EditText_Site);
-		return editSite.getText().toString();
+		EditText editPlace = (EditText) findViewById(R.id.newEvent_EditText_Site);
+		String place = editPlace.getText().toString();
+		return adjustString(place);
 		
 	}
 	
@@ -771,6 +773,8 @@ public class NewEventActivity extends Activity {
 				address = addressPrefix + " ";
 			
 			address += editAdress.getText().toString();
+			
+			address = adjustString(address);
 		}
 		else {
 			invalidFields = true;
@@ -795,7 +799,7 @@ public class NewEventActivity extends Activity {
 			fields.add("Ciudad");
 		}
 	   
-		return city;
+		return adjustString(city);
 	}
 	 
 	/**
@@ -816,6 +820,20 @@ public class NewEventActivity extends Activity {
 		return postalCode;
 	}
 		      	   
+	
+	private String adjustString(String s){
+		
+		s = s.replace(" De ", " de ");
+		s = s.replace(" Del "," del ");
+		s = s.replace(" El "," el ");
+		s = s.replace(" La "," la ");
+		s = s.replace(" Los "," los ");
+		s = s.replace(" Las "," las ");
+		s = s.replace(" Y ", " y ");
+		
+		return s;
+		
+	}
 	
 	// AUXILIARES CONEXION DB
 	// **************************************************************************************
@@ -897,6 +915,9 @@ public class NewEventActivity extends Activity {
             
             // CAMPOS JSON NO REQUERIDOS 
             // **********************************************************
+        	if (!newEventOrganized.getPlace().equals(""))
+        		jsonObject.put("place", newEventOrganized.getPlace());
+        	
             jsonObject.put("longitude", newEventOrganized.getLongitude());
             jsonObject.put("latitude", newEventOrganized.getLatitude());
             

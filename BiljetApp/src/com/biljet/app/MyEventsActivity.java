@@ -36,7 +36,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.biljet.adapters.SpinnerAdapter;
-import com.biljet.adapters.UpcomingEventsAdapter;
+import com.biljet.adapters.EventListAdapter;
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
@@ -57,8 +57,8 @@ public class MyEventsActivity extends Activity {
 	ArrayList<Event> eventsOrganized; 				// Eventos que organiza el propio usuario
 	
 	// Adaptadores para listas de eventos
-	UpcomingEventsAdapter eventsToGoAdapter;		
-	UpcomingEventsAdapter eventsOrganizedAdapter;
+	EventListAdapter eventsToGoAdapter;		
+	EventListAdapter eventsOrganizedAdapter;
 	
 	// Opciones Spinner: Selector tipo de eventos (Asistir/Orgnizar)
 	final String[] opEventsSpinner = new String[] {"Eventos a los que asistirás:",
@@ -85,6 +85,7 @@ public class MyEventsActivity extends Activity {
 		actionBar.setTitle("Mis Eventos");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.addAction(new IntentAction(this, new Intent(this, CalendarViewActivity.class), R.drawable.actionbar_calendar_action));
 		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.actionbar_newevent_action));
 		
 		// CONEXION CON DB EN SEGUNDO PLANO
@@ -104,8 +105,8 @@ public class MyEventsActivity extends Activity {
 		// LIST VIEW
 		// **************************************************************************************
 	
-		eventsToGoAdapter = new UpcomingEventsAdapter(this,eventsToGo);
-		eventsOrganizedAdapter = new UpcomingEventsAdapter(this, eventsOrganized);
+		eventsToGoAdapter = new EventListAdapter(this,eventsToGo);
+		eventsOrganizedAdapter = new EventListAdapter(this, eventsOrganized);
 		
 		// Setear oyentes OnClick
         

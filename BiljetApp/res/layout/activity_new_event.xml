@@ -58,7 +58,7 @@
                 android:id="@+id/newEvent_EditText_Title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords"
                 android:layout_marginBottom="3dp" />
             	<requestFocus />
       	        
@@ -410,7 +410,7 @@
 	                android:layout_width="0dp"
 	                android:layout_height="wrap_content"
 	                android:layout_weight="65"
-	                android:inputType="textCapSentences"
+	                android:inputType="textCapWords"
 	                android:hint="@string/newEvent_Hint_Address"
 	                android:layout_marginBottom="3dp"
 	                android:layout_marginLeft="3dp" />

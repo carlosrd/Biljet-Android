@@ -11,6 +11,7 @@
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
+    
 	<View
        android:layout_width="fill_parent"
        android:layout_height="3dp"
@@ -23,11 +24,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scrollbars="vertical"
+        android:background="@android:color/transparent"
         android:padding="@dimen/activity_horizontal_margin" >
-        <FrameLayout 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:background="@android:color/transparent" >
+        
     	<LinearLayout
     	    android:layout_width="fill_parent"
     	    android:layout_height="wrap_content"
@@ -177,17 +176,25 @@
     	        android:layout_height="wrap_content"
     	        android:layout_weight="55" >
    				
-   				<fragment
+   			    <FrameLayout 
+   			        android:id="@+id/mapHost"
+   			        android:layout_width="match_parent"
+   			        android:layout_height="match_parent" >
+   			        
+   			        <fragment
 					android:id="@+id/minimap"
 					android:layout_width="fill_parent"
 					android:layout_height="150dp"
-					class="com.google.android.gms.maps.SupportMapFragment" /> 
-   			    
+					class="com.google.android.gms.maps.SupportMapFragment" /> 	 			
+
+   			    </FrameLayout>
+
+
    			    <Button
 			        android:id="@+id/eventView_Button_HowToArrive"
 			        android:layout_width="fill_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_below="@id/minimap"
+			        android:layout_below="@id/mapHost"
 			        android:layout_marginTop="5dp"
 			        android:text="@string/eventView_Button_HowToArrive" />
    			   
@@ -253,6 +260,5 @@
 	   	     android:layout_width="wrap_content"
 	   	     android:layout_height="wrap_content" />
 		</LinearLayout>
-		</FrameLayout>
 	</ScrollView>
 </LinearLayout>

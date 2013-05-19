@@ -31,7 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.biljet.adapters.UpcomingEventsAdapter;
+import com.biljet.adapters.EventListAdapter;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -41,7 +41,7 @@ public class UpcomingEventsActivity extends Activity {
 	ActionBar actionBar;
 	DBConnection connector;
 	ListView eventList;
-	UpcomingEventsAdapter eventListAdapter;
+	EventListAdapter eventListAdapter;
 	boolean connectionAlive;
 	ArrayList<Event> itemsEvent;// = getEvents();
 	
@@ -57,10 +57,10 @@ public class UpcomingEventsActivity extends Activity {
      	// **************************************************************************************
 		
 		actionBar = (ActionBar) findViewById(R.id.actionbar);
-		actionBar.setTitle("Próximos Eventos");
+		actionBar.setTitle("Descubrir...");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new IntentAction(this, new Intent(this, SearchActivity.class), R.drawable.buscar));
+		actionBar.addAction(new IntentAction(this, new Intent(this, SearchActivity.class), R.drawable.actionbar_search_action));
 		
 		// CONEXION CON DB EN SEGUNDO PLANO
 	   	// **************************************************************************************
@@ -78,7 +78,7 @@ public class UpcomingEventsActivity extends Activity {
 		// LIST VIEW
 		// **************************************************************************************
 		
-		eventListAdapter = new UpcomingEventsAdapter(this,itemsEvent);
+		eventListAdapter = new EventListAdapter(this,itemsEvent);
         
 		// Setear oyentes OnClick
         

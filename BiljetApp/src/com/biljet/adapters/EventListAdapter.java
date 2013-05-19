@@ -19,7 +19,7 @@ import com.biljet.app.R;
 import com.biljet.types.Event;
 import com.biljet.types.Province;
 
-public class UpcomingEventsAdapter extends BaseAdapter{
+public class EventListAdapter extends BaseAdapter{
 		
 		Activity context;
 		protected ArrayList<Event> events;
@@ -44,7 +44,7 @@ public class UpcomingEventsAdapter extends BaseAdapter{
 		// CONSTRUCTOR
 		// *************************************************************************
 		
-		public UpcomingEventsAdapter(Activity context, ArrayList<Event> sampleEvents) {
+		public EventListAdapter(Activity context, ArrayList<Event> sampleEvents) {
 			this.context = context;
 			events = sampleEvents;
 		}

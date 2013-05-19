@@ -11,34 +11,73 @@
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
 
-	<!-- <ViewStub
-		android:id="@+id/actionBar"
-		android:inflatedId="@+id/header"
-	    android:layout="@layout/header"
+    <View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:background="#BDC3C7" />
+    
+    <!-- VISTA DETALLADA DIA -->
+	<!-- *************************************** -->
+	<LinearLayout
+	    android:id="@+id/dayView_LayoutHost_ListA"
 	    android:layout_width="fill_parent"
-	    android:layout_height="60dip" /> -->
-
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="5dp"
+	    android:orientation="vertical">
+	    
+	    <TextView
+		    android:id="@+id/dayView_LabelHeader_ListA"
+		    style="@style/headerLabel" 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="@dimen/activity_vertical_margin"
+        	android:layout_marginRight="@dimen/activity_vertical_margin" />
 	
-	<RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:background="#444444" >
-
-        <TextView
-            android:id="@+id/dayView_LabelDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-        
-    </RelativeLayout>
+	    <View
+	        android:layout_width="fill_parent"
+	        android:layout_height="3dp"
+	        android:layout_marginBottom="5dp"
+	        android:background="@drawable/biljet_gradient"
+	        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        	android:layout_marginRight="@dimen/activity_vertical_margin" />
+		
+		<ListView 
+		    android:id="@+id/dayView_ListA"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"  />
+		
+	</LinearLayout>
 	
-	<ListView 
-	    android:id="@+id/list_EventsOnDay"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"  />
+	<LinearLayout
+	    android:id="@+id/dayView_LayoutHost_ListB"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:orientation="vertical">
+	    
+	    
+		<TextView
+		    android:id="@+id/dayView_LabelHeader_ListB"
+		    style="@style/headerLabel" 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="@dimen/activity_vertical_margin"
+        	android:layout_marginRight="@dimen/activity_vertical_margin" />
 
+	    <View
+	        android:layout_width="fill_parent"
+	        android:layout_height="3dp"
+	        android:layout_marginBottom="5dp"
+	        android:background="@drawable/biljet_gradient"
+	        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        	android:layout_marginRight="@dimen/activity_vertical_margin" />
+		
+		<ListView 
+		    android:id="@+id/dayView_ListB"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"  />
+	    
+	</LinearLayout>
+	
 </LinearLayout>    
     

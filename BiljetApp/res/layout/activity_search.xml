@@ -36,9 +36,10 @@
 
 	    <ImageButton
 	        android:id="@+id/search_ImageButton_Search"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
 	        android:layout_marginLeft="5dp"
+	        android:src="@drawable/button_search"
 	        android:background="@drawable/button_biljet" />
         
     </LinearLayout>

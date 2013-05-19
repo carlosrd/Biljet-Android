@@ -26,7 +26,7 @@ public class IndexActivity extends Activity {
 		actionBar.setHomeLogo(R.drawable.actionbar_logo);
 		actionBar.setTitle("Menu Principal");
 		actionBar.addAction(new IntentAction(this, createShareIntent(), android.R.drawable.ic_menu_share));
-		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.perfil));
+		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.actionbar_myprofile_action));
 		
         // GRID VIEW
 		// **************************************************************************************

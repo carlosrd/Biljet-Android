@@ -44,10 +44,11 @@
     <string name="indexMenu_optionSettings">Preferencias</string>
     <string name="indexMenu_optionAbout">Acerca de&#8230;</string>
     <string name="indexMenu_optionExit">Salir</string>
+    
     <string name="menuItem_Title_Discover">Descubrir</string>
     <string name="menuItem_Subtitle_Discover">Busca eventos, adquiere pases&#8230;</string>
     <string name="menuItem_Title_MyEvents">Mis Eventos</string>
-    <string name="menuItem_Subtitle_MyEvents">Consulta tus pases y tus eventos organizados</string>
+    <string name="menuItem_Subtitle_MyEvents">Consulta tus pases y eventos organizados</string>
     <string name="menuItem_Title_MyCalendar">Mi Calendario</string>
     <string name="menuItem_Subtitle_MyCalendar">Tu agenda Biljet</string>
 
@@ -60,16 +61,16 @@
     <!-- CalendarViewActivity -->
     <!-- *********************************************************************** -->
 
-    <string name="calendarView_ButtonPrevious"> &lt;&lt; </string>
-    <string name="calendarView_MonthText"> dfsd </string>
-    <string name="calendarView_ButtonNext"> >> </string>
-    <string name="calendarView_LabelMonday"> Lun </string>
-    <string name="calendarView_LabelTuesday"> Mar </string>
-    <string name="calendarView_LabelWednesday"> Mie </string>
-    <string name="calendarView_LabelThursday"> Jue </string>
-    <string name="calendarView_LabelFriday"> Vie </string>
-    <string name="calendarView_LabelSaturday"> Sab </string>
-    <string name="calendarView_LabelSunday"> Dom </string>
+    <string name="calendarView_Button_Previous"> &lt;&lt; </string>
+    <string name="calendarView_Month_Text"> Month </string>
+    <string name="calendarView_Button_Next"> >> </string>
+    <string name="calendarView_Label_Monday"> Lun </string>
+    <string name="calendarView_Label_Tuesday"> Mar </string>
+    <string name="calendarView_Label_Wednesday"> Mie </string>
+    <string name="calendarView_Label_Thursday"> Jue </string>
+    <string name="calendarView_Label_Friday"> Vie </string>
+    <string name="calendarView_Label_Saturday"> Sab </string>
+    <string name="calendarView_Label_Sunday"> Dom </string>
 
     <!-- DayViewActivity -->
     <!-- *********************************************************************** -->
@@ -203,6 +204,11 @@
     <string name="settingsView_ButtonSaveAndBack"> "Guardar y volver"</string>
     <string name="settingsView_ButtonBack"> "Volver"</string>
 
+    <!-- Used in gallery part -->
+    <!-- *********************************************************************** -->
+
+    <string name="maps_Spinner_Prompt_MapType">Selecciona el tipo de mapa:</string>
+    
     <!-- Used in gallery part -->
     <!-- *********************************************************************** -->
 
