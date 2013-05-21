@@ -24,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,11 +37,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.biljet.adapters.SpinnerAdapter;
 import com.biljet.adapters.EventListAdapter;
+import com.biljet.adapters.SpinnerAdapter;
+import com.biljet.types.Category;
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class MyEventsActivity extends Activity {
@@ -85,7 +89,7 @@ public class MyEventsActivity extends Activity {
 		actionBar.setTitle("Mis Eventos");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new IntentAction(this, new Intent(this, CalendarViewActivity.class), R.drawable.actionbar_calendar_action));
+		actionBar.addAction(new IntentWithFinishAction(this, new Intent(this, CalendarViewActivity.class), R.drawable.actionbar_calendar_action));
 		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.actionbar_newevent_action));
 		
 		// CONEXION CON DB EN SEGUNDO PLANO
@@ -391,7 +395,7 @@ public class MyEventsActivity extends Activity {
 									   _id,
 									   description,
 									   imagePath,
-									   category,
+									   new Category().getLabel(category),
 									   place,
 									   address,
 									   city,
@@ -535,7 +539,7 @@ public class MyEventsActivity extends Activity {
 									   _id,
 									   description,
 									   imagePath,
-									   category,
+									   new Category().getLabel(category),
 									   place,
 									   address,
 									   city,
@@ -647,6 +651,33 @@ public class MyEventsActivity extends Activity {
 	
 	
 	}
+	
+	
+	// ACCIONES ADICIONALES PARA ACTIONBAR
+ 	// **************************************************************************************
+ 		
+    private class IntentWithFinishAction extends AbstractAction {
+        private Context mContext;
+        private Intent mIntent;
+
+        public IntentWithFinishAction(Context context, Intent intent, int drawable) {
+            super(drawable);
+            mContext = context;
+            mIntent = intent;
+        }
+
+        @Override
+        public void performAction(View view) {
+            try {      
+               mContext.startActivity(mIntent); 
+               finish();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(mContext,
+                        mContext.getText(R.string.actionbar_activity_not_found),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 	
 	// BOTON MENU TELEFONO
 	// **************************************************************************************

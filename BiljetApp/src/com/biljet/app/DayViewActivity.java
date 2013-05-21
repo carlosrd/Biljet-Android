@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biljet.adapters.EventListAdapter;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
-import com.markupartist.android.widget.ActionBar.IntentAction;
+import com.markupartist.android.widget.ActionBar.AbstractAction;
 
 public class DayViewActivity extends Activity{
 
@@ -29,6 +33,9 @@ public class DayViewActivity extends Activity{
 	private boolean activeHostA = false; // Puede tener eventos ToGo o Created
 	private boolean activeHostB = false; // Solo Created
 	
+	// Fecha actual a mostrar en milisegundos
+	private long choosedDate; 			
+	
 	// CONSTRUCTORA
  	// **************************************************************************************
 	
@@ -40,22 +47,33 @@ public class DayViewActivity extends Activity{
 		// LEER BUNDLE
      	// **************************************************************************************
         	
-		String date = getIntent().getStringExtra("DATE");
+		String date = getIntent().getStringExtra("DATE_STRING");
 		eventsToGo = getIntent().getParcelableArrayListExtra("TO_GO");
 		eventsCreated = getIntent().getParcelableArrayListExtra("CREATED");
-		long choosedDate = getIntent().getLongExtra("DATEMILLIS", 0);
+		choosedDate = getIntent().getLongExtra("DATE_MILLIS", 0);
 				
         // ACTION BAR
      	// **************************************************************************************
         
         ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Agenda " + date);
-		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setHomeAction(new IntentWithFinishAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		if (choosedDate >= Calendar.getInstance().getTimeInMillis())
-			actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.actionbar_newevent_action));
 
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);
+		today.set(Calendar.AM_PM,Calendar.AM);
+
+		Log.d("TIME","Choosed: " + choosedDate +"    Instance: "+ today.getTimeInMillis());
+		
+		if (choosedDate >= today.getTimeInMillis()){
+			Intent newEventIntent = new Intent(this, NewEventActivity.class);
+			newEventIntent.putExtra("DATE_SELECTED", choosedDate);
+			actionBar.addAction(new IntentWithFinishAction(this, newEventIntent, R.drawable.actionbar_newevent_action));
+		}
         // HEADER LISTA A
      	// **************************************************************************************
         
@@ -179,5 +197,31 @@ public class DayViewActivity extends Activity{
 			
 	} // onCreate()
 
+	
+	// ACCIONES ADICIONALES PARA ACTIONBAR
+ 	// **************************************************************************************
+    
+	private class IntentWithFinishAction extends AbstractAction {
+        private Context mContext;
+        private Intent mIntent;
+
+        public IntentWithFinishAction(Context context, Intent intent, int drawable) {
+            super(drawable);
+            mContext = context;
+            mIntent = intent;
+        }
+
+        @Override
+        public void performAction(View view) {
+            try {      
+               mContext.startActivity(mIntent); 
+               finish();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(mContext,
+                        mContext.getText(R.string.actionbar_activity_not_found),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 	
 }

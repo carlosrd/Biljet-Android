@@ -152,6 +152,7 @@
     <string name="newEvent_Label_infoAddress">Para una correcta situación del evento en el mapa, escribe direcciones basadas en el tipo + nombre de la vía y número.</string>
     <string name="newEvent_Label_infoSite">Opcionalmente, incluye aquí el nombre de las instalaciones</string>
     <string name="newEvent_Label_infoDuration">Para indeterminado introduce 0</string>
+    <string name="newEvent_Label_infoImage">El tamaño de la imágen no podrá exceder los 300KB. Para una correcta visualización, te recomendamos que uses imágenes de unos 200x200</string>
     
     <string name="newEvent_Hint_Description">Información del evento</string>
     <string name="newEvent_Hint_Site">Ej: Facultad de Informática</string>
@@ -173,10 +174,13 @@
     <string name="newEvent_Label_Description">"Descripción:"</string>
     <string name="newEvent_Label_Date">"Fecha:"</string>
     <string name="newEvent_Label_Time">"Hora:"</string>
+    
     <string name="newEvent_Button_SetDate">"Fijar fecha" </string>
     <string name="newEvent_Button_SetTime">"Fijar hora" </string>
     <string name="newEvent_Button_CreateEvent">"¡Crear!" </string>
     <string name="newEvent_Button_CancelEvent">"Cancelar" </string>
+    <string name="newEvent_Button_OpenGallery">"Abrir galería..." </string> 
+    
     <string name="newEvent_Spinner_Prompt_Category">Selecciona una categoría para el evento:</string>
     <string name="newEvent_Spinner_Prompt_AddressType">Selecciona un tipo de vía:</string>
     <string name="newEvent_Spinner_Prompt_Province">Selecciona una provincia:</string>

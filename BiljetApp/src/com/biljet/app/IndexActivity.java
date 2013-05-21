@@ -28,54 +28,23 @@ public class IndexActivity extends Activity {
 		actionBar.addAction(new IntentAction(this, createShareIntent(), android.R.drawable.ic_menu_share));
 		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.actionbar_myprofile_action));
 		
-        // GRID VIEW
-		// **************************************************************************************
-        // Acoplar el adaptador al GridView
-        /*
-		MenuOptionsAdapter adapter = new MenuOptionsAdapter(this);
-		GridView gridMenu = (GridView)findViewById(R.id.indexActivity_gridMenu);
-		
-		// Setear oyentes OnClick
-		gridMenu.setOnItemClickListener(new OnItemClickListener() {
-						public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-						//Acciones necesarias al hacer click
-							switch(position){
-								case 0: Intent upcomingEventsOption = new Intent(IndexActivity.this, UpcomingEventsActivity.class);
-										startActivity(upcomingEventsOption);
-										break;
-								case 1: Intent myEventsOption = new Intent(IndexActivity.this, MyEventsActivity.class);
-										startActivity(myEventsOption);
-										break;
-								case 2: Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
-										startActivity(calendarViewOption);
-										break;
-								case 3: Intent settingsOption = new Intent(IndexActivity.this, SettingsActivity.class);
-										startActivity(settingsOption);
-										break;
-										
-								default: break;
-
-							}
-						}
-		});
-		
-		gridMenu.setAdapter(adapter);*/
 	}	
 
 	public void onClickDiscover(View v){
-		Intent upcomingEventsOption = new Intent(IndexActivity.this, UpcomingEventsActivity.class);
-		startActivity(upcomingEventsOption);
+		Intent discover = new Intent(IndexActivity.this, UpcomingEventsActivity.class);
+		startActivity(discover);
 	}
 	
 	public void onClickMyEvents(View v){
-		Intent myEventsOption = new Intent(IndexActivity.this, MyEventsActivity.class);
-		startActivity(myEventsOption);
+		Intent myEvents = new Intent(IndexActivity.this, MyEventsActivity.class);
+		startActivity(myEvents);
 	}
 	
 	public void onClickMyCalendar(View v){
-		Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
-		startActivity(calendarViewOption);
+		Intent calendarView = new Intent(IndexActivity.this, CalendarViewActivity.class);
+		startActivity(calendarView);
 	}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 

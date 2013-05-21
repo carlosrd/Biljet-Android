@@ -487,26 +487,53 @@
 	    	
 	    	<!-- Imagen del evento -->
             <!-- ******************************************************* -->  
-           		
-		 	<ImageView 
-		        android:id="@+id/newEvent_Image" 
-		        android:src="@drawable/logo_evento" 
-		        android:contentDescription="@string/contentDescription_ImageEvent"
-		        android:layout_width="200dp"
-		        android:layout_height="200dp"
-		        android:layout_weight="1"
-		        android:layout_gravity="center">        
-	    	</ImageView>
-	         
-	    	<Button	
-		        android:id="@+id/newEvent_ButtonChangeImage"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"  
-		        android:layout_marginTop="10dp"
-		        android:layout_weight="0"
-		        android:text="Change Image"
-		        android:layout_gravity="center" >        
-	    	</Button>
+           	
+           	<TextView
+                android:id="@+id/newEvent_Label_infoImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="10dp"
+                android:text="@string/newEvent_Label_infoImage" />
+           	
+           	<LinearLayout
+           	    android:layout_width="fill_parent"
+           	    android:layout_height="wrap_content"
+           	    android:layout_marginBottom="8dp"
+           	    android:orientation="horizontal">
+           	    
+           	    <RelativeLayout
+           	        android:layout_width="0dp"
+           	        android:layout_height="wrap_content"
+           	        android:layout_weight="50"	>
+           	        	 	
+			        <ImageView 
+				        android:id="@+id/newEvent_Image" 
+				        android:src="@drawable/eventdefault"
+				        android:contentDescription="@string/contentDescription_ImageEvent"
+				        android:layout_width="@dimen/event_preview_image_width"
+				        android:layout_height="@dimen/event_preview_image_width"   
+				        android:layout_centerInParent="true" >        
+			    	</ImageView>
+			    	
+		        </RelativeLayout>
+		    	
+		    	<RelativeLayout
+           	        android:layout_width="0dp"
+           	        android:layout_height="@dimen/event_preview_image_width"
+           	        android:layout_weight="50"	>
+           	        	 
+			    	<Button	
+				        android:id="@+id/newEvent_Button_OpenGallery"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"  
+				        android:text="@string/newEvent_Button_OpenGallery"
+				        android:layout_centerInParent="true" >        
+			    	</Button>
+			    	
+           	    </RelativeLayout>
+           	    
+           	</LinearLayout>
+
 	
 	
             

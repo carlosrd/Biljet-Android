@@ -21,6 +21,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +29,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,11 +48,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.biljet.adapters.CalendarAdapter;
+import com.biljet.types.Category;
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
+
 
 public class CalendarViewActivity extends Activity {
 
@@ -88,6 +93,12 @@ public class CalendarViewActivity extends Activity {
 		
 		// Inicializar las variables de fechas
 		month = Calendar.getInstance();
+		month.set(Calendar.HOUR, 0);
+		month.set(Calendar.MINUTE, 0);
+		month.set(Calendar.SECOND, 0);
+		month.set(Calendar.MILLISECOND, 0);
+		month.set(Calendar.AM_PM,Calendar.AM);
+		
 	    selectedDate = Calendar.getInstance();
 	    selectedDate.setTimeInMillis(0);
 	    
@@ -98,7 +109,7 @@ public class CalendarViewActivity extends Activity {
 		actionBar.setTitle("Mi Calendario");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new IntentAction(this, new Intent(this, MyEventsActivity.class), R.drawable.actionbar_listview_action));
+		actionBar.addAction(new IntentWithFinishAction(this, new Intent(this, MyEventsActivity.class), R.drawable.actionbar_listview_action));
 		actionBar.addAction(new GoToDateAction(R.drawable.actionbar_gotodate_action));
 		
 		
@@ -157,7 +168,6 @@ public class CalendarViewActivity extends Activity {
 		eventsCreated = new ArrayList<Event>();
 		
 		connector = new DBConnection();
-		connectionAlive = true;
 		connector.execute();
 
 	    
@@ -211,13 +221,12 @@ public class CalendarViewActivity extends Activity {
 					        	if (choosedDay.length() == 1) 
 					        		choosedDay = "0"+choosedDay;			        	
 					        	
-					        	intent.putExtra("DATE", choosedDay + "/" + android.text.format.DateFormat.format("MM/yyyy", month));
+					        	intent.putExtra("DATE_STRING", choosedDay + "/" + android.text.format.DateFormat.format("MM/yyyy", month));
 					        	
 					        	c = (Calendar) month.clone();
 					        	c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(choosedDay));
 					        	
-					        	intent.putExtra("DATEMILLIS", c.getTimeInMillis());
-					        	
+					        	intent.putExtra("DATE_MILLIS", c.getTimeInMillis());
 					        	
 					        	startActivity(intent);
 					        	//setResult(RESULT_OK, intent);
@@ -230,6 +239,20 @@ public class CalendarViewActivity extends Activity {
 		
 	}
 
+	@Override
+	protected void onRestart() {
+	    super.onRestart();  // Always call the superclass method first
+	    
+	    // Activity being restarted from stopped state    
+	
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
+
+		connector = new DBConnection();
+		connector.execute();
+
+	}
+	
 	/**
 	 * Refresh the calendar view: It updates month label and fills the calendar with the days in its correct position
 	 */
@@ -425,145 +448,130 @@ public class CalendarViewActivity extends Activity {
 		
 		try {
 			Log.d("Calendar","Entra bucle JSONToGo");
-			JSONObject root = new JSONObject(result);
-			JSONObject jsonObject = null; 
-			boolean moreEvents = true;
-			int i = 0;
-			while (moreEvents){
-	
-				try {
+			JSONArray jsonArray = new JSONArray(result);
+			JSONObject jsonObject = null;
+			for(int i = 0; i < jsonArray.length(); i++){
+				jsonObject = jsonArray.getJSONObject(i);
 					
-					// RECUPERAR FECHA Y AÑADIR AL CONJUNTO
-					// ******************************************************************
-					
-					jsonObject = root.getJSONObject(String.valueOf(i));
-					date.setTimeInMillis(jsonObject.getLong("finishAt"));
-					
-					int day = date.get(Calendar.DAY_OF_MONTH);
-					if (!eventDays.contains(String.valueOf(day)))
-						eventDays.add(String.valueOf(day));
-					
-					// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
-					// ************************************************************************
-					
-					title = jsonObject.getString("title");
-					creatorId = jsonObject.getString("creator");
-					_id = jsonObject.getString("_id");
-					description = jsonObject.getString("description");		
-					category = jsonObject.getString("category");
+				// RECUPERAR FECHA Y AÑADIR AL CONJUNTO
+				// ******************************************************************
 
-					address = jsonObject.getString("address");
-					city = jsonObject.getString("city");
-					
-					// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
-					// -------------
-					try{
-						postalCode = jsonObject.getInt("postalCode");
-					} catch (JSONException e){
-						postalCode = 0;
-					}
-					
-					// Provincia (Numero => Lanza excepcion si no se puede convertir)
-					// -------------
-					try{
-						province = jsonObject.getInt("province"); 
-					} catch (JSONException e){
-						province = 0;
-					}
-					
-					capacity = jsonObject.getInt("capacity"); 
-					timestamp = jsonObject.getLong("finishAt");
-					price = jsonObject.getDouble("price");
+				date.setTimeInMillis(jsonObject.getLong("finishAt"));
+				
+				int day = date.get(Calendar.DAY_OF_MONTH);
+				if (!eventDays.contains(String.valueOf(day)))
+					eventDays.add(String.valueOf(day));
+				
+				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+				// ************************************************************************
+				
+				title = jsonObject.getString("title");
+				creatorId = jsonObject.getString("creator");
+				_id = jsonObject.getString("_id");
+				description = jsonObject.getString("description");		
+				category = jsonObject.getString("category");
 
-					// CACHING IMAGENES EVENTOS
-					// ************************************************************************
-					imageName = jsonObject.getString("imageName");
-					
-					String imageURL = "http://www.biljetapp.com/img/" + imageName;
-					imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
-					
-					File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
-					if(!imgFolder.exists())
-						imgFolder.mkdir();
-					
-					File imgFile = new File(imagePath);
-						
-					try {
-						// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
-						if(!imgFile.exists())
-							saveImageFromURL(imageURL,imagePath);
-						
-					} catch(IOException e2) {
-							runOnUiThread(new Runnable() {
-								  public void run() {
-									  // Notificar error al guardar avatar
-									  //Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
-									  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
-									  File fileToDelete = new File(imagePath);
-									  if (fileToDelete.exists())
-										  fileToDelete.delete();
-								  }
-							});
-
-					} // catch
-										
-					// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
-					// ************************************************************************
-
-					// Lugar (String => No lanza excepcion si es null)
-					// ---------
-					place = jsonObject.getString("place");
-					if (place.equals("null"))
-						place = "";		
-					
-					// Longitud
-					// -------------
-					try{
-						latitude = jsonObject.getDouble("latitude");;
-					} catch (JSONException e){
-						latitude = -1;
-					}
-					
-					// Latitud
-					// -------------
-					try{
-						longitude = jsonObject.getDouble("longitude"); 
-					} catch (JSONException e){
-						longitude = -1;
-					}
-
-					Event event = new Event(title,
-										    creatorId,
-										    _id,
-										    description,
-										    imagePath,
-										    category,
-										    place,	
-										    address,
-										    city,	
-										    postalCode,
-										   	province,
-										   	longitude,
-										   	latitude,
-										   	timestamp,
-										   	(float)price,
-										   	capacity,
-										   	0,0,0);
-										
-					eventItems.add(event);
-					
-					Log.d("Calendar","\nAñadido el evento "+ title +" al array");
-					
-					
-					
+				address = jsonObject.getString("address");
+				city = jsonObject.getString("city");
+				
+				// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
 				} catch (JSONException e){
-					moreEvents = false;
-					Log.d("JSON","Excepcion JSON en "+i);
+					postalCode = 0;
 				}
 				
+				// Provincia (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					province = jsonObject.getInt("province"); 
+				} catch (JSONException e){
+					province = 0;
+				}
 				
-				i++;
+				capacity = jsonObject.getInt("capacity"); 
+				timestamp = jsonObject.getLong("finishAt");
+				price = jsonObject.getDouble("price");
+
+				// CACHING IMAGENES EVENTOS
+				// ************************************************************************
+				imageName = jsonObject.getString("imageName");
 				
+				String imageURL = "http://www.biljetapp.com/img/" + imageName;
+				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+				
+				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
+				if(!imgFolder.exists())
+					imgFolder.mkdir();
+				
+				File imgFile = new File(imagePath);
+					
+				try {
+					// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+					if(!imgFile.exists())
+						saveImageFromURL(imageURL,imagePath);
+					
+				} catch(IOException e2) {
+						runOnUiThread(new Runnable() {
+							  public void run() {
+								  // Notificar error al guardar avatar
+								  //Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+								  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+								  File fileToDelete = new File(imagePath);
+								  if (fileToDelete.exists())
+									  fileToDelete.delete();
+							  }
+						});
+
+				} // catch
+									
+				// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+				// ************************************************************************
+
+				// Lugar (String => No lanza excepcion si es null)
+				// ---------
+				place = jsonObject.getString("place");
+				if (place.equals("null"))
+					place = "";		
+				
+				// Longitud
+				// -------------
+				try{
+					latitude = jsonObject.getDouble("latitude");;
+				} catch (JSONException e){
+					latitude = -1;
+				}
+				
+				// Latitud
+				// -------------
+				try{
+					longitude = jsonObject.getDouble("longitude"); 
+				} catch (JSONException e){
+					longitude = -1;
+				}
+
+				Event event = new Event(title,
+									    creatorId,
+									    _id,
+									    description,
+									    imagePath,
+									    new Category().getLabel(category),
+									    place,	
+									    address,
+									    city,	
+									    postalCode,
+									   	province,
+									   	longitude,
+									   	latitude,
+									   	timestamp,
+									   	(float)price,
+									   	capacity,
+									   	0,0,0);
+									
+				eventItems.add(event);
+				
+				Log.d("Calendar","\nAñadido el evento "+ title +" al array");
 				
 				
 			} // for
@@ -595,6 +603,7 @@ public class CalendarViewActivity extends Activity {
 	    @Override
 	    protected void onPreExecute() {
 			actionBar.setProgressBarVisibility(View.VISIBLE);
+			connectionAlive = true;
 			actionBar.removeActionAt(1);
 			hideCalendar();
 	    }
@@ -633,10 +642,12 @@ public class CalendarViewActivity extends Activity {
 	    @Override
 	    protected void onCancelled() {
 	    	actionBar.setProgressBarVisibility(View.INVISIBLE);
+			actionBar.addAction(new GoToDateAction(R.drawable.actionbar_gotodate_action));
+			
 	    	connectionAlive = false;
 	    	refreshCalendar();
 	    	showCalendar();
-	    	Toast.makeText(getBaseContext(), "Conexión cancelada por el usuario!", Toast.LENGTH_LONG).show();
+	    	Toast.makeText(getBaseContext(), " ! : Actualización de calendario cancelado por el usuario!", Toast.LENGTH_LONG).show();
 	    }
 
 
@@ -644,7 +655,31 @@ public class CalendarViewActivity extends Activity {
 	  
 	// ACCIONES ADICIONALES PARA ACTIONBAR
  	// **************************************************************************************
-	
+ 	
+    private class IntentWithFinishAction extends AbstractAction {
+        private Context mContext;
+        private Intent mIntent;
+
+        public IntentWithFinishAction(Context context, Intent intent, int drawable) {
+            super(drawable);
+            mContext = context;
+            mIntent = intent;
+        }
+
+        @Override
+        public void performAction(View view) {
+            try {      
+               mContext.startActivity(mIntent); 
+               finish();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(mContext,
+                        mContext.getText(R.string.actionbar_activity_not_found),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    
+    
     private class GoToDateAction extends AbstractAction {
 
         public GoToDateAction(int drawable) {
@@ -675,12 +710,14 @@ public class CalendarViewActivity extends Activity {
  	                    int monthOfYear, int dayOfMonth) {
  	            	
  	                month.set(year, monthOfYear, 1);
+ 	                
+ 	                selectedDate = Calendar.getInstance();
  	                selectedDate.set(year, monthOfYear, dayOfMonth);
- 					
+ 	                //selectedDate.set(Calendar.AM_PM,Calendar.AM);
+ 	                
  	                connector = new DBConnection();
  					connector.execute();
  					
- 	   
  	            }
  	        }, month.get(Calendar.YEAR),
  	           month.get(Calendar.MONTH),
@@ -690,4 +727,7 @@ public class CalendarViewActivity extends Activity {
  	        }
  	        return null;
  	    }
+
+
+ 	
 }

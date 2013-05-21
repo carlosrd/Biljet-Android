@@ -22,25 +22,28 @@
 	    android:id="@+id/dayView_LayoutHost_ListA"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="5dp"
+	    android:layout_marginTop="10dp"
 	    android:orientation="vertical">
 	    
-	    <TextView
-		    android:id="@+id/dayView_LabelHeader_ListA"
-		    style="@style/headerLabel" 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="@dimen/activity_vertical_margin"
-        	android:layout_marginRight="@dimen/activity_vertical_margin" />
-	
-	    <View
+	    <RelativeLayout 
 	        android:layout_width="fill_parent"
-	        android:layout_height="3dp"
-	        android:layout_marginBottom="5dp"
-	        android:background="@drawable/biljet_gradient"
+	        android:layout_height="40dp" 
+	        android:background="@drawable/dayview_header_togo_bg"
 	        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        	android:layout_marginRight="@dimen/activity_vertical_margin" />
+	        android:layout_marginRight="@dimen/activity_vertical_margin"
+	        android:layout_marginBottom="5dp" 
+	        >
+	       	
+	       	<TextView
+			    android:id="@+id/dayView_LabelHeader_ListA"
+			    style="@style/dayViewLabel" 
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" />
 		
+	    </RelativeLayout>
+
 		<ListView 
 		    android:id="@+id/dayView_ListA"
 			android:layout_width="fill_parent"
@@ -52,26 +55,28 @@
 	    android:id="@+id/dayView_LayoutHost_ListB"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="10dp"
+	    android:layout_marginTop="5dp"
 	    android:orientation="vertical">
 	    
 	    
-		<TextView
-		    android:id="@+id/dayView_LabelHeader_ListB"
-		    style="@style/headerLabel" 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="@dimen/activity_vertical_margin"
-        	android:layout_marginRight="@dimen/activity_vertical_margin" />
-
-	    <View
+	    <RelativeLayout 
 	        android:layout_width="fill_parent"
-	        android:layout_height="3dp"
-	        android:layout_marginBottom="5dp"
-	        android:background="@drawable/biljet_gradient"
+	        android:layout_height="40dp" 
+	        android:background="@drawable/dayview_header_created_bg"
 	        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        	android:layout_marginRight="@dimen/activity_vertical_margin" />
+	        android:layout_marginRight="@dimen/activity_vertical_margin"
+	        android:layout_marginBottom="5dp" >
+	       	
+	       	<TextView
+			    android:id="@+id/dayView_LabelHeader_ListB"
+			    style="@style/dayViewLabel" 
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" />
 		
+	    </RelativeLayout>
+	    
 		<ListView 
 		    android:id="@+id/dayView_ListB"
 			android:layout_width="fill_parent"

@@ -106,8 +106,14 @@ public class EventViewActivity extends FragmentActivity {
 		int auxInt = 0;
 		
 		ImageView eventImageView = (ImageView)findViewById(R.id.eventView_ImageView_Avatar);
-		//eventImage.setImageResource(e.getImage());		
-		File imgFile = new File(currentEvent.getImagePath());
+		//eventImage.setImageResource(e.getImage());	
+		
+	//String imgPath //= getIntent().getExtras().getString("IMG_PATH");
+		
+		//if (imgPath == null)
+		String	imgPath = currentEvent.getImagePath();
+		
+		File imgFile = new File(imgPath);
 		if(imgFile.exists()){
 		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 		    eventImageView.setImageBitmap(myBitmap);
@@ -301,12 +307,8 @@ public class EventViewActivity extends FragmentActivity {
 			
 		}
 		
-		
-		
 
-		
-
-	}
+	} // onCreate()
 
 	// RECOGER DATOS QR
 	// ***********************************************************************************

@@ -1,6 +1,9 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -12,8 +15,12 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,11 +38,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,6 +62,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.biljet.adapters.SpinnerAdapter;
+import com.biljet.types.Category;
 import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.biljet.types.Province;
@@ -63,7 +76,7 @@ public class NewEventActivity extends Activity {
     // **************************************************************************************
 	
 	// Atributos para los Date y Time Pickers
-	private Calendar dateTime = Calendar.getInstance();    
+	private Calendar dateTime;    
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMMM , yyyy");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm"); 
     private SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd MMMM yyyy - HH:mm");
@@ -91,10 +104,13 @@ public class NewEventActivity extends Activity {
     private String addressPrefix;
     private int province = 1;
     private String category;
-    private int postImage = 0;	//?¿
+    
+    // Almacena la ruta de la imagen en el telefono seleccionada por el usuario
+    private String imagePath = "";
+    private String imageName = "";
     
     // Variable auxiliar para almacenar el evento creado
-    private Event newEventOrganized;
+    private Event newEventCreated;
     
     // Variables para la conexion con la BD
 	private DBConnection connector;				// Tarea en segundo plano para realizar el post a la DB
@@ -119,8 +135,8 @@ public class NewEventActivity extends Activity {
     final int [] arrayIMG = {R.drawable.logo_evento,R.drawable.android1,R.drawable.android2,R.drawable.android3};
     
     // Spinner: Array de tipos de eventos.
-    final String [] arrayTypeEvents = {"Comedia/Monólogos","Cine","Concierto","Conferencia","Cultural","Cumpleaños",
-    								   "Deportivo","Excursión","Exposición","Fiesta","Musical","Ocio","Reunión","Teatro"}; 
+    final String [] arrayTypeEvents = {"Comedia/Monólogos","Cine","Concierto","Concurso/Torneo","Conferencia","Cultural",
+    								   "Deportivo","Excursión","Exposición","Fiesta","Musical","Ocio","Reunión","Teatro/Espectáculo"}; 
     // Spinner: Array prefijo de direccion
     final String[] arrayAddressPrefix = {"C/","Avda.","Plaza","Urb.","Paseo","Otro (Especificar)"};
        
@@ -140,9 +156,40 @@ public class NewEventActivity extends Activity {
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
         
+		
+        // AJUSTAR FECHAS
+		// **************************************************************************************
+		
+		// Recoger Fecha por Bundle desde Calendario o 0 en otro caso
+		long dateSelected = 0;
+		if (getIntent().getExtras() != null)
+			dateSelected = getIntent().getExtras().getLong("DATE_SELECTED", 0);
+		
+		// Obtener la fecha actual/hora actuales
+		dateTime = Calendar.getInstance();
+		
+		// Inicializar la fecha a 0
+		dateTime.set(Calendar.HOUR, 0);
+		dateTime.set(Calendar.MINUTE, 0);
+		dateTime.set(Calendar.SECOND, 0);
+		
+		// Si le pasamos una fecha por Intent (desde el calendario) setear la
+		// fecha al valor obtenido
+		if (dateSelected != 0)
+			dateTime.setTimeInMillis(dateSelected);
+			
+		// Inicializamos las variables que recogen los datos
+		dayPicked = dateTime.get(Calendar.DAY_OF_MONTH);
+		monthPicked = dateTime.get(Calendar.MONTH);
+		yearPicked = dateTime.get(Calendar.YEAR);
+		
+		
 		// BOTON: Fijar Fecha
 		// **************************************************************************************
-
+		
+		// Comprobamos si la llamada se hace desde la vista calendario desde un dia
+		// concreto para ajusta los valores a los del dia seleccionado en el calenario	
+		
 		buttonDatePicker = (Button) findViewById(R.id.newEvent_Button_SetDate);	
 		editTextDate = (EditText) findViewById(R.id.newEvent_EditText_Date);			
 		editTextDate.setText(dateFormatter.format(dateTime.getTime()));	
@@ -170,7 +217,7 @@ public class NewEventActivity extends Activity {
 		// BOTON: Cambiar imagen
 		// **************************************************************************************
 
-		Button buttonChangeImage = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
+		Button buttonChangeImage = (Button) findViewById(R.id.newEvent_Button_OpenGallery);
 		buttonChangeImage.setOnClickListener(new View.OnClickListener() {             
             public void onClick(View arg0) {
                  
@@ -194,7 +241,7 @@ public class NewEventActivity extends Activity {
 	        	// Preparar el dialogo de proceso para el inicio de sesion
 	            postProgress = new ProgressDialog(NewEventActivity.this);
 	            postProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	            postProgress.setMessage("Envíando evento...");
+	            postProgress.setMessage("Creando evento...");
 	            postProgress.setCancelable(true);
 	            postProgress.setOnCancelListener(new OnCancelListener(){
 	            
@@ -211,13 +258,13 @@ public class NewEventActivity extends Activity {
 	            //postProgress.show();
 	            
 	            createNewEvent();
-	           /* if (newEventOrganized != null){
+	           /* if (newEventCreated != null){
 	            	connector = new DBConnection();
 					connectionAlive = true;
 		        	connector.execute();
             		}
 	            else
-	            	newEventOrganized = null;*/
+	            	newEventCreated = null;*/
 	        }
 	    	
 	    });
@@ -280,7 +327,7 @@ public class NewEventActivity extends Activity {
 			}
 			
 	  });
-			addListenerChangeImage();
+			
 		
 		// SPINNER: PREFIJO DE DIRECCION (C/, Pza, Avda, ... etc)
      	// **************************************************************************************
@@ -304,53 +351,67 @@ public class NewEventActivity extends Activity {
 			}
 			
 	  });
-			addListenerChangeImage();
+			
+		//addListenerChangeImage();
 			
 	    }  //onCreate
-	    
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				showCancelEventAlertDialog();
+				break;
+		}
+
+		return true;
+	}
+    
 	// GALERIA DE IMAGENES
     // **************************************************************************************
-		
-    //Método para cambiar las imagenes, mas adelante utulizaremos el metodo para acceder a la galeria de imagemes.    
-	public void addListenerChangeImage() {				
-			
-			final ImageView image = (ImageView) findViewById(R.id.newEvent_Image);	 
-			Button button = (Button) findViewById(R.id.newEvent_ButtonChangeImage);
-			
-			button.setOnClickListener(new OnClickListener() {				
-				public void onClick(View arg0) {
-					postImage = (postImage+1)%(arrayIMG.length);
-					image.setImageResource(arrayIMG[postImage]);
-				}
-			});
-	}
-	 
-		 /*
-		  * PARA ACCEDER A GALERIA DE IMAGENES
-	   @Override
-	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	        super.onActivityResult(requestCode, resultCode, data);
-	         
-	        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-	            Uri selectedImage = data.getData();
-	            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-	 
-	            Cursor cursor = getContentResolver().query(selectedImage,
-	                    filePathColumn, null, null, null);
-	            cursor.moveToFirst();
-	 
-	            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-	            String picturePath = cursor.getString(columnIndex);	            
-	            cursor.close();
-	            
-	            ImageView imageView = (ImageView) findViewById(R.id.nuevoEvento_ImagenEvento);      
-	            
-	            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePathG));	           
-	         
-	        }    
-	    }
-		  */
 
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+ 
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+ 
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);	            
+            cursor.close();     
+            
+            ImageView imageView = (ImageView) findViewById(R.id.newEvent_Image);      
+            
+            if (checkImageSelected(picturePath))
+            	imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));	           
+            else
+            	showInvalidImageAlertDialog();
+        }    
+    }
+	  
+	private boolean checkImageSelected(String path){
+		
+		File image = new File(path);
+		
+		// Si el tamaño es menor de 300KB
+		if (image.length() <= 307200){
+			imagePath = path;
+			imageName = image.getName();
+			return true;
+			}
+		else
+			return false;
+		
+	}
+	
+	
 	// MOSTRAR DIALOGS: FECHA / HORA
     // **************************************************************************************
 		
@@ -420,8 +481,7 @@ public class NewEventActivity extends Activity {
 		builder.setPositiveButton("Aceptar",null);
 	
 		AlertDialog alert = builder.create();
-		postProgress.dismiss();
-		setRequestedOrientation(SENSOR_ON);
+
 		alert.show();
 		invalidFields = false;
 	}
@@ -433,20 +493,51 @@ public class NewEventActivity extends Activity {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
-		builder.setTitle("Biljet");
-		builder.setMessage("La fecha/hora no puede ser anterior a la actual. Por favor corrija el dato antes de enviar el formulario");
+		builder.setTitle("Biljet - Error");
+		builder.setMessage("La fecha/hora introducida no es válida. Recuerda que no puedes crear eventos con menos de 2 horas de antelación.\n\nPor favor, revisa el formulario y reinténtelo de nuevo");
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
 		builder.setCancelable(true);
 		builder.setPositiveButton("Aceptar",null);
 
 		AlertDialog alert = builder.create();
-		postProgress.dismiss();
 		
 		invalidDate = false;
-		setRequestedOrientation(SENSOR_ON);
 		alert.show();
 	}
 		
+	/**
+	* Method alert when user leaves empty fields
+	*/
+	private void showInvalidImageAlertDialog(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setTitle("Biljet - Error");
+		builder.setMessage("La imágen seleccionada no es válida: El tamaño excede los 300KB.\n\n¿Deseas seleccionar otra imagen o usar una por defecto?");
+	
+		
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setCancelable(false);
+		builder.setPositiveButton("Elegir otra",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						
+					}
+				});
+		builder.setNegativeButton("Usar por defecto",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						imageName = "eventDefault.png";
+					}
+				});
+		
+	
+		AlertDialog alert = builder.create();
+
+		alert.show();
+		invalidFields = false;
+	}
+	
    /**
     * Method alert when user press Cancel button
     */
@@ -484,32 +575,35 @@ public class NewEventActivity extends Activity {
 		
 		builder.setTitle("Biljet - Confirmar evento");
 		String message = "Confirme los siguientes datos:\n";
-		message += " > Título: " + newEventOrganized.getTitle() + "\n";
-		message += " > Categoría: " + newEventOrganized.getCategory() + "\n";
+		message += " > Título:\n  " + newEventCreated.getTitle() + "\n";
+		message += " > Categoría:\n  " + newEventCreated.getCategory() + "\n";
 		
-		float price = newEventOrganized.getPrice();
+		float price = newEventCreated.getPrice();
 		
 		if (Float.compare(0, price) ==  0)
-			message += " > Precio: Gratis\n";
+			message += " > Precio:\n  Gratis\n";
 		else
-			message += " > Precio: "+ price + "\n";
+			message += " > Precio:\n  "+ price + "\n";
 		
-		message += " > Aforo: " + newEventOrganized.getCapacity() + "\n";
-		message += " > Fecha: " + dateTimeFormatter.format(newEventOrganized.getDate()) + "\n";
+		message += " > Aforo:\n  " + newEventCreated.getCapacity() + "\n";
+		message += " > Fecha:\n  " + dateTimeFormatter.format(newEventCreated.getDate()) + "\n";
 		
-		int days = newEventOrganized.getDaysDuration();
-		int hours = newEventOrganized.getHoursDuration();
-		int minutes = newEventOrganized.getMinutesDuration();
+		int days = newEventCreated.getDaysDuration();
+		int hours = newEventCreated.getHoursDuration();
+		int minutes = newEventCreated.getMinutesDuration();
 		
 		if (days == 0 && hours == 0 && minutes == 0)
-			message += " > Duración: Indeterminado\n";
+			message += " > Duración:\n  Indeterminado\n";
 		else
-			message += " > Duración: " + days +" días " + hours + " h " + minutes + " min\n";
+			message += " > Duración:\n  " + days +" días " + hours + " h " + minutes + " min\n";
 		
-		message += " > Dirección: " + newEventOrganized.getAddress() + ", " + newEventOrganized.getCity() + "\n";
-		message += " > Código Postal: " + newEventOrganized.getPostalCode() + "\n";
-		message += " > Provincia: " + new Province().toString(newEventOrganized.getProvince()) + "\n";
-		message += " > Descripción: " + newEventOrganized.getDescription() + "\n\n";
+		if (!newEventCreated.getPlace().equals(""))
+			message += " > Lugar:\n  " + newEventCreated.getPlace() +  "\n";
+		
+		message += " > Dirección:\n  " + newEventCreated.getAddress() + ", " + newEventCreated.getCity() + "\n";
+		message += " > Código Postal:\n  " + newEventCreated.getPostalCode() + "\n";
+		message += " > Provincia:\n  " + new Province().toString(newEventCreated.getProvince()) + "\n";
+		message += " > Descripción:\n  " + newEventCreated.getDescription() + "\n";
 		message += "Si son correctos, pulse 'Enviar'. Si necesita corregir alguno, pulse 'Cancelar'";
 		
 		builder.setMessage(message);
@@ -545,7 +639,7 @@ public class NewEventActivity extends Activity {
 	*/
 	private void createNewEvent() { 
 	   
-		newEventOrganized = null;
+		newEventCreated = null;
 		fields.clear();
 		
 		String title = getTitleForm();
@@ -563,17 +657,20 @@ public class NewEventActivity extends Activity {
 		String city = getCityForm();
 		int postalCode = getPostalCodeForm();	
 		
+		if (imagePath.equals(""))
+			imageName ="eventDefault.png";
+		
 		if (invalidFields)
 			showInvalidFieldsAlertDialog();
 		else if (invalidDate)
 			showInvalidDateAlertDialog();
 		else {
-			newEventOrganized = new Event(title,
+			newEventCreated = new Event(title,
 										  "",  // creator
 										  "",  // id evento
 										  description,
-										  "eventDefault.png",  // imagePath
-										  category,
+										  imagePath, //"eventDefault.png",  // imagePath
+										  new Category().getValue(category),
 										  site,
 										  address,
 										  city,  // city
@@ -591,7 +688,7 @@ public class NewEventActivity extends Activity {
 			showConfirmEventDialog();
 		} // else
 		
-	   //return newEventOrganized;
+	   //return newEventCreated;
    
 	} //CrearNewEvent
     
@@ -733,11 +830,13 @@ public class NewEventActivity extends Activity {
 	*/
 	private long getDateForm(){
 	   
-		Calendar today = Calendar.getInstance();
+		Calendar now = Calendar.getInstance();
+		now.set(Calendar.HOUR, now.get(Calendar.HOUR)+2);
+		
 		Calendar aux = Calendar.getInstance();
-		aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked);
+		aux.set(yearPicked, monthPicked, dayPicked, hourPicked, minutePicked,0);
 	   
-		if (aux.getTimeInMillis() < today.getTimeInMillis())
+		if (aux.getTimeInMillis() < now.getTimeInMillis())
 			invalidDate = true;
 	   
 		return aux.getTimeInMillis();
@@ -896,30 +995,30 @@ public class NewEventActivity extends Activity {
                   	
 			// CAMPOS JSON REQUERIDOS            	
 			// **********************************************************  
-			jsonObject.put("title", newEventOrganized.getTitle() );
+			jsonObject.put("title", newEventCreated.getTitle() );
         	jsonObject.put("id", authentication[2] );
         	jsonObject.put("creator", authentication[2]);
         	jsonObject.put("password", authentication[3]);
-        	jsonObject.put("price", newEventOrganized.getPrice() );
+        	jsonObject.put("price", newEventCreated.getPrice() );
         	
-            jsonObject.put("address", newEventOrganized.getAddress() );
-            jsonObject.put("city",newEventOrganized.getCity() );
-            jsonObject.put("postalCode", newEventOrganized.getPostalCode() );
-            jsonObject.put("province", String.valueOf(newEventOrganized.getProvince()) );
+            jsonObject.put("address", newEventCreated.getAddress() );
+            jsonObject.put("city",newEventCreated.getCity() );
+            jsonObject.put("postalCode", newEventCreated.getPostalCode() );
+            jsonObject.put("province", String.valueOf(newEventCreated.getProvince()) );
             
-            jsonObject.put("capacity", String.valueOf(newEventOrganized.getCapacity()) );
-        	jsonObject.put("finishAt", newEventOrganized.getDate() );
-            jsonObject.put("description", newEventOrganized.getDescription() );
-            jsonObject.put("category", newEventOrganized.getCategory() );
-        	jsonObject.put("imageName", newEventOrganized.getImagePath() );
+            jsonObject.put("capacity", String.valueOf(newEventCreated.getCapacity()) );
+        	jsonObject.put("finishAt", newEventCreated.getDate() );
+            jsonObject.put("description", newEventCreated.getDescription() );
+            jsonObject.put("category", newEventCreated.getCategory() );
+        	jsonObject.put("imageName", imageName );
             
             // CAMPOS JSON NO REQUERIDOS 
             // **********************************************************
-        	if (!newEventOrganized.getPlace().equals(""))
-        		jsonObject.put("place", newEventOrganized.getPlace());
+        	if (!newEventCreated.getPlace().equals(""))
+        		jsonObject.put("place", newEventCreated.getPlace());
         	
-            jsonObject.put("longitude", newEventOrganized.getLongitude());
-            jsonObject.put("latitude", newEventOrganized.getLatitude());
+            jsonObject.put("longitude", newEventCreated.getLongitude());
+            jsonObject.put("latitude", newEventCreated.getLatitude());
             
             // Damos formato al JSON a enviar o el servidor lo rechazará
             StringEntity entity = new StringEntity(jsonObject.toString(),"UTF-8");
@@ -945,17 +1044,60 @@ public class NewEventActivity extends Activity {
 		return statusCode;	   
     }  
 
+    private void postEventImage(){
+    	    	
+    	//Bitmap bm = BitmapFactory.decodeFile("/sdcard/DCIM/forest.png");
+
+            try {
+              /*  ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bm.compress(CompressFormat.PNG, 90, bos);
+           
+                byte[] data = bos.toByteArray();
+                ByteArrayBody bab = new ByteArrayBody(data, "forest.jpg");
+               */ 
+                
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost postRequest = new HttpPost("http://www.biljetapp.com/upload");
+                
+                File file = new File(imagePath);
+                FileBody bin = new FileBody(file);
+                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                
+                //reqEntity.addPart("uploaded", bab);
+                reqEntity.addPart("eventImage", bin);
+                
+                postRequest.setEntity(reqEntity);
+                HttpResponse response = httpClient.execute(postRequest);
+                
+                //Recoger respuesta
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        response.getEntity().getContent(), "UTF-8"));
+                String sResponse;
+                StringBuilder s = new StringBuilder();
+             
+                while ((sResponse = reader.readLine()) != null) {
+                    s = s.append(sResponse);
+                }
+                
+                Log.d("POST_IMAGE","Response: " + s);
+            } catch (Exception e) {
+                // handle exception here
+                Log.e(e.getClass().getName(), e.getMessage());
+            }
+
+    }
+    
     private void setPosition(){
     	
-		String address =  newEventOrganized.getAddress() + ", " +
-						  newEventOrganized.getPostalCode() + " " +
-						  newEventOrganized.getCity() + " " +
-						  new Province().toString(newEventOrganized.getProvince());
+		String address =  newEventCreated.getAddress() + ", " +
+						  newEventCreated.getPostalCode() + " " +
+						  newEventCreated.getCity() + " " +
+						  new Province().toString(newEventCreated.getProvince());
 		
 		String siteAddress = null;
 		
-		if (!newEventOrganized.getSiteName().equals(""))
-			siteAddress = newEventOrganized.getSiteName() + " " + address;
+		if (!newEventCreated.getSiteName().equals(""))
+			siteAddress = newEventCreated.getSiteName() + " " + address;
 		else
 			siteAddress = "";
 		
@@ -1002,19 +1144,19 @@ public class NewEventActivity extends Activity {
 				  }
 			});   
 			
-            newEventOrganized.setLatitude(-1);
-            newEventOrganized.setLongitude(-1);
+            newEventCreated.setLatitude(-1);
+            newEventCreated.setLongitude(-1);
              
         }
         else {
         	//Obtenemos la latitud y longitud de la dirección dada.  
         	Address a = (Address) addresses.get(0);
         	
-            newEventOrganized.setLatitude(a.getLatitude());
-            newEventOrganized.setLongitude(a.getLongitude());
+            newEventCreated.setLatitude(a.getLatitude());
+            newEventCreated.setLongitude(a.getLongitude());
 
         }
-      Log.d("setPOsition","Lat: "+newEventOrganized.getLatitude()+"   Long: "+newEventOrganized.getLongitude());
+      Log.d("setPOsition","Lat: "+newEventCreated.getLatitude()+"   Long: "+newEventCreated.getLongitude());
     }
     
     
@@ -1037,10 +1179,35 @@ public class NewEventActivity extends Activity {
 		@Override
 		protected Integer doInBackground(Void... args) {
 			// Obtener la longitud y latitud de la localizacion
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  postProgress.setMessage("Situando evento..."); 
+				  }
+				});	
+			
 			setPosition();
 			
 			if (connector.isCancelled())
 				return -3;
+			
+			if (!imagePath.equals("")){
+				runOnUiThread(new Runnable() {
+					  public void run() {
+						  postProgress.setMessage("Cargando imágen..."); 
+					  }
+					});	
+				postEventImage();
+			}
+				
+			
+			if (connector.isCancelled())
+				return -3;
+			
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  postProgress.setMessage("Envíando evento..."); 
+				  }
+				});	
 			
 			return postEventToDB();
 		}
@@ -1060,7 +1227,8 @@ public class NewEventActivity extends Activity {
 			// Devolver resultado
 			switch(statusCode){
 				case 200: Intent showEvent = new Intent(NewEventActivity.this,EventViewActivity.class);
-						  showEvent.putExtra("EVENT", newEventOrganized);
+						  showEvent.putExtra("EVENT", newEventCreated);
+						  //showEvent.putExtra("IMAGE_PATH",imagePath);
 						  startActivity(showEvent);
 						  NewEventActivity.this.finish();
 						  break;
@@ -1087,6 +1255,8 @@ public class NewEventActivity extends Activity {
 
 	}
 	   
+	
+	
 	// BOTON MENU TELEFONO
 	// **************************************************************************************
 		/* 

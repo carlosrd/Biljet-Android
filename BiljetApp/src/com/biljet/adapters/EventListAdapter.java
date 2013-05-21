@@ -81,9 +81,11 @@ public class EventListAdapter extends BaseAdapter{
 			date.setText(auxDate);	
 			
 			TextView location = (TextView)item.findViewById(R.id.eventList_TxtPlace);
-			String site = events.get(position).getAddress()+", ";
+			String site = events.get(position).getPlace();
+			if (site.equals(""))
+				site = events.get(position).getAddress();
 			Province p = new Province();
-			site += p.toString(events.get(position).getProvince());
+			site += ", " + p.toString(events.get(position).getProvince());
 			location.setText(site);
 			
 			return item;

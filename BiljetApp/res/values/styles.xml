@@ -57,6 +57,14 @@
     	<item name="android:layout_marginBottom">2dp</item>
     </style>
     
+    <style name="dayViewLabel">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">18sp</item>
+    	<item name="android:textColor">#FFFFFF</item>
+    </style>
+    
     <!-- ESTILO ETIQUETAS DEL MENU
 	 	 *********************************************************************************** -->      
     
@@ -77,6 +85,8 @@
     	<item name="android:textColor">#e5e8ea</item>
     	<item name="android:layout_marginBottom">2dp</item>
     </style> 
+    
+    
   <!-- ========================================================================================= 
        Android Widgets
        ========================================================================================= -->  

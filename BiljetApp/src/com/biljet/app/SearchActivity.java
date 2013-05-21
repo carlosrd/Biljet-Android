@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.biljet.adapters.EventListAdapter;
+import com.biljet.types.Category;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -302,7 +303,7 @@ public class SearchActivity extends Activity {
 										   _id,
 										   description,
 										   imagePath,
-										   category,
+										   new Category().getLabel(category),
 										   place,	
 										   address,
 										   city,	
