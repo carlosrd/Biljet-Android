@@ -289,8 +289,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
 					android:layout_weight="40"
-					android:text="@string/newEvent_Button_SetDate"
-                    android:onClick="setDate" />
+					android:text="@string/newEvent_Button_SetDate" />
     
 			</LinearLayout>
 			
