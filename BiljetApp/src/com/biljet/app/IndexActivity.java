@@ -24,9 +24,11 @@ public class IndexActivity extends Activity {
 
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setHomeLogo(R.drawable.actionbar_logo);
-		actionBar.setTitle("Menu Principal");
-		actionBar.addAction(new IntentAction(this, createShareIntent(), android.R.drawable.ic_menu_share));
+		actionBar.setTitle("Inicio");
+		actionBar.addAction(new IntentAction(this, createShareIntent(), R.drawable.actionbar_share_action));
+		actionBar.addAction(new IntentAction(this, new Intent(this, HelpActivity.class), R.drawable.actionbar_help_action));
 		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.actionbar_myprofile_action));
+
 		
 	}	
 

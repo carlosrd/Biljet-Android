@@ -84,7 +84,6 @@ public class MyEventsActivity extends Activity {
 
         // ACTION BAR
      	// **************************************************************************************       
-        
 		actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Mis Eventos");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));

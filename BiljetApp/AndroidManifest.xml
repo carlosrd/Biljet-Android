@@ -60,7 +60,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyA9njTlWFjGTGu46AO-tm5tO9oiS5Mwo24" />
+            android:value="AIzaSyByFGH_Ly70NXOmUt7iCmqFepPmh84ygaE" />
 
         <!-- Activity + informacion para el intent SCAN del lector de QR -->
         <!-- =========================================================== -->
@@ -118,8 +118,8 @@
         </activity>
         <activity
             android:name="com.biljet.app.CalendarViewActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_calendar_view" >
+            android:label="@string/title_activity_calendar_view"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.SearchActivity"
@@ -153,6 +153,10 @@
         <activity
             android:name="com.biljet.app.SignUpActivity"
             android:label="@string/title_activity_sign_up" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.HelpActivity"
+            android:label="@string/title_activity_help" >
         </activity>
     </application>
 

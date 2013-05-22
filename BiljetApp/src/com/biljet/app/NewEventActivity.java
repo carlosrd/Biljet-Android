@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
@@ -1042,61 +1043,73 @@ public class NewEventActivity extends Activity {
 		return statusCode;	   
     }  
 
-    private void postEventImage(){
+    private boolean postEventImage(){
     	    	
     	//Bitmap bm = BitmapFactory.decodeFile("/sdcard/DCIM/forest.png");
+    	boolean imageUploaded = false;
+    	
+        try {
+        	// Si queremos comprimirla antes, utilizar este codigo
+        	// y situar "bab" en el FileBody
+        	/*  
+        	 * ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        	 * bm.compress(CompressFormat.PNG, 90, bos);
+        	 * 
+        	 * byte[] data = bos.toByteArray();
+        	 * ByteArrayBody bab = new ByteArrayBody(data, "forest.jpg");
+        	 */ 
+        	
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost postRequest = new HttpPost("http://www.biljetapp.com/upload");
+            
+            //File file = new File(imagePath);
+            //FileBody bin = new FileBody(file);
 
-            try {
-              /*  ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bm.compress(CompressFormat.PNG, 90, bos);
-           
-                byte[] data = bos.toByteArray();
-                ByteArrayBody bab = new ByteArrayBody(data, "forest.jpg");
-               */ 
-                Log.d("POSTIMAGE","entra en post image");
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost postRequest = new HttpPost("http://www.biljetapp.com/upload");
-                
-                Log.d("POSTIMAGE","ha creado el cliente");
-                File file = new File(imagePath);
-                FileBody bin = new FileBody(file);
-                Log.d("POSTIMAGE","ha accedido al archivo");
-                /*
-                String contentType = "image/png";
-                if (imagePath.endsWith(".jpg") || imagePath.endsWith(".JPG"))
-                	contentType = "image/jpeg";
-                else if (imagePath.endsWith(".png") || imagePath.endsWith(".PNG"))
-                	contentType = "image/png";
-                else if (imagePath.endsWith(".gif") || imagePath.endsWith(".GIF"))
-                	contentType = "image/gif";
-               	*/
-                
-               // ContentBody cbFile = new FileBody(new File(imagePath),contentType);
+            String contentType = "image/png";
+            if (imagePath.endsWith(".jpg") || imagePath.endsWith(".JPG"))
+            	contentType = "image/jpeg";
+            else if (imagePath.endsWith(".png") || imagePath.endsWith(".PNG"))
+            	contentType = "image/png";
+            else if (imagePath.endsWith(".gif") || imagePath.endsWith(".GIF"))
+            	contentType = "image/gif";
+           	
+            
+            ContentBody cbFile = new FileBody(new File(imagePath),contentType);
 
-                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-                Log.d("POSTIMAGE","crea el entity");
-                //reqEntity.addPart("uploaded", bab);
-                reqEntity.addPart("eventImage", bin);
-                Log.d("POSTIMAGE","añadida");
-                postRequest.setEntity(reqEntity);
-                HttpResponse response = httpClient.execute(postRequest);
-                Log.d("POSTIMAGE","ejecutada");
-                //Recoger respuesta
-                /*
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        response.getEntity().getContent(), "UTF-8"));
-                String sResponse;
-                StringBuilder s = new StringBuilder();
-             
-                while ((sResponse = reader.readLine()) != null) {
-                    s = s.append(sResponse);
-                }
-                
-                Log.d("POST_IMAGE","Response: " + s);*/
-            } catch (Exception e) {
-                // handle exception here
-                Log.e(e.getClass().getName(), e.getMessage());
+            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            //reqEntity.addPart("uploaded", bab);
+            reqEntity.addPart("eventImage",cbFile); // bin);
+
+            postRequest.setEntity(reqEntity);
+            HttpResponse response = httpClient.execute(postRequest);
+            int statusCode = response.getStatusLine().getStatusCode();
+            
+            if (statusCode == 200)
+            	imageUploaded = true;
+            else 
+            	imageUploaded = false;
+
+            
+            //Recoger respuesta
+            /*
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    response.getEntity().getContent(), "UTF-8"));
+            String sResponse;
+            StringBuilder s = new StringBuilder();
+         
+            while ((sResponse = reader.readLine()) != null) {
+                s = s.append(sResponse);
             }
+            
+            Log.d("POST_IMAGE","Response: " + s);*/
+        } catch (Exception e) {
+        	imageUploaded = false;
+            // handle exception here
+
+        }
+            
+        return imageUploaded;
 
     }
     

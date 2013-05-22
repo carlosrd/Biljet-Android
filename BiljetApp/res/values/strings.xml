@@ -14,18 +14,16 @@
     <string name="login_Button_SignUp"> ¡Unirme ahora! </string>
     <string name="login_Label_User">Usuario</string>
     <string name="login_Label_Password">Contraseña</string>
-    
+
     <!-- SignUpActivity -->
     <!-- *********************************************************************** -->
     <string name="signUp_LabelHeader_BasicData"> Tu cuenta Biljet </string>
     <string name="signUp_LabelHeader_OptionalData"> Acerca de ti&#8230;</string>
     <string name="signUp_LabelHeader_Confirm"> ¡Ya casi estás dentro!</string>
-    
-    <string name="signUp_Label_infoUsername"> Admite solo caracteres [a-z], [A-Z] y [0-9] </string>  
-    <string name="signUp_Label_infoOptionalData"> Opcionalmente, puedes incluir más detalles </string>   
+    <string name="signUp_Label_infoUsername"> Admite solo caracteres [a-z], [A-Z] y [0-9] </string>
+    <string name="signUp_Label_infoOptionalData"> Opcionalmente, puedes incluir más detalles </string>
     <string name="signUp_Hint_Username"> Ej: usuario43 </string>
- 	<string name="signUp_Hint_Mail"> Ej: usuario@biljetapp.com </string>
- 	
+    <string name="signUp_Hint_Mail"> Ej: usuario@biljetapp.com </string>
     <string name="signUp_Label_Username">Nombre de usuario: </string>
     <string name="signUp_Label_Password">Contraseña: </string>
     <string name="signUp_Label_RepeatPassword">Repite contraseña: </string>
@@ -34,17 +32,15 @@
     <string name="signUp_Label_Surname">Apellidos: </string>
     <string name="signUp_Label_Facebook">Facebook: </string>
     <string name="signUp_Label_Twitter">Twitter: </string>
-    
-    <string name="signUp_Button_CreateUser"> Unirme</string>    
-    <string name="signUp_Button_CancelUser"> Cancelar </string>   
-      
+    <string name="signUp_Button_CreateUser"> Unirme</string>
+    <string name="signUp_Button_CancelUser"> Cancelar </string>
+
     <!-- IndexMenuActivity -->
     <!-- *********************************************************************** -->
 
     <string name="indexMenu_optionSettings">Preferencias</string>
     <string name="indexMenu_optionAbout">Acerca de&#8230;</string>
     <string name="indexMenu_optionExit">Salir</string>
-    
     <string name="menuItem_Title_Discover">Descubrir</string>
     <string name="menuItem_Subtitle_Discover">Busca eventos, adquiere pases&#8230;</string>
     <string name="menuItem_Title_MyEvents">Mis Eventos</string>
@@ -52,6 +48,19 @@
     <string name="menuItem_Title_MyCalendar">Mi Calendario</string>
     <string name="menuItem_Subtitle_MyCalendar">Tu agenda Biljet</string>
 
+        
+    <!-- MyEventsActivity -->
+    <!-- *********************************************************************** -->
+
+    <string name="help_LabelHeader_Discover">Descubrir</string>
+	<string name="help_Discover_Info">En la sección Descubrir se muestra una lista con los últimos eventos que se han creado en Biljet.
+Pulsando sobre cada uno de ellos puedes obtener todos los detalles del mismo así como obtener pases para asistir. También tienes la posibilidad de utilizar el buscador para encontrar eventos por título</string>
+    <string name="help_MyEvents_Info">En la sección Mis Eventos se pueden mostrar dos listas. Una con los eventos para los que tienes un pase (asistes) y otra lista para los que has creado y organizas. Al pulsar sobre los eventos se muestra toda la información relevante de los mismos. Además, dependiendo de la lista que estés mostrando además podrás: </string>
+    <string name="help_MyCalendar_Info">En la sección Mi Calendario puedes llevar un seguimiento de tu agenda de eventos en Biljet. Al pulsar sobre un día, puedes ver en detalle en 2 listas separadas (asistes y organizas) que eventos tienes programados para dicha fecha. El calendario señala los días en los que tienes eventos concertados de la siguiente manera: </string>
+    
+    <string name="help_LabelHeader_Actions">Acciones disponibles: </string>
+    
+    
     <!-- MyEventsActivity -->
     <!-- *********************************************************************** -->
 
@@ -148,16 +157,13 @@
     <string name="newEvent_LabelHeader_Duration"> ¿Cuanto durará aprox.? </string>
     <string name="newEvent_LabelHeader_Image"> Elige una imagen&#8230; </string>
     <string name="newEvent_LabelHeader_Confirm"> ¡Confirma tu evento! </string>
-    
     <string name="newEvent_Label_infoAddress">Para una correcta situación del evento en el mapa, escribe direcciones basadas en el tipo + nombre de la vía y número.</string>
     <string name="newEvent_Label_infoSite">Opcionalmente, incluye aquí el nombre de las instalaciones</string>
     <string name="newEvent_Label_infoDuration">Para indeterminado introduce 0</string>
     <string name="newEvent_Label_infoImage">El tamaño de la imagen no podrá exceder los 300KB. Para una correcta visualización, te recomendamos que uses imágenes de unos 200x200</string>
-    
     <string name="newEvent_Hint_Description">Información del evento</string>
     <string name="newEvent_Hint_Site">Ej: Facultad de Informática</string>
     <string name="newEvent_Hint_Address">Ej: Goya 64</string>
-    
     <string name="newEvent_Label_Title">Nombre del evento: </string>
     <string name="newEvent_Label_Category">"Categoría:"</string>
     <string name="newEvent_Label_Site">Lugar:</string>
@@ -174,13 +180,11 @@
     <string name="newEvent_Label_Description">Descripción:</string>
     <string name="newEvent_Label_Date">Fecha:</string>
     <string name="newEvent_Label_Time">Hora:</string>
-    
     <string name="newEvent_Button_SetDate">Fijar fecha </string>
     <string name="newEvent_Button_SetTime">Fijar hora </string>
     <string name="newEvent_Button_CreateEvent">¡Crear! </string>
     <string name="newEvent_Button_CancelEvent">Cancelar </string>
-    <string name="newEvent_Button_OpenGallery">Abrir galería... </string> 
-    
+    <string name="newEvent_Button_OpenGallery">Abrir galería... </string>
     <string name="newEvent_Spinner_Prompt_Category">Selecciona una categoría para el evento:</string>
     <string name="newEvent_Spinner_Prompt_AddressType">Selecciona un tipo de vía:</string>
     <string name="newEvent_Spinner_Prompt_Province">Selecciona una provincia:</string>
@@ -212,12 +216,13 @@
     <!-- *********************************************************************** -->
 
     <string name="maps_Spinner_Prompt_MapType">Selecciona el tipo de mapa:</string>
-    
+
     <!-- Used in gallery part -->
     <!-- *********************************************************************** -->
 
     <string name="picture">Picture</string>
     <string name="title_activity_maps">Biljet - Mapa del Evento</string>
     <string name="title_activity_sign_up">Biljet - Registro</string>
+    <string name="title_activity_help">HelpActivity</string>
 
 </resources>
