@@ -1,9 +1,7 @@
 package com.biljet.app;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -1055,21 +1053,36 @@ public class NewEventActivity extends Activity {
                 byte[] data = bos.toByteArray();
                 ByteArrayBody bab = new ByteArrayBody(data, "forest.jpg");
                */ 
-                
+                Log.d("POSTIMAGE","entra en post image");
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost postRequest = new HttpPost("http://www.biljetapp.com/upload");
                 
+                Log.d("POSTIMAGE","ha creado el cliente");
                 File file = new File(imagePath);
                 FileBody bin = new FileBody(file);
-                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                Log.d("POSTIMAGE","ha accedido al archivo");
+                /*
+                String contentType = "image/png";
+                if (imagePath.endsWith(".jpg") || imagePath.endsWith(".JPG"))
+                	contentType = "image/jpeg";
+                else if (imagePath.endsWith(".png") || imagePath.endsWith(".PNG"))
+                	contentType = "image/png";
+                else if (imagePath.endsWith(".gif") || imagePath.endsWith(".GIF"))
+                	contentType = "image/gif";
+               	*/
                 
+               // ContentBody cbFile = new FileBody(new File(imagePath),contentType);
+
+                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                Log.d("POSTIMAGE","crea el entity");
                 //reqEntity.addPart("uploaded", bab);
                 reqEntity.addPart("eventImage", bin);
-                
+                Log.d("POSTIMAGE","añadida");
                 postRequest.setEntity(reqEntity);
                 HttpResponse response = httpClient.execute(postRequest);
-                
+                Log.d("POSTIMAGE","ejecutada");
                 //Recoger respuesta
+                /*
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         response.getEntity().getContent(), "UTF-8"));
                 String sResponse;
@@ -1079,7 +1092,7 @@ public class NewEventActivity extends Activity {
                     s = s.append(sResponse);
                 }
                 
-                Log.d("POST_IMAGE","Response: " + s);
+                Log.d("POST_IMAGE","Response: " + s);*/
             } catch (Exception e) {
                 // handle exception here
                 Log.e(e.getClass().getName(), e.getMessage());

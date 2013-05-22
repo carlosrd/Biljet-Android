@@ -161,25 +161,25 @@
     <string name="newEvent_Label_Title">Nombre del evento: </string>
     <string name="newEvent_Label_Category">"Categoría:"</string>
     <string name="newEvent_Label_Site">Lugar:</string>
-    <string name="newEvent_Label_Address">"Dirección:"</string>
-    <string name="newEvent_Label_City">"Ciudad:"</string>
-    <string name="newEvent_Label_PostalCode">"Código Postal:"</string>
-    <string name="newEvent_Label_Province">"Provincia":"</string>
-    <string name="newEvent_Label_Price">"Precio:"</string>
-    <string name="newEvent_Label_Duration">"Duración aproximada:"</string>
-    <string name="newEvent_Label_DaysDuration">"Días:"</string>
-    <string name="newEvent_Label_HoursDuration">"Horas"</string>
-    <string name="newEvent_Label_MinutesDuration">"Min:"</string>
-    <string name="newEvent_Label_Capacity">"Aforo:"</string>
-    <string name="newEvent_Label_Description">"Descripción:"</string>
-    <string name="newEvent_Label_Date">"Fecha:"</string>
-    <string name="newEvent_Label_Time">"Hora:"</string>
+    <string name="newEvent_Label_Address">Dirección:</string>
+    <string name="newEvent_Label_City">Ciudad:</string>
+    <string name="newEvent_Label_PostalCode">Código Postal:</string>
+    <string name="newEvent_Label_Province">Provincia:</string>
+    <string name="newEvent_Label_Price">Precio:</string>
+    <string name="newEvent_Label_Duration">Duración aproximada:</string>
+    <string name="newEvent_Label_DaysDuration">Días:</string>
+    <string name="newEvent_Label_HoursDuration">Horas:</string>
+    <string name="newEvent_Label_MinutesDuration">Min:</string>
+    <string name="newEvent_Label_Capacity">Aforo:</string>
+    <string name="newEvent_Label_Description">Descripción:</string>
+    <string name="newEvent_Label_Date">Fecha:</string>
+    <string name="newEvent_Label_Time">Hora:</string>
     
-    <string name="newEvent_Button_SetDate">"Fijar fecha" </string>
-    <string name="newEvent_Button_SetTime">"Fijar hora" </string>
-    <string name="newEvent_Button_CreateEvent">"¡Crear!" </string>
-    <string name="newEvent_Button_CancelEvent">"Cancelar" </string>
-    <string name="newEvent_Button_OpenGallery">"Abrir galería..." </string> 
+    <string name="newEvent_Button_SetDate">Fijar fecha </string>
+    <string name="newEvent_Button_SetTime">Fijar hora </string>
+    <string name="newEvent_Button_CreateEvent">¡Crear! </string>
+    <string name="newEvent_Button_CancelEvent">Cancelar </string>
+    <string name="newEvent_Button_OpenGallery">Abrir galería... </string> 
     
     <string name="newEvent_Spinner_Prompt_Category">Selecciona una categoría para el evento:</string>
     <string name="newEvent_Spinner_Prompt_AddressType">Selecciona un tipo de vía:</string>
@@ -189,24 +189,24 @@
     <!-- *********************************************************************** -->
 
     <string name="settingsView_LabelNotifications">Notificaciones </string>
-    <string name="settingsView_CheckBoxReceiveMsg">"Recibir mensajes en este terminal"</string>
-    <string name="settingsView_CheckBoxRMsgBySound">"Con sonido"</string>
-    <string name="settingsView_CheckBoxRMsgByVibration">"Con vibración"</string>
-    <string name="settingsView_checkBoxRMsgByLight">"Con lumínicas*"</string>
-    <string name="settingsView_CheckBoxRMsgByEmail">"Recibir notificaciones por E-mail"</string>
-    <string name="settingsView_LabelPersonalData">"Datos personales"</string>
-    <string name="settingsView_LabelUpdatePersonalData">"Actualizar datos personales"</string>
-    <string name="settingsView_LabelPhone">"Teléfono"</string>
-    <string name="settingsView_LabelMobil">"Móvil"</string>
-    <string name="settingsView_LabelAddress">"Dirección"</string>
-    <string name="settingsView_LabelCountBiljet">"Tu cuenta Biljet" </string>
-    <string name="settingsView_LabelUpdateCountBiljet">"Actualizar datos de tu cuenta Biljet" </string>
-    <string name="settingsView_CheckBoxChangePassword">"Cambiar la contraseña" </string>
-    <string name="settingsView_LabelCurrentPassword">"Actual" </string>
-    <string name="settingsView_LabelNewPassword"> "Nueva"</string>
-    <string name="settingsView_LabelRepeatNewPassword"> "Repita"</string>
-    <string name="settingsView_ButtonSaveAndBack"> "Guardar y volver"</string>
-    <string name="settingsView_ButtonBack"> "Volver"</string>
+    <string name="settingsView_CheckBoxReceiveMsg">Recibir mensajes en este terminal</string>
+    <string name="settingsView_CheckBoxRMsgBySound">Con sonido</string>
+    <string name="settingsView_CheckBoxRMsgByVibration">Con vibración</string>
+    <string name="settingsView_checkBoxRMsgByLight">Con lumínicas*</string>
+    <string name="settingsView_CheckBoxRMsgByEmail">Recibir notificaciones por E-mail</string>
+    <string name="settingsView_LabelPersonalData">Datos personales</string>
+    <string name="settingsView_LabelUpdatePersonalData">Actualizar datos personales</string>
+    <string name="settingsView_LabelPhone">Teléfono</string>
+    <string name="settingsView_LabelMobil">Móvil</string>
+    <string name="settingsView_LabelAddress">Dirección</string>
+    <string name="settingsView_LabelCountBiljet">Tu cuenta Biljet </string>
+    <string name="settingsView_LabelUpdateCountBiljet">Actualizar datos de tu cuenta Biljet </string>
+    <string name="settingsView_CheckBoxChangePassword">Cambiar la contraseña </string>
+    <string name="settingsView_LabelCurrentPassword">Actual </string>
+    <string name="settingsView_LabelNewPassword"> Nueva</string>
+    <string name="settingsView_LabelRepeatNewPassword"> Repita</string>
+    <string name="settingsView_ButtonSaveAndBack"> Guardar y volver</string>
+    <string name="settingsView_ButtonBack"> Volver</string>
 
     <!-- Used in gallery part -->
     <!-- *********************************************************************** -->

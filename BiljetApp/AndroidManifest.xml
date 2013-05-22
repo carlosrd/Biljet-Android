@@ -55,12 +55,12 @@
         android:theme="@style/AppTheme" >
 
         <!-- API Key para GMaps -->
-        <!-- DEBUG VALUE = AIzaSyBTlnWLb4_xrNZAqYQl0EHVD-wkqgOO6Ow -->
-        <!-- RELEASE VALUE = AIzaSyD_v4Uly4yvjZm12_pwVi2p3hCuAoi1H24  (Alias: biljet) -->
+        <!-- DEBUG VALUE = AIzaSyA9njTlWFjGTGu46AO-tm5tO9oiS5Mwo24 -->
+        <!-- RELEASE VALUE = AIzaSyByFGH_Ly70NXOmUt7iCmqFepPmh84ygaE  (Alias: biljet) -->
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD_v4Uly4yvjZm12_pwVi2p3hCuAoi1H24" />
+            android:value="AIzaSyByFGH_Ly70NXOmUt7iCmqFepPmh84ygaE" />
 
         <!-- Activity + informacion para el intent SCAN del lector de QR -->
         <!-- =========================================================== -->
