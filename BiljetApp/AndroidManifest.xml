@@ -60,7 +60,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyByFGH_Ly70NXOmUt7iCmqFepPmh84ygaE" />
+            android:value="AIzaSyA9njTlWFjGTGu46AO-tm5tO9oiS5Mwo24" />
 
         <!-- Activity + informacion para el intent SCAN del lector de QR -->
         <!-- =========================================================== -->
