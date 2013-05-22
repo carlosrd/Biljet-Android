@@ -46,8 +46,8 @@
 
     	        <ImageView
     	            android:id="@+id/eventView_ImageView_Avatar"
-    	            android:layout_width="@dimen/event_preview_image_width"
-    	            android:layout_height="@dimen/event_preview_image_height"
+    	            android:layout_width="125dp"
+    	            android:layout_height="125dp"
     	            android:layout_centerVertical="true"
     	            android:layout_centerHorizontal="true"
 					android:layout_marginTop="10dp"

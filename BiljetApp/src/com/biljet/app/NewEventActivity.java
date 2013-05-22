@@ -575,35 +575,35 @@ public class NewEventActivity extends Activity {
 		
 		builder.setTitle("Biljet - Confirmar evento");
 		String message = "Confirme los siguientes datos:\n";
-		message += " > Título:\n  " + newEventCreated.getTitle() + "\n";
-		message += " > Categoría:\n  " + newEventCreated.getCategory() + "\n";
+		message += " > Título:\n    " + newEventCreated.getTitle() + "\n";
+		message += " > Categoría:\n    " + newEventCreated.getCategory() + "\n";
 		
 		float price = newEventCreated.getPrice();
 		
 		if (Float.compare(0, price) ==  0)
-			message += " > Precio:\n  Gratis\n";
+			message += " > Precio:\n    Gratis\n";
 		else
 			message += " > Precio:\n  "+ price + "\n";
 		
-		message += " > Aforo:\n  " + newEventCreated.getCapacity() + "\n";
-		message += " > Fecha:\n  " + dateTimeFormatter.format(newEventCreated.getDate()) + "\n";
+		message += " > Aforo:\n    " + newEventCreated.getCapacity() + "\n";
+		message += " > Fecha:\n    " + dateTimeFormatter.format(newEventCreated.getDate()) + "\n";
 		
 		int days = newEventCreated.getDaysDuration();
 		int hours = newEventCreated.getHoursDuration();
 		int minutes = newEventCreated.getMinutesDuration();
 		
 		if (days == 0 && hours == 0 && minutes == 0)
-			message += " > Duración:\n  Indeterminado\n";
+			message += " > Duración:\n    Indeterminado\n";
 		else
-			message += " > Duración:\n  " + days +" días " + hours + " h " + minutes + " min\n";
+			message += " > Duración:\n    " + days +" días " + hours + " h " + minutes + " min\n";
 		
 		if (!newEventCreated.getPlace().equals(""))
-			message += " > Lugar:\n  " + newEventCreated.getPlace() +  "\n";
+			message += " > Lugar:\n    " + newEventCreated.getPlace() +  "\n";
 		
-		message += " > Dirección:\n  " + newEventCreated.getAddress() + ", " + newEventCreated.getCity() + "\n";
-		message += " > Código Postal:\n  " + newEventCreated.getPostalCode() + "\n";
-		message += " > Provincia:\n  " + new Province().toString(newEventCreated.getProvince()) + "\n";
-		message += " > Descripción:\n  " + newEventCreated.getDescription() + "\n";
+		message += " > Dirección:\n    " + newEventCreated.getAddress() + ", " + newEventCreated.getCity() + "\n";
+		message += " > Código Postal:\n    " + newEventCreated.getPostalCode() + "\n";
+		message += " > Provincia:\n    " + new Province().toString(newEventCreated.getProvince()) + "\n";
+		message += " > Descripción:\n    " + newEventCreated.getDescription() + "\n\n";
 		message += "Si son correctos, pulse 'Enviar'. Si necesita corregir alguno, pulse 'Cancelar'";
 		
 		builder.setMessage(message);
@@ -670,7 +670,7 @@ public class NewEventActivity extends Activity {
 										  "",  // id evento
 										  description,
 										  imagePath, //"eventDefault.png",  // imagePath
-										  new Category().getValue(category),
+										  category,
 										  site,
 										  address,
 										  city,  // city
@@ -1009,7 +1009,7 @@ public class NewEventActivity extends Activity {
             jsonObject.put("capacity", String.valueOf(newEventCreated.getCapacity()) );
         	jsonObject.put("finishAt", newEventCreated.getDate() );
             jsonObject.put("description", newEventCreated.getDescription() );
-            jsonObject.put("category", newEventCreated.getCategory() );
+            jsonObject.put("category", new Category().getValue(newEventCreated.getCategory()) );
         	jsonObject.put("imageName", imageName );
             
             // CAMPOS JSON NO REQUERIDOS 

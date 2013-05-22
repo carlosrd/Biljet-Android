@@ -8,7 +8,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -60,6 +59,7 @@ public class DayViewActivity extends Activity{
 		actionBar.setHomeAction(new IntentWithFinishAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
+		// Action: Nuevo evento
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR, 0);
 		today.set(Calendar.MINUTE, 0);
@@ -67,13 +67,23 @@ public class DayViewActivity extends Activity{
 		today.set(Calendar.MILLISECOND, 0);
 		today.set(Calendar.AM_PM,Calendar.AM);
 
-		Log.d("TIME","Choosed: " + choosedDate +"    Instance: "+ today.getTimeInMillis());
-		
+		String toGo = "";
+		String created = "";
+		// Si la fecha escogida es posterior o igual a hoy, dejamos crear evento 
+		// Tambien inicializamos los label
 		if (choosedDate >= today.getTimeInMillis()){
 			Intent newEventIntent = new Intent(this, NewEventActivity.class);
 			newEventIntent.putExtra("DATE_SELECTED", choosedDate);
 			actionBar.addAction(new IntentWithFinishAction(this, newEventIntent, R.drawable.actionbar_newevent_action));
+			
+			toGo = "Asistirás a...";
+			created = "Organizas...";
+		
+		} else {
+			toGo = "Estuviste en...";
+			created = "Organizaste...";
 		}
+		
         // HEADER LISTA A
      	// **************************************************************************************
         
@@ -86,11 +96,11 @@ public class DayViewActivity extends Activity{
 
 		if (eventsToGo.size() > 0){
 			
-			titleListA.setText("Asistirás a...");
+			titleListA.setText(toGo);
 			activeHostA = true;
 			
 			if (eventsCreated.size() > 0){
-				titleListB.setText("Organizas...");
+				titleListB.setText(created);
 				activeHostB = true;
 			}
 			else
