@@ -148,7 +148,7 @@ public class UpcomingEventsActivity extends Activity {
     	
     	try {
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/event");
+			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/event?limit=15");
 			HttpResponse response = httpclient.execute(getRequest);
 			StatusLine responseStatus = response.getStatusLine();
 			int statusCode = responseStatus.getStatusCode();
@@ -251,7 +251,7 @@ public class UpcomingEventsActivity extends Activity {
 				// ************************************************************************
 				imageName = jsonObject.getString("imageName");
 				
-				String imageURL = "http://www.biljetapp.com/img/" + imageName;
+				String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
 				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
 				
 				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");

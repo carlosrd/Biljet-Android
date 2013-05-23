@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+    
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
+    
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:background="#BDC3C7" />
+	
+	<RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" >
+
+		<ImageView
+		    android:id="@+id/qrview_ImageView_QR"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+		    android:layout_centerVertical="true"/>
+	</RelativeLayout>
+
+
+
+</LinearLayout>

@@ -378,7 +378,7 @@ public class SearchActivity extends Activity {
 						// ************************************************************************
 						imageName = jsonObject.getString("imageName");
 						
-						String imageURL = "http://www.biljetapp.com/img/" + imageName;
+						String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
 						imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
 						
 						File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
@@ -512,7 +512,7 @@ public class SearchActivity extends Activity {
 								// ************************************************************************
 								imageName = jsonObject.getString("imageName");
 								
-								String imageURL = "http://www.biljetapp.com/img/" + imageName;
+								String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
 								imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
 								
 								File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");

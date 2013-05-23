@@ -48,19 +48,16 @@
     <string name="menuItem_Title_MyCalendar">Mi Calendario</string>
     <string name="menuItem_Subtitle_MyCalendar">Tu agenda Biljet</string>
 
-        
     <!-- MyEventsActivity -->
     <!-- *********************************************************************** -->
 
     <string name="help_LabelHeader_Discover">Descubrir</string>
-	<string name="help_Discover_Info">En la sección Descubrir se muestra una lista con los últimos eventos que se han creado en Biljet.
+    <string name="help_Discover_Info">En la sección Descubrir se muestra una lista con los últimos eventos que se han creado en Biljet.
 Pulsando sobre cada uno de ellos puedes obtener todos los detalles del mismo así como obtener pases para asistir. También tienes la posibilidad de utilizar el buscador para encontrar eventos por título</string>
     <string name="help_MyEvents_Info">En la sección Mis Eventos se pueden mostrar dos listas. Una con los eventos para los que tienes un pase (asistes) y otra lista para los que has creado y organizas. Al pulsar sobre los eventos se muestra toda la información relevante de los mismos. Además, dependiendo de la lista que estés mostrando podrás: </string>
     <string name="help_MyCalendar_Info">En la sección Mi Calendario puedes llevar un seguimiento de tu agenda de eventos en Biljet. Al pulsar sobre un día, puedes ver en detalle en 2 listas separadas (asistes y organizas) que eventos tienes programados para dicha fecha. El calendario señala los días en los que tienes eventos concertados de la siguiente manera: </string>
-    
     <string name="help_LabelHeader_Actions">Acciones disponibles: </string>
-    
-    
+
     <!-- MyEventsActivity -->
     <!-- *********************************************************************** -->
 
@@ -220,5 +217,7 @@ Pulsando sobre cada uno de ellos puedes obtener todos los detalles del mismo as�
     <string name="title_activity_maps">Biljet - Mapa del Evento</string>
     <string name="title_activity_sign_up">Biljet - Registro</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_qrview">Biljet - QR Viewer</string>
+    <string name="title_activity_qrresults">QRResultsActivity</string>
 
 </resources>

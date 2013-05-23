@@ -127,6 +127,8 @@ public class MyEventsActivity extends Activity {
 							eventIntent.putExtra("EVENT", e);
 							eventIntent.putExtra("OWN?", isOwn);
 							eventIntent.putExtra("NO_TICKET", false);
+							if (!isOwn)
+								eventIntent.putExtra("SHOW_QR", true);
 							
 							startActivity(eventIntent);
 					
@@ -336,7 +338,7 @@ public class MyEventsActivity extends Activity {
 				
 				imageName = jsonObject.getString("imageName");
 				
-				String imageURL = "http://www.biljetapp.com/img/" + imageName;
+				String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/"+ imageName;
 				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
 				
 				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
@@ -472,7 +474,7 @@ public class MyEventsActivity extends Activity {
 				// ************************************************************************
 				imageName = jsonObject.getString("imageName");
 				
-				String imageURL = "http://www.biljetapp.com/img/" + imageName;
+				String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
 				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
 				
 				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");

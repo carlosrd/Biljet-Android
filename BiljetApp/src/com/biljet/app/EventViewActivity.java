@@ -122,6 +122,8 @@ public class EventViewActivity extends FragmentActivity {
 		
 		connectorIsGoing = new DBGet();
 		
+		boolean own = currentEvent.getCreatorId().equals(prepareUserId());
+
 		// Si es la vista de un evento para el que no tenemos pase, lo comprobamos
 		// para saber si mostrar el boton de "Adquirir Pase"
 		if (getIntent().getBooleanExtra("NO_TICKET", false))
@@ -130,13 +132,17 @@ public class EventViewActivity extends FragmentActivity {
 		buttonMultipurpose = (Button)findViewById(R.id.eventView_Button_Multipurpose);
 		if (getIntent().getBooleanExtra("OWN?", false)){
 			buttonMultipurpose.setVisibility(View.VISIBLE);
-			buttonMultipurpose.setText("Leer lista de invitados");
+			buttonMultipurpose.setText("Validar invitados");
 	        buttonMultipurpose.setOnClickListener(new OnClickListener() {
 		        							   public void onClick(View arg0) {
+		        								   
+		        								   Intent readQRs = new Intent(EventViewActivity.this,QRResultsActivity.class);
+		        								   startActivity(readQRs);
+		        								   /*
 		        								   // Intent para lanzar el lector de QR
 		        								   Intent intent = new Intent("com.biljet.app.SCAN");
 		        								   intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-		        								   startActivityForResult(intent, 0);
+		        								   startActivityForResult(intent, 0);*/
 		        							   }
 	        							   });
 			}
@@ -166,6 +172,17 @@ public class EventViewActivity extends FragmentActivity {
 			        							   }
 		        							   });
 				}
+		else if (getIntent().getBooleanExtra("SHOW_QR", false) && !own){
+			buttonMultipurpose.setVisibility(View.VISIBLE);
+			buttonMultipurpose.setText("Mostrar QR");
+	        buttonMultipurpose.setOnClickListener(new OnClickListener() {
+		        							   public void onClick(View arg0) {
+		        								   Intent viewQR = new Intent(EventViewActivity.this,QRViewActivity.class);
+		        								   viewQR.putExtra("EVENT_ID", currentEvent.get_id());
+		        								   startActivity(viewQR);
+		        							   }
+	        							   });
+			}
 		else
 			buttonMultipurpose.setVisibility(View.INVISIBLE);
   
@@ -331,6 +348,27 @@ public class EventViewActivity extends FragmentActivity {
 	
 	}
 	
+	private String prepareUserId(){
+		
+		String[] params = null;
+	
+		try {
+			params = new EncryptedData(EventViewActivity.this).decrypt();
+			return params[2];
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
+		
+		return "";
+	
+	}
+	
     private Intent createShareIntent() {
 		
         final Intent intent = new Intent(Intent.ACTION_SEND);
@@ -342,18 +380,26 @@ public class EventViewActivity extends FragmentActivity {
 	// RECOGER DATOS QR
 	// ***********************************************************************************
 	// Metodo para recoger los resultados de leer el QR
+    @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		   if (requestCode == 0) {
 		      if (resultCode == RESULT_OK) {
+		    	  
+		    	  Intent results = new Intent(EventViewActivity.this,QRResultsActivity.class);
+		    	  results.putExtra("SCAN_RESULT", intent.getStringExtra("SCAN_RESULT"));
+		    	  results.putExtra("SCAN_RESULT_FORMAT", intent.getStringExtra("SCAN_RESULT_FORMAT"));
+		    	  
+		    	  startActivity(results);
+		    	  /*
 		         String contents = intent.getStringExtra("SCAN_RESULT");
 		         String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 		         // Handle successful scan
 	             Toast toast = Toast.makeText(this, "Contenido:" + contents + "       Formato:" + format , Toast.LENGTH_LONG);
 	             toast.setGravity(Gravity.TOP, 25, 500);
-	             toast.show();
+	             toast.show();*/
 		      } else if (resultCode == RESULT_CANCELED) {
 		         // Handle cancel
-	             Toast toast = Toast.makeText(this, " ! : Escaneo cancelado", Toast.LENGTH_LONG);
+	             Toast toast = Toast.makeText(this, " ! : Escaneo cancelado por el usuario", Toast.LENGTH_LONG);
 	             toast.setGravity(Gravity.TOP, 25, 500);
 	             toast.show();
 		      }
