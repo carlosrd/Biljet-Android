@@ -17,38 +17,143 @@
        android:layout_marginBottom="5dp"
        android:background="#BDC3C7" />
 	
-	 <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="5dp" >
-        
-	    <EditText
-	        android:id="@+id/search_EditText_Input"
-	        android:layout_width="0dp" 
+  
+	<ViewSwitcher 
+	    android:id="@+id/search_FilterSwitcher"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="@dimen/activity_vertical_margin"
+	    android:layout_marginRight="@dimen/activity_vertical_margin">
+	    
+	    <!-- Vista 1: simple -->
+	    <LinearLayout
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:ems="10" >
-	        <requestFocus />
-        </EditText>
+	        android:orientation="vertical">
+	        
+	        <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:layout_marginBottom="5dp" >
+		        
+			    <EditText
+			        android:id="@+id/search_EditText_Input"
+			        android:layout_width="0dp" 
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:ems="10" 
+			        android:hint="Ej: Festival Jazz">
+			        <requestFocus />
+		        </EditText>
+		
+			    <ImageButton
+			        android:id="@+id/search_ImageButton_Search"
+			        android:layout_width="48dp"
+			        android:layout_height="48dp"
+			        android:layout_marginLeft="5dp"
+			        android:src="@drawable/button_search"
+			        android:background="@drawable/button_biljet" />
+		        
+		    </LinearLayout>
+	        
+	        <ListView
+			    android:id="@+id/search_MatchesList"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content">
+			</ListView>
+	        
+	    </LinearLayout>
 
-	    <ImageButton
-	        android:id="@+id/search_ImageButton_Search"
-	        android:layout_width="48dp"
-	        android:layout_height="48dp"
-	        android:layout_marginLeft="5dp"
-	        android:src="@drawable/button_search"
-	        android:background="@drawable/button_biljet" />
-        
-    </LinearLayout>
-	
-	<ListView
-	    android:id="@+id/search_MatchesList"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content">
-	</ListView>
+	    
+	   	<!-- Vista 2: Avanzada -->
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+	        
+	        <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:layout_marginBottom="3dp" >
+		        
+			    <EditText
+			        android:id="@+id/search_EditText_InputAdvanced"
+			        android:layout_width="0dp" 
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:ems="10" 
+			        android:hint="Ej: Festival Jazz">
+			        <requestFocus />
+		        </EditText>
+		
+			    <ImageButton
+			        android:id="@+id/search_ImageButton_SearchAdvanced"
+			        android:layout_width="48dp"
+			        android:layout_height="48dp"
+			        android:layout_marginLeft="5dp"
+			        android:src="@drawable/button_search"
+			        android:background="@drawable/button_biljet" />
+		
+		    </LinearLayout>
+	        
+	        <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+		           		
+              		<TextView 
+		                android:text="@string/newEvent_Label_Category" 
+		                style="@style/formLabel"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:layout_marginRight="2dp"
+		                 />
 
-	
+   		            <TextView 
+		                android:text="@string/newEvent_Label_Province" 
+		                style="@style/formLabel"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:layout_marginLeft="2dp"
+		                 />		
+		    </LinearLayout>
+	        
+	        <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:layout_marginBottom="5dp">
+   		            
+	            <Spinner
+					android:id="@+id/search_Spinner_Category"
+					android:layout_width="0dp"
+					android:layout_height="48dp"
+					android:layout_weight="1"
+					android:layout_marginRight="2dp"
+					android:prompt="@string/newEvent_Spinner_Prompt_Category"  />
+				
+    	    	<Spinner
+			   		android:id="@+id/search_Spinner_Province"
+			   		android:layout_width="0dp"
+			   		android:layout_height="48dp"
+			   		android:layout_weight="1"
+			   		android:layout_marginLeft="2dp"
+			   		android:prompt="@string/newEvent_Spinner_Prompt_Province" />		        
+		    </LinearLayout>
+
+	        
+	        <ListView
+			    android:id="@+id/search_MatchesListAdvanced"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content">
+			</ListView>
+	    </LinearLayout>
+	    
+
+	</ViewSwitcher>	        
+
 </LinearLayout>

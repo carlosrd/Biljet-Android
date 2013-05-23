@@ -220,6 +220,9 @@ public class Event implements Parcelable {
 		this.latitude = latitude;
 	}
 	
+	public void setImagePath(String imagePath){
+		this.imagePath = imagePath;
+	}
 	
 	//---------------------------Metodos de parcelable-----------------------------------------//
 	

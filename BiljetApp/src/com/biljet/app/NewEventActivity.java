@@ -582,7 +582,7 @@ public class NewEventActivity extends Activity {
 		if (Float.compare(0, price) ==  0)
 			message += " > Precio:\n    Gratis\n";
 		else
-			message += " > Precio:\n  "+ price + "\n";
+			message += " > Precio:\n    "+ price + "\n";
 		
 		message += " > Aforo:\n    " + newEventCreated.getCapacity() + "\n";
 		message += " > Fecha:\n    " + dateTimeFormatter.format(newEventCreated.getDate()) + "\n";
@@ -1222,7 +1222,10 @@ public class NewEventActivity extends Activity {
 						  postProgress.setMessage("Cargando imágen..."); 
 					  }
 					});	
-				postEventImage();
+				if (!postEventImage()){
+					newEventCreated.setImagePath("");
+					imageName ="eventDefault.png";
+				}
 			}
 				
 			
