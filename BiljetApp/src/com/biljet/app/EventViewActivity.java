@@ -98,7 +98,7 @@ public class EventViewActivity extends FragmentActivity {
 		actionBar.setTitle("Evento: "+ currentEvent.getTitle());
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+		actionBar.addAction(new IntentAction(this, createShareIntent(), R.drawable.actionbar_share_action));
 		
 		// IMAGEN DEL EVENTO
      	// **************************************************************************************
@@ -309,7 +309,39 @@ public class EventViewActivity extends FragmentActivity {
 		
 
 	} // onCreate()
+	
+	// COMPARTIR ACTION
+	// ***********************************************************************************
 
+	private String prepareUsername(){
+		
+		String[] params = null;
+	
+		try {
+			params = new EncryptedData(EventViewActivity.this).decrypt();
+			return params[0];
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
+		
+		return "";
+	
+	}
+	
+    private Intent createShareIntent() {
+		
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, prepareUsername() + " quiere compartir el evento "+ currentEvent.getTitle() + " publicado en Biljet contigo! Descargate nuestra APK desde el siguiente enlace: http://db.tt/k0odWEqh \nMás info: http://www.biljetapp.com");
+        return Intent.createChooser(intent, "Comparte evento BiljetApp por...");
+    }
+    
 	// RECOGER DATOS QR
 	// ***********************************************************************************
 	// Metodo para recoger los resultados de leer el QR

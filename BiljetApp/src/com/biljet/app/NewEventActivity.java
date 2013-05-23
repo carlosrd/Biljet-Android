@@ -1018,7 +1018,7 @@ public class NewEventActivity extends Activity {
         	
             jsonObject.put("longitude", newEventCreated.getLongitude());
             jsonObject.put("latitude", newEventCreated.getLatitude());
-            
+            jsonObject.put("duration", "Dura un cojon y medio!");
             // Damos formato al JSON a enviar o el servidor lo rechazará
             StringEntity entity = new StringEntity(jsonObject.toString(),"UTF-8");
            

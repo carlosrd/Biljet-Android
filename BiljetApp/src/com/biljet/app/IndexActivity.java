@@ -1,14 +1,22 @@
 package com.biljet.app;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.biljet.types.EncryptedData;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
@@ -29,7 +37,6 @@ public class IndexActivity extends Activity {
 		actionBar.addAction(new IntentAction(this, new Intent(this, HelpActivity.class), R.drawable.actionbar_help_action));
 		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.actionbar_myprofile_action));
 
-		
 	}	
 
 	public void onClickDiscover(View v){
@@ -87,6 +94,27 @@ public class IndexActivity extends Activity {
 		alert.show();
 	}
 	
+	private String prepareUsername(){
+		
+		String[] params = null;
+	
+		try {
+			params = new EncryptedData(IndexActivity.this).decrypt();
+			return params[0];
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
+		
+		return "";
+	
+	}
+	
     public static Intent createIntent(Context context) {
         Intent i = new Intent(context, IndexActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -94,10 +122,11 @@ public class IndexActivity extends Activity {
     }
 
     private Intent createShareIntent() {
+    		
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Comparte BiljetApp con tus amigos! Para descargar seguir el siguiente enlace: https://dl.dropbox.com/u/16354811/Android/BiljetApp.apk");
-        return Intent.createChooser(intent, "Share");
+        intent.putExtra(Intent.EXTRA_TEXT, prepareUsername() + " te invita a unirte Biljet! Descargate nuestra APK desde el siguiente enlace: http://db.tt/k0odWEqh \nMás info: http://www.biljetapp.com");
+        return Intent.createChooser(intent, "Comparte BiljetApp por...");
     }
     
 	// TECLA SUBMENU / BOTON ···
