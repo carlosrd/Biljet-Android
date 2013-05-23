@@ -35,11 +35,15 @@ public class MyProfileActivity extends Activity {
 	ActionBar actionBar;
 	TextView txtUsername;
 	TextView txtEmail;
+	TextView txtName;
+	TextView txtSurname;
+	TextView txtFacebook;
+	TextView txtTwitter;
 	
 	DBConnection connector;
 	boolean connectionAlive = false;
 	
-	String user,email;
+	String user,email,name,surname,facebook,twitter;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,11 @@ public class MyProfileActivity extends Activity {
 	//name and surname
 		txtUsername = (TextView)findViewById(R.id.myProfile_TextView_Username);
 		txtEmail = (TextView)findViewById(R.id.myProfile_TextView_Email);//txtNombre.setText(bundleDatos.getString(userProfile.getName() + " " + userProfile.getSurname()));
+    
+		txtName = (TextView)findViewById(R.id.myProfile_TextView_Name);
+		txtSurname = (TextView)findViewById(R.id.myProfile_TextView_Surname);
+		txtFacebook = (TextView)findViewById(R.id.myProfile_TextView_Facebook);
+		txtTwitter = (TextView)findViewById(R.id.myProfile_TextView_Twitter);
     }
 
     private String prepareUser(){
@@ -155,11 +164,31 @@ public class MyProfileActivity extends Activity {
   			user = jsonObject.getString("username");
   			email = jsonObject.getString("email");
   			
+  			name = jsonObject.getString("name");
+  			if (name.equals("null"))
+  				name = "No especificado";
+  			
+  			surname = jsonObject.getString("surname");
+  			if (surname.equals("null"))
+  				surname = "No especificado";
+  			
+  			facebook = jsonObject.getString("facebook");
+  			if (facebook.equals("null"))
+  				facebook = "No especificado";
+  			
+  			twitter = jsonObject.getString("twitter");
+  			if (twitter.equals("null"))	
+  				twitter = "No especificado";
+  				
   			runOnUiThread(new Runnable() {
 				  public void run() {
 						txtUsername.setText(user);
 			  			txtEmail.setText(email);
 			  		
+			  			txtName.setText(name);
+			  			txtSurname.setText(surname);
+			  			txtFacebook.setText(facebook);
+			  			txtTwitter.setText(twitter);
 				  }
 				});	
   	

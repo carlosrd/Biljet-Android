@@ -251,7 +251,47 @@
 		       	</LinearLayout>
 			</RelativeLayout>
 	        
-	        
+	       	<RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_Discover_Action2"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_filter_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_Discover_Action2">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Filtrar" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Permite buscar eventos por Título, Provincia, Categoría o combinaciones de ellos." /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout> 
 	         
 	        <!-- LABEL HEADER: Mis Eventos -->
 		    <RelativeLayout 
@@ -507,7 +547,7 @@
 	            android:layout_height="wrap_content" />
 	        
 	        <!-- Acciones Mis Calendario -->
-	        	        <RelativeLayout 
+	       <RelativeLayout 
 		        android:layout_width="fill_parent"
 		        android:clickable="false"
 		        android:layout_height="wrap_content" 
@@ -591,7 +631,47 @@
 		       	</LinearLayout>
 			</RelativeLayout>
 	        
-
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_MyCalendar_Action3"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_newevent_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_MyCalendar_Action3">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Crear nuevo evento" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="En la vista detallada de un día, lanza un formulario para crear un evento en la fecha seleccionada" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
 	        
 	        
 	        

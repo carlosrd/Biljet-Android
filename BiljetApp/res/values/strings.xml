@@ -55,7 +55,7 @@
     <string name="help_LabelHeader_Discover">Descubrir</string>
 	<string name="help_Discover_Info">En la sección Descubrir se muestra una lista con los últimos eventos que se han creado en Biljet.
 Pulsando sobre cada uno de ellos puedes obtener todos los detalles del mismo así como obtener pases para asistir. También tienes la posibilidad de utilizar el buscador para encontrar eventos por título</string>
-    <string name="help_MyEvents_Info">En la sección Mis Eventos se pueden mostrar dos listas. Una con los eventos para los que tienes un pase (asistes) y otra lista para los que has creado y organizas. Al pulsar sobre los eventos se muestra toda la información relevante de los mismos. Además, dependiendo de la lista que estés mostrando además podrás: </string>
+    <string name="help_MyEvents_Info">En la sección Mis Eventos se pueden mostrar dos listas. Una con los eventos para los que tienes un pase (asistes) y otra lista para los que has creado y organizas. Al pulsar sobre los eventos se muestra toda la información relevante de los mismos. Además, dependiendo de la lista que estés mostrando podrás: </string>
     <string name="help_MyCalendar_Info">En la sección Mi Calendario puedes llevar un seguimiento de tu agenda de eventos en Biljet. Al pulsar sobre un día, puedes ver en detalle en 2 listas separadas (asistes y organizas) que eventos tienes programados para dicha fecha. El calendario señala los días en los que tienes eventos concertados de la siguiente manera: </string>
     
     <string name="help_LabelHeader_Actions">Acciones disponibles: </string>
@@ -138,14 +138,10 @@ Pulsando sobre cada uno de ellos puedes obtener todos los detalles del mismo as�
 
     <string name="myProfile_Label_Username">> Usuario: </string>
     <string name="myProfile_Label_Email">> E-mail: </string>
-    <string name="myProfile_LabelCity">Ciudad: </string>
-    <string name="myProfile_LabelBio">Biografía: </string>
-    <string name="myProfile_find_me">Me puedes encontrar en: </string>
-    <string name="myProfile_LabelEvents_follow">Eventos a los que sigo: </string>
-    <string name="myProfile_LabelEvents_organized">Eventos que organizo: </string>
-    <string name="myProfile_LabelEvents_signup">Eventos a los que voy: </string>
-    <string name="myProfile_LabelTwitter">Twitter: </string>
-    <string name="myProfile_LabelFacebook">Facebook: </string>
+    <string name="myProfile_Label_Name">Nombre: </string>
+    <string name="myProfile_Label_Surname">Apellidos: </string>
+    <string name="myProfile_Label_Twitter">Twitter: </string>
+    <string name="myProfile_Label_Facebook">Facebook: </string>
     <string name="myProfile_LabelLast_login">Última visita el día: </string>
 
     <!-- NewEventActivity -->
