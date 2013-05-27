@@ -1,6 +1,7 @@
 package com.biljet.adapters;
 
 import java.util.Calendar;
+import java.util.HashSet;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.biljet.app.R;
+import com.biljet.app.R.drawable;
 
 public class CalendarAdapter extends BaseAdapter {
 	
@@ -21,16 +23,26 @@ public class CalendarAdapter extends BaseAdapter {
 	
 	private Context mContext;	// Context heredado de la anterior actividad
 
-    private Calendar month;			// Mes actual del calendario
-    private Calendar selectedDate;	//
+    private Calendar month;			// Fecha/Mes actual del calendario (timestamp)
+    private Calendar today;			// Almacenar la fecha de hoy
+    private Calendar selectedDate;  // Fecha seleccionada por el usuario
 	
+    // Conjuntos de dias con eventos (para mostrar iconito)
+    private HashSet<String> eventDaysToGo;
+    private HashSet<String> eventDaysCreated;
+    
+    
     public CalendarAdapter(Context c, Calendar monthCalendar) {
+    	
     	month = monthCalendar;
-    	selectedDate = (Calendar)monthCalendar.clone();
+    	today = (Calendar)monthCalendar.clone();
+    	selectedDate = Calendar.getInstance();
+    	selectedDate.setTimeInMillis(0);
+    	
     	mContext = c;
         month.set(Calendar.DAY_OF_MONTH, 1);
-        //this.items = new ArrayList<String>();
-        refreshDays();
+
+        refreshDays(new HashSet<String>(),new HashSet<String>());
     }
     
 	@Override
@@ -40,13 +52,11 @@ public class CalendarAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -67,64 +77,72 @@ public class CalendarAdapter extends BaseAdapter {
         if (days[position].equals("")) {
         	dayView.setClickable(false);
         	dayView.setFocusable(false);
-        	v.setBackgroundColor(Color.parseColor("#F0F8FF"));
+        	v.setBackgroundResource(drawable.calendar_white_bg);
         } // Si el día contiene algo (es un día del mes)
         else {
         	// Si es el día actual, lo resaltamos
-        	if (month.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR) && 
-        		month.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
-        		days[position].equals(""+selectedDate.get(Calendar.DAY_OF_MONTH))) {
-        		v.setBackgroundColor(Color.parseColor("#00BFFF"));
+        	if (month.get(Calendar.YEAR) == today.get(Calendar.YEAR) && 
+        		month.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+        		days[position].equals("" + today.get(Calendar.DAY_OF_MONTH))) {
+        		v.setBackgroundResource(drawable.calendar_today_bg);
         		dayView.setTextColor(Color.parseColor("#0B173B"));
         		//v.setBackgroundResource(R.drawable.item_background_focused);
         	}
-        	else { // Sino, aplicamos el estilo normal
-        		v.setBackgroundColor(Color.parseColor("#084B8A"));
+        	else { 
+            	// Si es el día actual, lo resaltamos
+            	if (month.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR) && 
+            		month.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
+            		days[position].equals("" + selectedDate.get(Calendar.DAY_OF_MONTH))) {
+            		v.setBackgroundResource(drawable.calendar_selected_date_bg);
+            		dayView.setTextColor(Color.WHITE);
+            		//v.setBackgroundResource(R.drawable.item_background_focused);
+            	}
+            	else {// Sino, aplicamos el estilo normal
+        		v.setBackgroundResource(drawable.calendar_day_bg);
         		dayView.setTextColor(Color.WHITE);
         		//v.setBackgroundResource(R.drawable.list_item_background);
+            	}
         	}
         }
         
         // Seteamos el texto del día con el correspondiente del array de días
         dayView.setText(days[position]);
         
-        // Eventos en dias 13 y 23 (PRUEBA LOCAL)
+        // Setear Iconos si hay eventos
         ImageView iconEvent = (ImageView)v.findViewById(R.id.calendarItem_IconDay);
-        if (days[position].equals("13") || days[position].equals("23")) 
-    		iconEvent.setVisibility(View.VISIBLE); 	
+        
+        if (eventDaysToGo.contains(days[position])){
+        	
+        	if (eventDaysCreated.contains(days[position]))
+        		iconEvent.setBackgroundResource(drawable.calendar_event_created);
+    		else
+    			iconEvent.setBackgroundResource(drawable.calendar_event_to_go);
+    		
+    		iconEvent.setVisibility(View.VISIBLE); 
+    		
+        	} 
+        else if (eventDaysCreated.contains(days[position])){
+        		   iconEvent.setVisibility(View.VISIBLE);
+        		   iconEvent.setBackgroundResource(drawable.calendar_event_created);
+        	} 
         else
-        	iconEvent.setVisibility(View.INVISIBLE); 	
-        
-        /*// create date string for comparison
-        String date = days[position];
-    	
-        if (date.length()==1) {
-    		date = "0"+date;
-    	}
-        
-    	String monthStr = ""+(month.get(Calendar.MONTH)+1);
-    	
-    	if(monthStr.length()==1) {
-    		monthStr = "0"+monthStr;
-    	}
-       
-        // show icon if date is not empty and it exists in the items array
-        ImageView iw = (ImageView)v.findViewById(R.id.date_icon);
-        if(date.length()>0 && items!=null && items.contains(date)) {        	
-        	iw.setVisibility(View.VISIBLE);
-        }
-        else {
-        	iw.setVisibility(View.INVISIBLE);
-        }*/
+        	iconEvent.setVisibility(View.INVISIBLE);
         
         return v;
 	}
 
+	public void setSelectedDate(Calendar selectedDate) {
+		this.selectedDate = selectedDate;
+	}
 	
-    public void refreshDays()
-    {
-    	// clear items
-    	//items.clear();
+	public void setMonth(Calendar selectedDate) {
+		this.month = selectedDate;
+	}
+
+	public void refreshDays(HashSet<String> eventDaysToGo, HashSet<String> eventDaysCreated){
+    	
+    	this.eventDaysToGo = eventDaysToGo;
+    	this.eventDaysCreated = eventDaysCreated;
     	
     	// Obtener cual es el << ultimo día del mes actual >> = Max día del mes actual => 28,30,31
         // --------------------------------------------------------------------
@@ -171,7 +189,5 @@ public class CalendarAdapter extends BaseAdapter {
         	dayNumber++;
         }
     }
-
-    // references to our items
 
 }

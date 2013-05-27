@@ -1,0 +1,110 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+    
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
+    
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:background="#BDC3C7" />
+	
+    <!-- LABEL HEADER: Resultados -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+        
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:clickable="false"
+        android:layout_height="50dp" 
+        android:background="@drawable/calendar_day_bg"
+        android:layout_marginBottom="5dp" >
+       	
+	       	<ImageView
+				android:id="@+id/qrresults_ImageView_Results"
+				android:layout_margin="1dp"
+				android:layout_marginLeft="5dp"
+			    android:layout_width="25dp"
+			    android:layout_height="25dp"
+			    android:src="@drawable/help_pencil"
+			    android:layout_centerVertical="true"
+			    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+	       	
+	       	<TextView
+			    style="@style/dayViewLabel" 
+			    android:layout_centerVertical="true"
+			    android:layout_toRightOf="@id/qrresults_ImageView_Results"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="Resultados" />
+		</RelativeLayout>
+		
+    
+    <!-- Barra de estado de lectura del QR -->
+	       <LinearLayout 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginTop="10dp"
+	            android:layout_marginBottom="10dp">
+            	
+            	<ImageView
+					android:id="@+id/qrresults_ImageView_StatusIcon"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="40dp"
+				    android:layout_height="40dp"
+				    android:src="@drawable/qr_init"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+	       	    
+            	<RelativeLayout 
+            	    android:layout_width="match_parent"
+            	    android:layout_height="match_parent"
+            	    android:layout_marginLeft="10dp">
+            	    <TextView
+            	        android:id="@+id/qrresults_TextView_Results"
+			            android:textSize="14sp"
+			    		android:layout_width="wrap_content"
+			    		android:layout_height="wrap_content"
+			    		android:layout_centerVertical="true"
+			    		android:text="Aun no se ha leido ningún QR..." />
+            	</RelativeLayout>
+
+	        </LinearLayout>
+	        
+	    <TextView
+	        style="@style/formLabel"
+         	android:id="@+id/qrresults_TextView_Results"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_centerVertical="true"
+    		android:text="¿Qué deseas hacer?" />    
+    		
+	       
+	       <Button
+	           android:id="@+id/qrresults_Button_Scan"
+	           android:layout_width="fill_parent"
+	           android:layout_height="wrap_content"
+	           android:text="Leer código QR"
+	           android:layout_marginBottom="8dp"
+	           android:layout_marginTop="5dp" />
+
+	       <Button
+	           android:id="@+id/qrresults_Button_Exit"
+	           android:layout_width="fill_parent"
+	           android:layout_height="wrap_content"
+	           android:text="Terminar"/>
+	</LinearLayout>
+</LinearLayout>

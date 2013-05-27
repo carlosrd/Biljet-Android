@@ -1,36 +1,86 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
-import com.biljet.adapters.ActivitiesHeader;
-import com.biljet.adapters.FriendsAdapter;
-import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
+import com.biljet.adapters.EventListAdapter;
+import com.biljet.adapters.SpinnerAdapter;
+import com.biljet.types.Category;
 import com.biljet.types.Event;
-import com.biljet.types.Friend;
+import com.biljet.types.Province;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.AbstractAction;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class SearchActivity extends ActivitiesHeader {
+public class SearchActivity extends Activity {
 	
 	// ATRIBUTOS
  	// **************************************************************************************
-
-	ArrayList<Event> eventsArray = new ArrayList<Event>();
-	ArrayList<Friend> friendsArray = new ArrayList<Friend>();
 	
+	// Objetos de la actividad
+	ActionBar actionBar;
 	EditText filterText;
+	EditText filterTextAdvanced;
+	ListView eventList;
+	ListView eventListAdvanced;
+	EventListAdapter eventListAdapter;
+	Spinner spinnerCategory;
+	Spinner spinnerProvince;
+	ViewSwitcher switcher;
 	
+	// ArrayList para recoger resultados de la busqueda
+	ArrayList<Event> itemsEvent;// = getEvents();
+	
+	// Conexion con la base de datos
+	DBConnection connector;
+	boolean connectionAlive;
+	
+	// Spinner: Array de tipos de eventos.
+    final String [] arrayTypeEvents = {"Todas","Comedia/Monólogos","Cine","Concierto","Concurso/Torneo","Conferencia","Cultural",
+    								   "Deportivo","Excursión","Exposición","Fiesta","Musical","Ocio","Reunión","Teatro/Espectáculo"}; 
+  	
+    int provincePicked;
+    String categoryPicked;
+    
+    boolean advanced;
+	// Necesario en caso de fallo en la descarga del avatar del evento. Si falla, borramos el archivo
+	String imagePath;		
+	
+	// CONSTRUCTORA
+ 	// **************************************************************************************
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,199 +88,628 @@ public class SearchActivity extends ActivitiesHeader {
 
         // ACTION BAR
      	// **************************************************************************************
-	    createHeaderView(R.drawable.header_back_button,"Buscar", android.R.drawable.ic_input_add,false);
-		setBackButton();
+
+		actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Buscar");
+		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.addAction(new FilterAction(R.drawable.actionbar_filter_action));
 		
+		filterText = (EditText)findViewById(R.id.search_EditText_Input);
+		filterTextAdvanced = (EditText)findViewById(R.id.search_EditText_InputAdvanced);
+		
+		// VISTA SIMPLE
+		// ********************************
 		// leemos el boton de busqueda
-		Button searchButton = (Button)findViewById(R.id.search_button);
+		ImageButton searchButton = (ImageButton)findViewById(R.id.search_ImageButton_Search);
 		searchButton.setOnClickListener(new OnClickListener() {
 					   public void onClick(View arg0) {
-						   Bundle b = getIntent().getExtras();
-						   char c = b.getChar("amigo_evento");
-						   searchList(c);
-						   filled(c);
+							
+						   if (!filterText.getText().toString().equals("")){
+							   if (!connectionAlive){
+								   connector = new DBConnection();
+								   connectionAlive = true;
+								   connector.execute(filterText.getText().toString());
+							   } else
+								   Toast.makeText(SearchActivity.this," ! : Conexión en curso. Espere...",Toast.LENGTH_SHORT).show(); 
+						   } else
+							   Toast.makeText(SearchActivity.this," ! : El campo Búsqueda está vacío",Toast.LENGTH_SHORT).show(); 
+						}
+				   });
+		
+		// LIST VIEW
+		// **************************************************************************************
+		
+		itemsEvent = new ArrayList<Event>();
+		eventListAdapter = new EventListAdapter(this,itemsEvent);
+        
+		// Setear oyentes OnClick
+		eventList = (ListView)findViewById(R.id.search_MatchesList);
+        eventList.setOnItemClickListener(new OnItemClickListener() {
+						public void onItemClick(AdapterView<?> a, View v, int idEvent, long id) {
+						//Acciones necesarias al hacer click
+							
+							Intent intentEvent = new Intent(SearchActivity.this, EventViewActivity.class);
+
+							Event e = itemsEvent.get(idEvent);
+							intentEvent.putExtra("EVENT",e);
+							intentEvent.putExtra("OWN?", false);
+							intentEvent.putExtra("NO_TICKET", true);
+							
+							startActivity(intentEvent);
+										
+							}
+						});
+        
+        eventList.setAdapter(eventListAdapter);
+		
+		// VISTA AVANZADA
+		// ************************************
+		// leemos el boton de busqueda
+		ImageButton searchAdvancedButton = (ImageButton)findViewById(R.id.search_ImageButton_SearchAdvanced);
+		searchAdvancedButton.setOnClickListener(new OnClickListener() {
+					   public void onClick(View arg0) {
+							
+						   if (!connectionAlive){
+						   	connector = new DBConnection();
+							connectionAlive = true;
+							connector.execute(filterTextAdvanced.getText().toString());
+						   }  else
+							   Toast.makeText(SearchActivity.this," ! : Conexión en curso. Espere...",Toast.LENGTH_SHORT).show(); 				   
 					   }
 				   });
 		
-		
 
+
+        
+    	// SPINNER: CATEGORIA EVENTO (Cine/Cumpleaños/Concierto/Conferencia)
+     	// **************************************************************************************
+
+		SpinnerAdapter spinnerCategoryAdapter = new SpinnerAdapter(this, arrayTypeEvents);	
+		spinnerCategory = (Spinner)findViewById(R.id.search_Spinner_Category);
+		spinnerCategoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
+		spinnerCategory.setAdapter(spinnerCategoryAdapter);		
+		
+		spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
+				
+				categoryPicked = arrayTypeEvents[position];
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0){
+				// ...
+			}
+			
+	  });	
+		
+		// SPINNER: PROVINCIA
+     	// **************************************************************************************
+		String[] provinces = new String[53];
+		provinces[0] = "Todas";
+		
+		String[] aux = new Province().toArrayString();
+		for (int i = 0; i < 52; i++)
+			provinces[i+1] = aux[i];
+		
+		SpinnerAdapter spinnerProvinceAdapter = new SpinnerAdapter(this, provinces);	
+		spinnerProvince = (Spinner)findViewById(R.id.search_Spinner_Province);
+		spinnerProvinceAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
+		spinnerProvince.setAdapter(spinnerProvinceAdapter);		
+		
+		spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent,android.view.View v, int position, long id) {
+			
+				provincePicked = position;		
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0){
+				// ...
+			}
+			
+	  });
+		
+		// LIST VIEW
+		// **************************************************************************************
+		
+		//itemsEvent = new ArrayList<Event>();
+		//eventListAdapter = new EventListAdapter(this,itemsEvent);
+        
+		// Setear oyentes OnClick
+		eventListAdvanced = (ListView)findViewById(R.id.search_MatchesListAdvanced);
+        eventListAdvanced.setOnItemClickListener(new OnItemClickListener() {
+						public void onItemClick(AdapterView<?> a, View v, int idEvent, long id) {
+						//Acciones necesarias al hacer click
+							
+							Intent intentEvent = new Intent(SearchActivity.this, EventViewActivity.class);
+
+							Event e = itemsEvent.get(idEvent);
+							intentEvent.putExtra("EVENT",e);
+							intentEvent.putExtra("OWN?", false);
+							intentEvent.putExtra("NO_TICKET", true);
+							
+							startActivity(intentEvent);
+										
+							}
+						});
+        
+        eventListAdvanced.setAdapter(eventListAdapter);
+		
+	advanced = false;	
+	switcher = (ViewSwitcher) findViewById(R.id.search_FilterSwitcher);	
+		
 	} // OnCreate()
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
-		return true;
-	}
 	
-	/**
-	 * Actions related to the menu options displayed when you press ··· or Config button on the device
-	 */
-	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-	        case R.id.indexSubmenu_optionSettings:
-	        	Intent openSettings = new Intent(SearchActivity.this,SettingsActivity.class);
-	        	startActivity(openSettings);
-	        	break;
-	    }
-	    return true;
-	}
-
+	// AUXILIARES CONEXION DB
+   	// **************************************************************************************
 	
-	/**
-	 * method who fills the listView depending c's value
-	 * @param c
-	 */
-	private void filled(char c){
-		switch(c){
-		
-			// buscar eventos
-			case 'e':
-				UpcomingEventsAdapter adapterEvent = new UpcomingEventsAdapter(this, eventsArray);
-				ListView eventList = (ListView)findViewById(R.id.list);
-			    
-			    eventList.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> a, View v, int idEvent, long id) {
-					//Acciones necesarias al hacer click
-			
-						Intent intentEvent = new Intent(SearchActivity.this, EventViewActivity.class);
-						
-						Event e = eventsArray.get(idEvent);					
-						intentEvent.putExtra("event",e);
-						intentEvent.putExtra("OWN?", false);
-						
-						startActivity(intentEvent);
-								
+	private boolean getSearchQuery(String query){
+	    
+			// CONEXION CON DB
+		   	// **************************************************************************************		
+	    	InputStream is = null;
+	    	
+	    	try {
+				
+				String URL;
+				if (advanced && query.equals(""))
+					URL = "http://www.biljetapp.com/api/event";
+				else{
+					URL = "http://www.biljetapp.com/api/event/search/" + query;
+					URL = URL.replace(" ","%20");
+				}
+				
+				HttpClient httpclient = new DefaultHttpClient();
+				HttpGet getRequest = new HttpGet(URL);
+				HttpResponse response = httpclient.execute(getRequest);
+				StatusLine responseStatus = response.getStatusLine();
+				int statusCode = responseStatus.getStatusCode();
+				if (statusCode == 200) {
+					HttpEntity entity = response.getEntity();
+					is = entity.getContent();
 					}
-				});
+				}
+			catch(Exception e) {
+				runOnUiThread(new Runnable() {
+					  public void run() {
+						  Toast.makeText(SearchActivity.this,"Error al conectar con el servidor!",Toast.LENGTH_SHORT).show(); 
+					  }
+					});	
+				
+				return false;
+				// En esta captura de excepción podemos ver que hay un problema con la
+				// conexión e intentarlo más adelante.
+			}
 			
-			    eventList.setAdapter(adapterEvent);
-			    break;
+			if (connector.isCancelled())
+				return false;
+						
+			String result = "";
+			
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+				StringBuilder sb = new StringBuilder();
+				sb.append(reader.readLine() + "\n");
+				String line="0";
+				
+				while ((line = reader.readLine()) != null) 
+					sb.append(line + "\n");
+				
+				is.close();
+				result = sb.toString();
+				
+				}
+			catch(Exception e) {
+				runOnUiThread(new Runnable() {
+					  public void run() {
+						  Toast.makeText(SearchActivity.this,"Error: No se ha podido completar la operacion!",Toast.LENGTH_SHORT).show(); 
+					  }
+					});	
+				return false;
+			}
+			
+			if (connector.isCancelled())
+				return false;
+			
+			
+			String title, creatorId, _id, description, imageName, category, 
+				   address, city, place;
+			int postalCode, province, capacity;
+			double price, latitude, longitude;
+			long date;
+				
+			itemsEvent.clear();
+			
+			try {
+				Log.d("Search","Entra bucle JSON");
+				JSONArray jsonArray = new JSONArray(result);
+				JSONObject jsonObject = null;
+				
+				if (jsonArray.length() == 0){
+					runOnUiThread(new Runnable() {
+						  public void run() {
+							  Toast.makeText(getBaseContext(), " ! : La búsqueda no encontró resultados", Toast.LENGTH_LONG).show();
+						  }
+						});	
+				}
+				
+				if (!advanced){
+					for(int i = 0; i < jsonArray.length(); i++){
+						jsonObject = jsonArray.getJSONObject(i);
+						
+						// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+						// ************************************************************************
+						
+						title = jsonObject.getString("title");
+						creatorId = jsonObject.getString("creator");
+						_id = jsonObject.getString("_id");
+						description = jsonObject.getString("description");		
+						category = jsonObject.getString("category");
 	
-			case 'a':
-				
-		        FriendsAdapter adapterFriends = new FriendsAdapter(this, friendsArray);
-		        ListView friendList = (ListView)findViewById(R.id.list);
-				
-		        friendList.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> a, View v, int idFriend, long id) {
-					//Acciones necesarias al hacer click
-						Intent intentFriend = new Intent(SearchActivity.this, FriendViewActivity.class);
-
-						Friend friend= friendsArray.get(idFriend);
-						intentFriend.putExtra("friend",friend);
-
-						startActivity(intentFriend);
-									
+						address = jsonObject.getString("address");
+						city = jsonObject.getString("city");
+						
+						// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+						// -------------
+						try{
+							postalCode = jsonObject.getInt("postalCode");
+						} catch (JSONException e){
+							postalCode = 0;
 						}
-					});
-		        
-		        friendList.setAdapter(adapterFriends);
-				break;
-		}// switch
+						
+						// Provincia (Numero => Lanza excepcion si no se puede convertir)
+						// -------------
+						try{
+							province = jsonObject.getInt("province"); 
+						} catch (JSONException e){
+							province = 0;
+						}
+						
+						capacity = jsonObject.getInt("capacity"); 
+						date = jsonObject.getLong("finishAt");
+						price = jsonObject.getDouble("price");
+	
+						// CACHING IMAGENES EVENTOS
+						// ************************************************************************
+						imageName = jsonObject.getString("imageName");
+						
+						String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
+						imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+						
+						File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
+						if(!imgFolder.exists())
+							imgFolder.mkdir();
+						
+						File imgFile = new File(imagePath);
+							
+						try {
+							// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+							if(!imgFile.exists())
+								saveImageFromURL(imageURL,imagePath);
+							
+						} catch(IOException e2) {
+								runOnUiThread(new Runnable() {
+									  public void run() {
+										  // Notificar error al guardar avatar
+										  //Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+										  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+										  File fileToDelete = new File(imagePath);
+										  if (fileToDelete.exists())
+											  fileToDelete.delete();
+									  }
+								});
+	
+						} // catch
+											
+						// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+						// ************************************************************************
+	
+						// Lugar (String => No lanza excepcion si es null)
+						// ---------
+						place = jsonObject.getString("place");
+						if (place.equals("null"))
+							place = "";		
+						
+						// Longitud
+						// -------------
+						try{
+							latitude = jsonObject.getDouble("latitude");;
+						} catch (JSONException e){
+							latitude = -1;
+						}
+						
+						// Latitud
+						// -------------
+						try{
+							longitude = jsonObject.getDouble("longitude"); 
+						} catch (JSONException e){
+							longitude = -1;
+						}
+	
+						Event event = new Event(title,
+											    creatorId,
+											   _id,
+											   description,
+											   imagePath,
+											   new Category().getLabel(category),
+											   place,	
+											   address,
+											   city,	
+											   postalCode,
+											   province,
+											   longitude,
+											   latitude,
+											   date,
+											   (float)price,
+											   capacity,
+											   0,0,0);
+											
+						itemsEvent.add(event);
+						
+					} // for
+				}
+				else {
+					categoryPicked = new Category().getValue(categoryPicked);
+					
+					for(int i = 0; i < jsonArray.length(); i++){
+						jsonObject = jsonArray.getJSONObject(i);
+						
+						// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+						// ************************************************************************
+						
+						// Provincia (Numero => Lanza excepcion si no se puede convertir)
+						// -------------
+						try{
+							province = jsonObject.getInt("province"); 
+						} catch (JSONException e){
+							province = 0;
+						}
+						
+						category = jsonObject.getString("category");
+						
+						Log.d("DEBUG", "JSONProvince: "+province+"  JSONCategory: " + category);
+						
+						
+						Log.d("DEBUG", "provincePicked: "+provincePicked+"   categoryPicked: "+categoryPicked);
+						if (provincePicked == 0 || 
+						   (provincePicked != 0 && provincePicked == province)){
+							
+							Log.d("DEBUG","Pasa 1er filtro");
+							if (categoryPicked.equals("Indefinido") ||
+							   (!categoryPicked.equals("Indefinido") && categoryPicked.equals(category))){
+								
+								Log.d("DEBUG","Pasa 2o filtro"); 
+										
+								title = jsonObject.getString("title");
+								creatorId = jsonObject.getString("creator");
+								_id = jsonObject.getString("_id");
+								description = jsonObject.getString("description");		
+								
 			
+								address = jsonObject.getString("address");
+								city = jsonObject.getString("city");
+								
+								// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+								// -------------
+								try{
+									postalCode = jsonObject.getInt("postalCode");
+								} catch (JSONException e){
+									postalCode = 0;
+								}
+								
+						
+								
+								capacity = jsonObject.getInt("capacity"); 
+								date = jsonObject.getLong("finishAt");
+								price = jsonObject.getDouble("price");
+			
+								// CACHING IMAGENES EVENTOS
+								// ************************************************************************
+								imageName = jsonObject.getString("imageName");
+								
+								String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
+								imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+								
+								File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
+								if(!imgFolder.exists())
+									imgFolder.mkdir();
+								
+								File imgFile = new File(imagePath);
+									
+								try {
+									// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+									if(!imgFile.exists())
+										saveImageFromURL(imageURL,imagePath);
+									
+								} catch(IOException e2) {
+										runOnUiThread(new Runnable() {
+											  public void run() {
+												  // Notificar error al guardar avatar
+												  //Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+												  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+												  File fileToDelete = new File(imagePath);
+												  if (fileToDelete.exists())
+													  fileToDelete.delete();
+											  }
+										});
+			
+								} // catch
+													
+								// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+								// ************************************************************************
+			
+								// Lugar (String => No lanza excepcion si es null)
+								// ---------
+								place = jsonObject.getString("place");
+								if (place.equals("null"))
+									place = "";		
+								
+								// Longitud
+								// -------------
+								try{
+									latitude = jsonObject.getDouble("latitude");;
+								} catch (JSONException e){
+									latitude = -1;
+								}
+								
+								// Latitud
+								// -------------
+								try{
+									longitude = jsonObject.getDouble("longitude"); 
+								} catch (JSONException e){
+									longitude = -1;
+								}
+			
+								Event event = new Event(title,
+													    creatorId,
+													   _id,
+													   description,
+													   imagePath,
+													   new Category().getLabel(category),
+													   place,	
+													   address,
+													   city,	
+													   postalCode,
+													   province,
+													   longitude,
+													   latitude,
+													   date,
+													   (float)price,
+													   capacity,
+													   0,0,0);
+													
+								itemsEvent.add(event);
+								
+							}
+						
+						}	
+							
+							
+							
+
+	
+					} // for
+				}
+				
+				} catch (JSONException e1) {
+					runOnUiThread(new Runnable() {
+						  public void run() {
+							  Toast.makeText(getBaseContext(), "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
+						  }
+						});	
+					
+					return false;
+				}
+	
+			
+			if (connector.isCancelled())
+				return false;
+			
+			return true;
 	}
-	
-	/**
-	 * method who fills the event list or friend list depending c's value
-	 * @param c
-	 */
-	private void searchList(char c){		
-		
-		switch(c){
-		
-			// buscar eventos
-			case 'e':
-				
-				//cogemos el nombre del evento que el usuario ha escogido
-				filterText = (EditText) findViewById(R.id.filterText);
-				String ev = filterText.getText().toString();
-				
-				ArrayList<Event> eventsList = getEvents();
-				eventsArray = filterEvents(ev,eventsList);	// Rellenamos la lista de eventos con los eventos encontrados
+		  
+    private void saveImageFromURL(String imageURL,String destinationPath) throws IOException{
+    	
+		URL url = new URL(imageURL);
+		File imgFile = new File(destinationPath);
+		imgFile.createNewFile();
+		InputStream input = null;
+		FileOutputStream output = null;
+		Log.d("tag3","Inicio try saveImage");
+		try {
+			
+		    input = url.openConnection().getInputStream();
+			Log.d("tag3","Conexion hecha!");
+		    output = new FileOutputStream(imgFile);
 
-				break;
-				
-			// buscar amigos
-			case 'a':
-				
-				//cogemos el nombre del amigo que el usuario ha escogido
-				filterText = (EditText) findViewById(R.id.filterText);
-				String am = filterText.getText().toString();
-				
-				ArrayList<Friend> friendsList = getFriends();
-				friendsArray = filterFriends(am,friendsList);	// Rellenamos la lista de amigos con los amigos encontrados			
+			Log.d("tag3","Abierto output!");
+			
+		    int read;
+		    byte[] data = new byte[1024];
+		    Log.d("tag3","Inicio bucle saveImage");
+		    while ((read = input.read(data)) != -1)
+		        output.write(data, 0, read);
+		    
+			Log.d("tag3","Termina bucle saveImage");
+			
+		} finally {
+		    if (output != null)
+		        output.close();
+		    if (input != null)
+		        input.close();
+		}
+    	
+    }
+	
+  
+	// CONEXION CON DB EN SEGUNDO PLANO
+   	// **************************************************************************************
+	
+    /*  Se instancia con 3 tipos:
+    		1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
+    		2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
+    		3º - Tipo de datos de SALIDA de doInBackground() y de ENTRADA en onPostExecute() => Datos para mostrar el fin de la tarea	
+    */
+    private class DBConnection extends AsyncTask<String,Integer,Boolean> {
 
-				break;
-		}// switch
-	}
+	    @Override
+	    protected void onPreExecute() {
+			actionBar.setProgressBarVisibility(View.VISIBLE);
+			eventList.setVisibility(View.INVISIBLE);
+	    }
+	 
+		@Override
+		protected Boolean doInBackground(String... params) {
+			return getSearchQuery(params[0]);
+		}
+		
+    	@Override
+	    protected void onProgressUpdate(Integer... values) {
 	
+	    }
+    	
+	    @Override
+	    protected void onPostExecute(Boolean result) {
+			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			connectionAlive = false;
+			eventList.setVisibility(View.VISIBLE);
+			eventListAdapter.notifyDataSetChanged();
+			
+	    }
+	 
+	    @Override
+	    protected void onCancelled() {
+	    	actionBar.setProgressBarVisibility(View.INVISIBLE);
+	    	connectionAlive = false;
+	    	Toast.makeText(getBaseContext(), "Conexión cancelada por el usuario!", Toast.LENGTH_LONG).show();
+	    }
 
-	/**
-	 * method which filters events whose name match with s
-	 * @param s
-	 * @param eventsList
-	 * @return
-	 */
-	private ArrayList<Event> filterEvents(String s, ArrayList<Event> eventsList){
-		ArrayList<Event> resultado = new ArrayList<Event>();
-		
-		for(Event e:eventsList)		
-			if(e.getName().contains(s))	 
-				resultado.add(e);
-		
-		return resultado;
-	}// filterEvents
-	
-	/**
-	 * method which filters events whose name match with s
-	 * @param s
-	 * @param friendsList
-	 * @return
-	 */
-	private ArrayList<Friend> filterFriends(String s, ArrayList<Friend> friendsList){
-		ArrayList<Friend> resultado = new ArrayList<Friend>();
-		
-		for(Friend f:friendsList)		
-			if(f.getName().contains(s))	
-				resultado.add(f);
-		
-		return resultado;
-	}// filterFriends	
-	
-	private ArrayList<Event> getEvents(){
-		ArrayList<Event> sampleItems = new ArrayList<Event>();
 
-		Event Event1 = new Event("Concierto ACDC",1 ,R.drawable.acdc_evento ,"Concierto", "Valladolid", new Date(8,12,2012,22,10),0,3,15, 40, 30, 200, "Empresa1 Conciertos", "Ya puede comprar las entradas ACDC. Los pioneros australianos del hard rock, se subirán de nuevo a los escenarios, este año presentarán su nueva gira mundial. La última vez que estuvieron de gira, fue hace 8 años. ¡Las entradas para la gira europea de AC/DC, están aquí disponibles! ¡Aproveche la oportunidad que le brindamos y oiga los éxitos legendarios de ACDC en concierto! Podrá oir el sonido inigualable de guitarra, que con el paso de los años no ha cambiado lo más mínimo. Los AC/DC siempre han sabido atraer a las masas. Las entradas para ver a los ACDC, le asegurarán una fantástica actuación en directo y podrá oir los éxitos “Back in Black”, “Highway to Hell” y “High Voltage” como también hits del último álbum “The Razor’s Edge” y “Ballbreaker”. Si nunca ha presenciado en directo a AC/DC, entonces no sabe lo que se pierde. Esta gira del grupo de rock duro, será seguramente, la última que ofrezcan, por eso tendrá que darse prisa, antes de que se agoten las entradas para los conciertos de AC/DC", 6);
-		Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event3 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
-		Event Event4 = new Event("Cine Forum",4 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),2,0,0, 3, 10, 5, "ONG", "organiza un cine fórum sobre la conocida película de Luis García Berlanga “Bienvenido Mr. Marshall” en el Ensanche de Vallecas, a la salida del metro Valdecarros (Avenida del Ensanche s/n), uno de los terrenos barajados en la Comunidad de Madrid como posible ubicación de Eurovegas", 7);
-	    
-		sampleItems.add(Event1);
-	    sampleItems.add(Event2);
-	    sampleItems.add(Event3);
-	    sampleItems.add(Event4);
-	    
-		return sampleItems;
-	}// getEvents
-	
-	private ArrayList<Friend> getFriends(){
-		ArrayList<Friend> Samples = new ArrayList<Friend>();
-	     Samples.add(new Friend(1, "Alan sdfds", "Londres", R.drawable.usr_alan , "Alan Mathison Turing, es un matemático, lógico, científico de la computación, criptógrafo y filósofo británico. Es considerado uno de los padres de la ciencia de la computación siendo el precursor de la informática moderna"));
-	     Samples.add(new Friend(2, "Albert Einstein", "Ulm", R.drawable.usr_albert,"Albert Einstein es un físico alemán de origen judío, nacionalizado después suizo y estadounidense. Es considerado como el científico más importante del siglo XX"));
-	     Samples.add(new Friend(3, "Bill Gates", "Seattle", R.drawable.usr_bill,"William Henry Gates III, mejor conocido como Bill Gates, es un empresario y filántropo estadounidense, cofundador de la empresa de software Microsoft."));
-	     Samples.add(new Friend(4, "Gordon Earl Moore", "San Francisco", R.drawable.usr_gordon,"Gordon Earl Moore es el cofundador de Intel y autor de la Ley de Moore. Nacido en San Francisco, California el 3 de enero de 1929. Recibió un certificado de bachiller de ciencias en química por la Universidad de California en Berkeley en 1950 y un Ph."));
-	     Samples.add(new Friend(5, "Frank Gray", "Alpine", R.drawable.usr_gray,"Frank Gray es un fisico e investigador en los Laboratorios Bell. Hizo numerosas inovaciones mecanicas y electronicas en la televisión. Famoso por el Código Gray."));
-	     Samples.add(new Friend(6, "Isaac Newton", "Londres", R.drawable.usr_isaac,"Sir Isaac Newton es un físico, filósofo, teólogo, inventor, alquimista y matemático inglés, autor de los Philosophiae naturalis principia mathematica, más conocidos como los Principia, donde describió la ley de la gravitación universal y estableció las bases de la mecánica clásica mediante las leyes que llevan su nombre."));
-	     Samples.add(new Friend(7, "Linus B. Torvalds", "Helsinki", R.drawable.usr_linus," Linus Benedict Torvalds es un ingeniero de software finlandés estadounidense, conocido por iniciar y mantener el desarrollo del 'kernel' Linux, basándose en el sistema operativo libre Minix creado por Andrew S. Tanenbaum. "));
-	     Samples.add(new Friend(8, "Richard Stallman", "Manhattan", R.drawable.usr_richard,"Richard Matthew Stallman, con frecuencia abreviado como «rms», es un programador estadounidense y fundador del movimiento por el software libre en el mundo."));
-	     Samples.add(new Friend(9, "Sergey Brin", "Moscú", R.drawable.usr_sergey,"Sergey Mijaylovich Brin es un empresario ruso, de origen judío, conocido por ser uno de los creadores de Google y con un patrimonio estimado en más de 17,5 mil millones de dólares."));
-	     Samples.add(new Friend(10, "Steve Jobs", "San Francisco", R.drawable.usr_steve,"Steven Paul Jobs, mejor conocido como Steve Jobs, fue un empresario y magnate de los negocios del sector informático y de la industria del entretenimiento estadounidense."));
-	     Samples.add(new Friend(11, "Thomas John Watson", "Campbell", R.drawable.usr_thomas,"Thomas John Watson fue el presidente de IBM, y quien supervisó el crecimiento de la empresa hasta convertirla en una multinacional."));
-	     Samples.add(new Friend(12, "Tim Berners-Lee", "Londres", R.drawable.usr_tim,"Thomas John Watson fue el presidente de IBM, y quien supervisó el crecimiento de la empresa hasta convertirla en una multinacional."));
-	    
-	     return Samples;
-	}// getFriends
-	
+    }
+
+    
+    private class FilterAction extends AbstractAction {
+
+        public FilterAction(int drawable) {
+            super(drawable);
+        }
+
+		@Override
+		public void performAction(View view) {
+			if (advanced){
+				switcher.showPrevious();
+				advanced = false;
+			}
+			else{
+				switcher.showNext();
+				advanced = true;
+			}
+		}
+    }
+    
 }// SearchActivity

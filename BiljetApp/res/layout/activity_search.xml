@@ -3,53 +3,157 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:scrollbars="vertical" >
-	
+    
     <!-- Action Bar -->
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
 
-	<ViewStub 
-	    android:id="@+id/actionBar"
-       	android:inflatedId="@+id/header"
-        android:layout="@layout/header"
-        android:layout_width="fill_parent"
-        android:layout_height="60dip" />
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
 	
-	
-		
-	<LinearLayout 
+  
+	<ViewSwitcher 
+	    android:id="@+id/search_FilterSwitcher"
 	    android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:scrollbars="vertical" >
-		    
-	    <AbsoluteLayout 
-		    android:id="@+id/AbsoluteLayout01"
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent">
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="@dimen/activity_vertical_margin"
+	    android:layout_marginRight="@dimen/activity_vertical_margin">
+	    
+	    <!-- Vista 1: simple -->
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+	        
+	        <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:layout_marginBottom="5dp" >
+		        
+			    <EditText
+			        android:id="@+id/search_EditText_Input"
+			        android:layout_width="0dp" 
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:ems="10" 
+			        android:hint="Ej: Festival Jazz">
+			        <requestFocus />
+		        </EditText>
 		
-			<EditText
-			    android:id="@+id/filterText"
-			    android:layout_width="227dp"
-			    android:layout_height="wrap_content"
-			    android:layout_x="12px"
-			    android:layout_y="12px" />
-		
-			<Button
-			    android:id="@+id/search_button"
-			    android:layout_width="80px"
-			    android:layout_height="wrap_content"
-			    android:layout_x="239dp"
-			    android:layout_y="9dp"
-			    android:text="Buscar" />
-		</AbsoluteLayout>
-		
-		<ListView
-		    android:id="@+id/list"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content">
-		</ListView>
+			    <ImageButton
+			        android:id="@+id/search_ImageButton_Search"
+			        android:layout_width="48dp"
+			        android:layout_height="48dp"
+			        android:layout_marginLeft="5dp"
+			        android:src="@drawable/button_search"
+			        android:background="@drawable/button_biljet" />
+		        
+		    </LinearLayout>
+	        
+	        <ListView
+			    android:id="@+id/search_MatchesList"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content">
+			</ListView>
+	        
+	    </LinearLayout>
 
-	</LinearLayout>
-	
+	    
+	   	<!-- Vista 2: Avanzada -->
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+	        
+	        <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:layout_marginBottom="3dp" >
+		        
+			    <EditText
+			        android:id="@+id/search_EditText_InputAdvanced"
+			        android:layout_width="0dp" 
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:ems="10" 
+			        android:hint="Ej: Festival Jazz">
+			        <requestFocus />
+		        </EditText>
+		
+			    <ImageButton
+			        android:id="@+id/search_ImageButton_SearchAdvanced"
+			        android:layout_width="48dp"
+			        android:layout_height="48dp"
+			        android:layout_marginLeft="5dp"
+			        android:src="@drawable/button_search"
+			        android:background="@drawable/button_biljet" />
+		
+		    </LinearLayout>
+	        
+	        <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+		           		
+              		<TextView 
+		                android:text="@string/newEvent_Label_Category" 
+		                style="@style/formLabel"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:layout_marginRight="2dp"
+		                 />
+
+   		            <TextView 
+		                android:text="@string/newEvent_Label_Province" 
+		                style="@style/formLabel"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:layout_marginLeft="2dp"
+		                 />		
+		    </LinearLayout>
+	        
+	        <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:layout_marginBottom="5dp">
+   		            
+	            <Spinner
+					android:id="@+id/search_Spinner_Category"
+					android:layout_width="0dp"
+					android:layout_height="48dp"
+					android:layout_weight="1"
+					android:layout_marginRight="2dp"
+					android:prompt="@string/newEvent_Spinner_Prompt_Category"  />
+				
+    	    	<Spinner
+			   		android:id="@+id/search_Spinner_Province"
+			   		android:layout_width="0dp"
+			   		android:layout_height="48dp"
+			   		android:layout_weight="1"
+			   		android:layout_marginLeft="2dp"
+			   		android:prompt="@string/newEvent_Spinner_Prompt_Province" />		        
+		    </LinearLayout>
+
+	        
+	        <ListView
+			    android:id="@+id/search_MatchesListAdvanced"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content">
+			</ListView>
+	    </LinearLayout>
+	    
+
+	</ViewSwitcher>	        
+
 </LinearLayout>

@@ -1,0 +1,49 @@
+# BiljetApp for Android
+The following is short description about this directory
+
+## General Description
+
+BiljetApp is the mobile extension for the web site: Biljet. This site provides services and tools to manage events and control the access to them with systems as QR codes
+
+This Open Source (GNU License) project is being developed by a group of students from Universidad Complutense de Madrid for Ingeniería del Software (Software Enginnering) subject
+
+## General Requirements
+
+You'll need a few additional software to compile/run the project
+
+* [Eclipse IDE](http://www.eclipse.org/downloads/packages/eclipse-classic-422/junosr2)
+ Available in different packages (Helios, Indigo, Juno, ...) and versions (Windows x86/64, Mac, ...)
+
+* [Android SDK Manager](http://developer.android.com/sdk/index.html)
+ Revision 21.1 + Android 2.3.3 `(API 10)` + ADT Plug-in. Now it's also possible to get both (SDK + Eclipse) at same time 
+
+* [JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+ Java Development Kit to build Java and Android apps.
+ 
+## BiljetApp / IndexActivity
+
+This project contains BiljetApp Android principal application. The following sections are almost implemented (pendant to improve GUI)
+
+* **Menu** : It's the first view after login view. It shows direct access to the most important options for Biljet users
+* **Upcoming** Events : In this view, you can see which events are going to be celebrate soon (Event View). In this section is possible to search events
+* **My Events** : In this area you can follow events organized by yourself or events for which you have a pass to get on. In first case of event type you can launch the QR reader to process the invitations of your guests. In second case you can see a QR code that will allow you entry to the event. Both cases shows data relative to the event such as date, time, place, etc
+* **New Event** : Shows a form to fill in order to create a new event. User has to provide all information required for a correct creation. This view changes depending on the type of user (regular or company) which it's using the app
+* **My Profile** : This view let the user check its own data and update them
+* **Settings** : User can adjust notifications and make changes on personal data in this view.
+* **Calendar** : Shows a Calendar to manage the events more easily by date.
+	
+## CaptureActivity
+
+This is the library needed to capture and decode QR codes within our own project. This auxiliary project has been developed by the [zXing Team](http://code.google.com/p/zxing/) and it has been embedded as a native QR decoder of our app. Some internal changes were added to adjust the decoder to our needs like change the focus area of rectangular to square. Texts on capturer have been translated and been rotated to simulate a portrait view
+
+## ActionBar
+
+This is the library that allows us to easily configure the appearance and actions of the Action Bar that is displayed on top of all activities. This provide us an API to add/remove Actions and show/hide a Progress Bar. All the changes are make directly on BiljetApp to overriding the original settings
+
+## Features to be added
+
+* Login access
+* Internal data manager
+
+## Disclaimer
+The software is provided 'as is', without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no ecent shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.

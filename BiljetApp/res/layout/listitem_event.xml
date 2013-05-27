@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content" 
-	android:background="#F0F8FF"
-      android:orientation="horizontal" >
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/event_item_height" 
+	android:background="#FFFFFF"
+    android:orientation="horizontal" >
       
 	<ImageView
 	  	android:id="@+id/eventList_Image"
-	   	android:layout_width="wrap_content"
-	   	android:layout_height="wrap_content"
+	   	android:layout_width="@dimen/event_preview_image_width"
+	   	android:layout_height="@dimen/event_preview_image_height"
 	   	android:contentDescription="@string/contentDescription_Icon"
-	   	android:padding="3dp" />
+	   	android:padding="5dp" />
 			
 	<LinearLayout
 	    android:layout_width="fill_parent"
@@ -18,12 +18,26 @@
 	    android:orientation="vertical" >
 	
 			<TextView android:id="@+id/eventList_TxtTitle"
+			  android:paddingTop="5dp"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
 			  android:textStyle="bold"
 			  android:textSize="20sp" />
 		
-			<TextView android:id="@+id/eventList_TxtSubtitle"
+			<TextView android:id="@+id/eventList_TxtType"
+		   	  android:layout_width="fill_parent"
+		   	  android:layout_height="wrap_content"
+		   	  android:textStyle="normal"
+		   	  android:textSize="12sp" />
+			
+			<TextView android:id="@+id/eventList_TxtDate"
+		   	  android:layout_width="fill_parent"
+		   	  android:layout_height="wrap_content"
+		   	  android:paddingTop="5dp"
+		   	  android:textStyle="normal"
+		   	  android:textSize="12sp" />
+						
+			<TextView android:id="@+id/eventList_TxtPlace"
 		   	  android:layout_width="fill_parent"
 		   	  android:layout_height="wrap_content"
 		   	  android:textStyle="normal"

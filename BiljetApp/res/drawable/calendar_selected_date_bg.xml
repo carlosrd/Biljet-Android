@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+   
+    <!-- Button en estado Presionado -->
+    <!-- ****************************************** -->
+    <item android:state_pressed="true">
+        <shape>
+            <solid
+                android:color="#4E6D8D" />
+            <stroke
+                android:width="3dp"
+                android:color="#4E6D8D" />
+            <corners
+                android:radius="5dp" />
+            <padding 
+                android:left="5dp"
+                android:right="5dp"
+                android:top="5dp"
+                android:bottom="5dp"/>
+        </shape>
+    </item>
+    
+    <!-- Button en estado normal -->
+    <!-- ****************************************** -->
+    <item android:state_enabled="true">
+        <shape>
+            <solid
+                android:color="#2C3E50" />
+            <stroke
+                android:width="4dp"
+                android:color="#e67e22" />
+            <corners
+                android:radius="5dp" />
+            <padding 
+                android:left="5dp"
+                android:right="5dp"
+                android:top="5dp"
+                android:bottom="5dp"/>
+        </shape>
+    </item>
+    
+    <!-- Button en estado desactivado -->
+    <!-- ****************************************** -->
+    <item>
+        <shape>
+            <solid
+                android:color="#BAC4C5" />
+            <stroke
+                android:width="4dp"
+                android:color="#e67e22" />
+            <corners
+                android:radius="5dp" />
+            <padding 
+                android:left="5dp"
+                android:right="5dp"
+                android:top="5dp"
+                android:bottom="5dp"/>
+        </shape>
+   </item>
+
+</selector>

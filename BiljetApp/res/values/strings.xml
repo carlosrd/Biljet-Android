@@ -5,64 +5,105 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="action_settings">Settings</string>
-    
+    <string name="zero">0</string>
+
+    <!-- LoginActivity -->
+    <!-- *********************************************************************** -->
+
+    <string name="login_Button_Login"> Iniciar Sesión </string>
+    <string name="login_Button_SignUp"> ¡Unirme ahora! </string>
+    <string name="login_Label_User">Usuario</string>
+    <string name="login_Label_Password">Contraseña</string>
+
+    <!-- SignUpActivity -->
+    <!-- *********************************************************************** -->
+    <string name="signUp_LabelHeader_BasicData"> Tu cuenta Biljet </string>
+    <string name="signUp_LabelHeader_OptionalData"> Acerca de ti&#8230;</string>
+    <string name="signUp_LabelHeader_Confirm"> ¡Ya casi estás dentro!</string>
+    <string name="signUp_Label_infoUsername"> Admite solo caracteres [a-z], [A-Z] y [0-9] </string>
+    <string name="signUp_Label_infoOptionalData"> Opcionalmente, puedes incluir más detalles </string>
+    <string name="signUp_Hint_Username"> Ej: usuario43 </string>
+    <string name="signUp_Hint_Mail"> Ej: usuario@biljetapp.com </string>
+    <string name="signUp_Label_Username">Nombre de usuario: </string>
+    <string name="signUp_Label_Password">Contraseña: </string>
+    <string name="signUp_Label_RepeatPassword">Repite contraseña: </string>
+    <string name="signUp_Label_Email">E-mail: </string>
+    <string name="signUp_Label_Name">Nombre: </string>
+    <string name="signUp_Label_Surname">Apellidos: </string>
+    <string name="signUp_Label_Facebook">Facebook: </string>
+    <string name="signUp_Label_Twitter">Twitter: </string>
+    <string name="signUp_Button_CreateUser"> Unirme</string>
+    <string name="signUp_Button_CancelUser"> Cancelar </string>
+
     <!-- IndexMenuActivity -->
-  	<!-- ***********************************************************************  -->
-    
+    <!-- *********************************************************************** -->
+
     <string name="indexMenu_optionSettings">Preferencias</string>
-	<string name="indexMenu_optionAbout">Acerca de&#8230;</string>
-	<string name="indexMenu_optionExit">Salir</string>
-	
-	
+    <string name="indexMenu_optionAbout">Acerca de&#8230;</string>
+    <string name="indexMenu_optionExit">Salir</string>
+    <string name="menuItem_Title_Discover">Descubrir</string>
+    <string name="menuItem_Subtitle_Discover">Busca eventos, adquiere pases&#8230;</string>
+    <string name="menuItem_Title_MyEvents">Mis Eventos</string>
+    <string name="menuItem_Subtitle_MyEvents">Consulta tus pases y eventos organizados</string>
+    <string name="menuItem_Title_MyCalendar">Mi Calendario</string>
+    <string name="menuItem_Subtitle_MyCalendar">Tu agenda Biljet</string>
+
     <!-- MyEventsActivity -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
-    <string name="myEvents_TxtEventsToGo"> > Eventos a los que voy: </string>
-    <string name="myEvents_TxtSelect"> > ¿Que eventos quieres mostrar?</string>
+    <string name="help_LabelHeader_Discover">Descubrir</string>
+    <string name="help_Discover_Info">En la sección Descubrir se muestra una lista con los últimos eventos que se han creado en Biljet.
+Pulsando sobre cada uno de ellos puedes obtener todos los detalles del mismo así como obtener pases para asistir. También tienes la posibilidad de utilizar el buscador para encontrar eventos por título</string>
+    <string name="help_MyEvents_Info">En la sección Mis Eventos se pueden mostrar dos listas. Una con los eventos para los que tienes un pase (asistes) y otra lista para los que has creado y organizas. Al pulsar sobre los eventos se muestra toda la información relevante de los mismos. Además, dependiendo de la lista que estés mostrando podrás: </string>
+    <string name="help_MyCalendar_Info">En la sección Mi Calendario puedes llevar un seguimiento de tu agenda de eventos en Biljet. Al pulsar sobre un día, puedes ver en detalle en 2 listas separadas (asistes y organizas) que eventos tienes programados para dicha fecha. El calendario señala los días en los que tienes eventos concertados de la siguiente manera: </string>
+    <string name="help_LabelHeader_Actions">Acciones disponibles: </string>
 
-    
+    <!-- MyEventsActivity -->
+    <!-- *********************************************************************** -->
+
+    <string name="myEvents_LabelHeader_Select">¿Cuales quieres mostrar?</string>
+    <string name="myEvents_Spinner_Prompt">Selecciona el tipo de eventos que deseas mostrar:</string>
+
     <!-- CalendarViewActivity -->
-  	<!-- ***********************************************************************  -->
-  	
-    <string name="calendarView_ButtonPrevious"> &lt;&lt; </string>
-    <string name="calendarView_MonthText"> dfsd </string>
-    <string name="calendarView_ButtonNext"> >> </string>
-    <string name="calendarView_LabelMonday"> Lun </string>
-    <string name="calendarView_LabelTuesday"> Mar </string>
-    <string name="calendarView_LabelWednesday"> Mie </string>
-    <string name="calendarView_LabelThursday"> Jue </string>
-    <string name="calendarView_LabelFriday"> Vie </string>
-    <string name="calendarView_LabelSaturday"> Sab </string>
-    <string name="calendarView_LabelSunday"> Dom </string>
+    <!-- *********************************************************************** -->
 
-    
-    <!-- CalendarViewActivity -->
-  	<!-- ***********************************************************************  -->
-  	
+    <string name="calendarView_Button_Previous"> &lt;&lt; </string>
+    <string name="calendarView_Month_Text"> Month </string>
+    <string name="calendarView_Button_Next"> >> </string>
+    <string name="calendarView_Label_Monday"> Lun </string>
+    <string name="calendarView_Label_Tuesday"> Mar </string>
+    <string name="calendarView_Label_Wednesday"> Mie </string>
+    <string name="calendarView_Label_Thursday"> Jue </string>
+    <string name="calendarView_Label_Friday"> Vie </string>
+    <string name="calendarView_Label_Saturday"> Sab </string>
+    <string name="calendarView_Label_Sunday"> Dom </string>
+
+    <!-- DayViewActivity -->
+    <!-- *********************************************************************** -->
+
     <string name="dayView_LabelNoEvents"> No hay eventos planificados para este día: Crea tu uno!</string>
-    
-    <!-- EventsViewActivity -->
-  	<!-- ***********************************************************************  -->
 
-    <string name="eventView_LabelType">Tipo: </string>
-    <string name="eventView_LabelSite">Lugar: </string>
-    <string name="eventView_LabelDate">Fecha: </string>
-    <string name="eventView_LabelLength">Duración aprox: </string>
-    <string name="eventView_LabelPrice">Por sólo: </string>
+    <!-- EventsViewActivity -->
+    <!-- *********************************************************************** -->
+
+    <string name="eventView_Label_Category">Tipo: </string>
+    <string name="eventView_Label_Address">Dirección: </string>
+    <string name="eventView_Label_Date">Fecha: </string>
+    <string name="eventView_Label_Duration">Duración aprox: </string>
+    <string name="eventView_Label_Price">Precio: </string>
     <string name="eventView_LabelConfirmedPeople">Asisten: </string>
-    <string name="eventView_LabelCapacity">Aforo Total: </string>
-    <string name="eventView_LabelInfo">Info: </string>
-    <string name="eventView_LabelBtnReadQR"> Leer lista de invitados</string>
+    <string name="eventView_Label_Capacity">Aforo Total: </string>
+    <string name="eventView_Label_Description">Info: </string>
+    <string name="eventView_Button_HowToArrive">Como llegar&#8230; </string>
 
     <!-- FriendViewActivity  TODO -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
     <string name="friendView_LabelCity">Ciudad: </string>
     <string name="friendView_LabelBio">Biografía: </string>
 
-    
     <!-- Content Description for images used in -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
     <string name="contentDescription_LogoMenu">logo_biljet</string>
     <string name="contentDescription_Icon">boton_icono</string>
@@ -71,10 +112,10 @@
     <string name="contentDescription_ImageEvent">imagen_evento</string>
     <string name="contentDescription_ImageCalendarItem">imagen_elemento_calendario</string>
 
-    
     <!-- Activities Titles -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
+    <string name="title_activity_login">BiljetApp</string>
     <string name="title_activity_my_friends">Biljet - Mis Amigos</string>
     <string name="title_activity_friend_view">Biljet - Detalles Amigo</string>
     <string name="title_activity_my_profile">Biljet - Mi Perfil</string>
@@ -86,69 +127,97 @@
     <string name="title_activity_search">Biljet - Buscar</string>
     <string name="title_activity_day_view">Biljet - Vista Día</string>
     <string name="title_activity_shared_preferences">Biljet - Preferencias</string>
-    <string name="title_activity_index">BiljetApp</string>
+    <string name="title_activity_index">BiljetApp - Menu Principal</string>
+    <string name="title_activity_settings">Biljet - Configuración</string>
 
     <!-- MyProfileActivity -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
-    <string name="myProfile_LabelCity">Ciudad: </string>
-    <string name="myProfile_LabelBio">Biografía: </string>
-    <string name="myProfile_find_me">Me puedes encontrar en: </string>
-    <string name="myProfile_LabelEvents_follow">Eventos a los que sigo: </string>
-    <string name="myProfile_LabelEvents_organized">Eventos que organizo: </string>
-    <string name="myProfile_LabelEvents_signup">Eventos a los que voy: </string>
-    <string name="myProfile_LabelTwitter">Twitter: </string>
-    <string name="myProfile_LabelFacebook">Facebook: </string>
+    <string name="myProfile_Label_Username">> Usuario: </string>
+    <string name="myProfile_Label_Email">> E-mail: </string>
+    <string name="myProfile_Label_Name">Nombre: </string>
+    <string name="myProfile_Label_Surname">Apellidos: </string>
+    <string name="myProfile_Label_Twitter">Twitter: </string>
+    <string name="myProfile_Label_Facebook">Facebook: </string>
     <string name="myProfile_LabelLast_login">Última visita el día: </string>
 
-    
     <!-- NewEventActivity -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
-    <string name="newEvent_LabelName">Nombre del evento: </string>
-    <string name="newEvent_LabelEventType">"Tipo:"</string>
-    <string name="newEvent_LabelSite">"Lugar:"</string>
-    <string name="newEvent_LabelPrice">"Precio:"</string>
-    <string name="newEvent_LabelLength">"Duración aproximada:"</string>
-    <string name="newEvent_LabelLengthDays">"Días:"</string>
-    <string name="newEvent_LabelLengthHours">"Horas"</string>
-    <string name="newEvent_LabelLengthMinutes">"Min:"</string>
-    <string name="newEvent_LabelCapacity">"Aforo:"</string>
-    <string name="newEvent_LabelInfo">"Observaciones:"</string>
-    <string name="newEvent_LabelDate">"Fecha:"</string>
-    <string name="newEvent_LabelTime">"Hora:"</string>
-    <string name="newEvent_ButtonSetDate">"Fijar fecha" </string>
-    <string name="newEvent_ButtonSetTime">"Fijar hora" </string>
-    <string name="newEvent_ButtonCreateEvent">"Crear" </string>
-    <string name="newEvent_ButtonCancelEvent">"Cancelar" </string>
-    
+    <string name="newEvent_LabelHeader_BasicData"> Datos básicos del evento </string>
+    <string name="newEvent_LabelHeader_When"> ¿Cuando será? </string>
+    <string name="newEvent_LabelHeader_Where"> ¿Donde será? </string>
+    <string name="newEvent_LabelHeader_Duration"> ¿Cuanto durará aprox.? </string>
+    <string name="newEvent_LabelHeader_Image"> Elige una imagen&#8230; </string>
+    <string name="newEvent_LabelHeader_Confirm"> ¡Confirma tu evento! </string>
+    <string name="newEvent_Label_infoAddress">Para una correcta situación del evento en el mapa, escribe direcciones basadas en el tipo + nombre de la vía y número.</string>
+    <string name="newEvent_Label_infoSite">Opcionalmente, incluye aquí el nombre de las instalaciones</string>
+    <string name="newEvent_Label_infoDuration">Para indeterminado introduce 0</string>
+    <string name="newEvent_Label_infoImage">El tamaño de la imagen no podrá exceder los 300KB. Para una correcta visualización, te recomendamos que uses imágenes de unos 200x200</string>
+    <string name="newEvent_Hint_Description">Información del evento</string>
+    <string name="newEvent_Hint_Site">Ej: Facultad de Informática</string>
+    <string name="newEvent_Hint_Address">Ej: Goya 64</string>
+    <string name="newEvent_Label_Title">Nombre del evento: </string>
+    <string name="newEvent_Label_Category">"Categoría:"</string>
+    <string name="newEvent_Label_Site">Lugar:</string>
+    <string name="newEvent_Label_Address">Dirección:</string>
+    <string name="newEvent_Label_City">Ciudad:</string>
+    <string name="newEvent_Label_PostalCode">Código Postal:</string>
+    <string name="newEvent_Label_Province">Provincia:</string>
+    <string name="newEvent_Label_Price">Precio:</string>
+    <string name="newEvent_Label_Duration">Duración aproximada:</string>
+    <string name="newEvent_Label_DaysDuration">Días:</string>
+    <string name="newEvent_Label_HoursDuration">Horas:</string>
+    <string name="newEvent_Label_MinutesDuration">Min:</string>
+    <string name="newEvent_Label_Capacity">Aforo:</string>
+    <string name="newEvent_Label_Description">Descripción:</string>
+    <string name="newEvent_Label_Date">Fecha:</string>
+    <string name="newEvent_Label_Time">Hora:</string>
+    <string name="newEvent_Button_SetDate">Fijar fecha </string>
+    <string name="newEvent_Button_SetTime">Fijar hora </string>
+    <string name="newEvent_Button_CreateEvent">¡Crear! </string>
+    <string name="newEvent_Button_CancelEvent">Cancelar </string>
+    <string name="newEvent_Button_OpenGallery">Abrir galería... </string>
+    <string name="newEvent_Spinner_Prompt_Category">Selecciona una categoría para el evento:</string>
+    <string name="newEvent_Spinner_Prompt_AddressType">Selecciona un tipo de vía:</string>
+    <string name="newEvent_Spinner_Prompt_Province">Selecciona una provincia:</string>
+
     <!-- SettingsActivity -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
 
     <string name="settingsView_LabelNotifications">Notificaciones </string>
-    <string name="settingsView_CheckBoxReceiveMsg">"Recibir mensajes en este terminal"</string>
-    <string name="settingsView_CheckBoxRMsgBySound">"Con sonido"</string>
-    <string name="settingsView_CheckBoxRMsgByVibration">"Con vibración"</string>
-    <string name="settingsView_checkBoxRMsgByLight">"Con lumínicas*"</string>
-    <string name="settingsView_CheckBoxRMsgByEmail">"Recibir notificaciones por E-mail"</string>
-    <string name="settingsView_LabelPersonalData">"Datos personales"</string>
-    <string name="settingsView_LabelUpdatePersonalData">"Actualizar datos personales"</string>
-    <string name="settingsView_LabelPhone">"Teléfono"</string>
-    <string name="settingsView_LabelMobil">"Móvil"</string>
-    <string name="settingsView_LabelAddress">"Dirección"</string>
-    <string name="settingsView_LabelCountBiljet">"Tu cuenta Biljet" </string>
-    <string name="settingsView_LabelUpdateCountBiljet">"Actualizar datos de tu cuenta Biljet" </string>
-    <string name="settingsView_CheckBoxChangePassword">"Cambiar la contraseña" </string>
-    <string name="settingsView_LabelCurrentPassword">"Actual" </string>
-    <string name="settingsView_LabelNewPassword"> "Nueva"</string>
-    <string name="settingsView_LabelRepeatNewPassword"> "Repita"</string>
-    <string name="settingsView_ButtonSaveAndBack"> "Guardar y volver"</string>
-    <string name="settingsView_ButtonBack"> "Volver"</string>
-    
+    <string name="settingsView_CheckBoxReceiveMsg">Recibir mensajes en este terminal</string>
+    <string name="settingsView_CheckBoxRMsgBySound">Con sonido</string>
+    <string name="settingsView_CheckBoxRMsgByVibration">Con vibración</string>
+    <string name="settingsView_checkBoxRMsgByLight">Con lumínicas*</string>
+    <string name="settingsView_CheckBoxRMsgByEmail">Recibir notificaciones por E-mail</string>
+    <string name="settingsView_LabelPersonalData">Datos personales</string>
+    <string name="settingsView_LabelUpdatePersonalData">Actualizar datos personales</string>
+    <string name="settingsView_LabelPhone">Teléfono</string>
+    <string name="settingsView_LabelMobil">Móvil</string>
+    <string name="settingsView_LabelAddress">Dirección</string>
+    <string name="settingsView_LabelCountBiljet">Tu cuenta Biljet </string>
+    <string name="settingsView_LabelUpdateCountBiljet">Actualizar datos de tu cuenta Biljet </string>
+    <string name="settingsView_CheckBoxChangePassword">Cambiar la contraseña </string>
+    <string name="settingsView_LabelCurrentPassword">Actual </string>
+    <string name="settingsView_LabelNewPassword"> Nueva</string>
+    <string name="settingsView_LabelRepeatNewPassword"> Repita</string>
+    <string name="settingsView_ButtonSaveAndBack"> Guardar y volver</string>
+    <string name="settingsView_ButtonBack"> Volver</string>
+
     <!-- Used in gallery part -->
-  	<!-- ***********************************************************************  -->
+    <!-- *********************************************************************** -->
+
+    <string name="maps_Spinner_Prompt_MapType">Selecciona el tipo de mapa:</string>
+
+    <!-- Used in gallery part -->
+    <!-- *********************************************************************** -->
 
     <string name="picture">Picture</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_maps">Biljet - Mapa del Evento</string>
+    <string name="title_activity_sign_up">Biljet - Registro</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_qrview">Biljet - QR Viewer</string>
+    <string name="title_activity_qrresults">QRResultsActivity</string>
 
 </resources>

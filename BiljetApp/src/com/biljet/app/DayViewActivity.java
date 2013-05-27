@@ -1,131 +1,237 @@
 package com.biljet.app;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
-import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
+import com.biljet.adapters.EventListAdapter;
 import com.biljet.types.Event;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.AbstractAction;
 
-public class DayViewActivity extends ActivitiesHeader {
+public class DayViewActivity extends Activity{
 
 	// ATRIBUTOS
  	// **************************************************************************************
 	
-	final ArrayList<Event> eventsOwn = getEventsOwned();
-	final ArrayList<Event> eventsToGo = getEventsToGo();
-	final UpcomingEventsAdapter adapterToGo = new UpcomingEventsAdapter(this,eventsToGo);
-	final UpcomingEventsAdapter adapterOwned = new UpcomingEventsAdapter(this,eventsOwn);
+	private ArrayList<Event> eventsCreated;
+	private ArrayList<Event> eventsToGo;
+
+	private boolean activeHostA = false; // Puede tener eventos ToGo o Created
+	private boolean activeHostB = false; // Solo Created
+	
+	// Fecha actual a mostrar en milisegundos
+	private long choosedDate; 			
+	
+	// CONSTRUCTORA
+ 	// **************************************************************************************
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_day_view);
 		
+		// LEER BUNDLE
+     	// **************************************************************************************
+        	
+		String date = getIntent().getStringExtra("DATE_STRING");
+		eventsToGo = getIntent().getParcelableArrayListExtra("TO_GO");
+		eventsCreated = getIntent().getParcelableArrayListExtra("CREATED");
+		choosedDate = getIntent().getLongExtra("DATE_MILLIS", 0);
+				
         // ACTION BAR
      	// **************************************************************************************
         
-		createHeaderView(R.drawable.header_back_button,"Mi Calendario",R.drawable.mas,true);
-		setBackButton();
-		setRightButtonAction(NewEventActivity.class);
+        ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Agenda " + date);
+		actionBar.setHomeAction(new IntentWithFinishAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
+		// Action: Nuevo evento
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);
+		today.set(Calendar.AM_PM,Calendar.AM);
+
+		String toGo = "";
+		String created = "";
+		// Si la fecha escogida es posterior o igual a hoy, dejamos crear evento 
+		// Tambien inicializamos los label
+		if (choosedDate >= today.getTimeInMillis()){
+			Intent newEventIntent = new Intent(this, NewEventActivity.class);
+			newEventIntent.putExtra("DATE_SELECTED", choosedDate);
+			actionBar.addAction(new IntentWithFinishAction(this, newEventIntent, R.drawable.actionbar_newevent_action));
+			
+			toGo = "Asistirás a...";
+			created = "Organizas...";
 		
-        // DAY SUBTITLE BAR
+		} else {
+			toGo = "Estuviste en...";
+			created = "Organizaste...";
+		}
+		
+        // HEADER LISTA A
      	// **************************************************************************************
         
-		TextView title = (TextView) findViewById(R.id.dayView_LabelDate);
-	    title.setText(getIntent().getExtras().getString("date"));
+		TextView titleListA = (TextView) findViewById(R.id.dayView_LabelHeader_ListA);
+		TextView titleListB = (TextView) findViewById(R.id.dayView_LabelHeader_ListB);
+		
+		LinearLayout hostA = (LinearLayout) findViewById(R.id.dayView_LayoutHost_ListA);
+		LinearLayout hostB = (LinearLayout) findViewById(R.id.dayView_LayoutHost_ListB);
+		
+
+		if (eventsToGo.size() > 0){
+			
+			titleListA.setText(toGo);
+			activeHostA = true;
+			
+			if (eventsCreated.size() > 0){
+				titleListB.setText(created);
+				activeHostB = true;
+			}
+			else
+				hostB.setVisibility(View.INVISIBLE);
+			
+		
+		} else if (eventsCreated.size() > 0){
+			titleListA.setText("Organizas...");
+			activeHostA = true;
+			hostB.setVisibility(View.INVISIBLE);
+		} else {		
+			hostA.setVisibility(View.INVISIBLE);
+			hostB.setVisibility(View.INVISIBLE);	
+		}
+
 	   
 	    
-		// LIST VIEW
+		// LIST VIEW A
 		// **************************************************************************************
 
-		ListView eventsOnDayList = (ListView)findViewById(R.id.list_EventsOnDay);
-		final String currentDay = (String) getIntent().getExtras().getString("date").subSequence(0, 2);
-		
-		// Setear oyentes OnClick
-		if (currentDay.equals("13") || currentDay.equals("23")){
-	        eventsOnDayList.setOnItemClickListener(new OnItemClickListener() {
-							public void onItemClick(AdapterView<?> a, View v, int eventId, long id) {
-							//Acciones necesarias al hacer click
-								
-								Intent eventIntent = new Intent(DayViewActivity.this, EventViewActivity.class);
-						
-								Event e;
-								
-								if (currentDay.equals("13")){
-									e = eventsOwn.get(eventId);
-									eventIntent.putExtra("event",e);
-									eventIntent.putExtra("OWN?", true);
-								}
-								else {
-									e = eventsToGo.get(eventId);
-									eventIntent.putExtra("event",e);
-									eventIntent.putExtra("OWN?", false);
-								}
-								
-								startActivity(eventIntent);
-											
-								}
-							});
-	        
-	    	if (currentDay.equals("13"))
-	    		eventsOnDayList.setAdapter(adapterOwned);	
-			else 
-				eventsOnDayList.setAdapter(adapterToGo);
-		}
+		ListView eventsListA = (ListView)findViewById(R.id.dayView_ListA);
 			
-	}
+        EventListAdapter adapterListA = null;
+        if (activeHostA){
+        	if (eventsToGo.size() > 0)
+        		adapterListA = new EventListAdapter(DayViewActivity.this, eventsToGo);
+        	else if (eventsCreated.size() > 0)
+        		adapterListA = new EventListAdapter(DayViewActivity.this, eventsCreated);
+        
+        
+        	// Setear oyentes OnClick
+        	eventsListA.setOnItemClickListener(new OnItemClickListener() {
+						public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+						//Acciones necesarias al hacer click
+							
+							Intent eventIntent = new Intent(DayViewActivity.this, EventViewActivity.class);
+							
+							if (eventsToGo.size() > 0)
+								eventIntent.putExtra("EVENT", eventsToGo.get(position));
+							else
+								eventIntent.putExtra("EVENT", eventsCreated.get(position));
+							
+							// TODO Comprobar si el evento es propio o no
+							/*if (currentDay.equals("13")){
+								e = eventsOwn.get(eventId);
+								eventIntent.putExtra("event",e);
+								eventIntent.putExtra("OWN?", true);
+							}
+							else {
+								e = eventsToGo.get(eventId);
+								eventIntent.putExtra("event",e);
+								eventIntent.putExtra("OWN?", false);
+							}*/
+							
+							startActivity(eventIntent);
+										
+							}
+						});
+        
+        	eventsListA.setAdapter(adapterListA);
+        
+        }
+        
+		// LIST VIEW B
+		// **************************************************************************************
 
-    private ArrayList<Event> getEventsToGo() {
-	    
-    	ArrayList<Event> sampleItems = new ArrayList<Event>();
-    	
-    	Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		sampleItems.add(Event2);
+        ListView eventsListB = (ListView)findViewById(R.id.dayView_ListB);
+		
+        EventListAdapter adapterListB = null;
+        
+        if (activeHostB){
+        	adapterListB = new EventListAdapter(DayViewActivity.this, eventsCreated);
+        
+        
+        	// Setear oyentes OnClick
+        	eventsListB.setOnItemClickListener(new OnItemClickListener() {
+						public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+						//Acciones necesarias al hacer click
+							
+							Intent eventIntent = new Intent(DayViewActivity.this, EventViewActivity.class);
+							
+							eventIntent.putExtra("EVENT", eventsCreated.get(position));
+							
+							// TODO Comprobar si el evento es propio o no
+							/*if (currentDay.equals("13")){
+								e = eventsOwn.get(eventId);
+								eventIntent.putExtra("event",e);
+								eventIntent.putExtra("OWN?", true);
+							}
+							else {
+								e = eventsToGo.get(eventId);
+								eventIntent.putExtra("event",e);
+								eventIntent.putExtra("OWN?", false);
+							}*/
+							
+							startActivity(eventIntent);
+										
+							}
+						});
+        
+        	eventsListB.setAdapter(adapterListB);
+        
+        }
+			
+	} // onCreate()
 
-	    return sampleItems;
-	}
 	
-    private ArrayList<Event> getEventsOwned() {
-	    
-    	ArrayList<Event> sampleItems = new ArrayList<Event>();
+	// ACCIONES ADICIONALES PARA ACTIONBAR
+ 	// **************************************************************************************
     
-    	Event Event1 = new Event("Cine Forum",1 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,30),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
-		sampleItems.add(Event1);
+	private class IntentWithFinishAction extends AbstractAction {
+        private Context mContext;
+        private Intent mIntent;
 
-	    return sampleItems;
-	}
-    
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.day_view, menu);
-		return true;
-	}
+        public IntentWithFinishAction(Context context, Intent intent, int drawable) {
+            super(drawable);
+            mContext = context;
+            mIntent = intent;
+        }
+
+        @Override
+        public void performAction(View view) {
+            try {      
+               mContext.startActivity(mIntent); 
+               finish();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(mContext,
+                        mContext.getText(R.string.actionbar_activity_not_found),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 	
-	/**
-	 * Actions related to the menu options displayed when you press ··· or Config button on the device
-	 */
-	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-	        case R.id.indexSubmenu_optionSettings:
-	        	Intent openSettings = new Intent(DayViewActivity.this,SettingsActivity.class);
-	        	startActivity(openSettings);
-	        	break;
-	    }
-	    return true;
-	}
-
-
 }

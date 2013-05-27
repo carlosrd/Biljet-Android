@@ -2,38 +2,110 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:orientation="vertical" >
     
     <!-- Action Bar -->
 
-	<ViewStub 
-	    android:id="@+id/actionBar"
-       	android:inflatedId="@+id/header"
-        android:layout="@layout/header"
-        android:layout_width="fill_parent"
-        android:layout_height="60dip" />
-	
-	<RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:background="#444444" >
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
 
-        <TextView
-            android:id="@+id/dayView_LabelDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-        
-    </RelativeLayout>
-	
-	<ListView 
-	    android:id="@+id/list_EventsOnDay"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"  />
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
+    
+    <!-- VISTA DETALLADA DIA -->
+	<!-- *************************************** -->
+	<LinearLayout
+	    android:id="@+id/dayView_LayoutHost_ListA"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:orientation="vertical">
+	    
+	    <RelativeLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp" 
+	        android:background="@drawable/calendar_day_bg"
+	        android:layout_marginLeft="@dimen/activity_vertical_margin"
+	        android:layout_marginRight="@dimen/activity_vertical_margin"
+	        android:layout_marginBottom="5dp" >
+	       	
+	       	<ImageView
+				android:id="@+id/dayView_ImageView_ToGoIcon"
+				android:layout_margin="1dp"
+				android:layout_marginLeft="5dp"
+			    android:layout_width="25dp"
+			    android:layout_height="25dp"
+			    android:src="@drawable/calendar_event_to_go"
+			    android:layout_centerVertical="true"
+			    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+	       	
+	       	<TextView
+			    android:id="@+id/dayView_LabelHeader_ListA"
+			    style="@style/dayViewLabel" 
+			    android:layout_centerVertical="true"
+			    android:layout_toRightOf="@id/dayView_ImageView_ToGoIcon"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" />
+		
+	    </RelativeLayout>
 
+		<ListView 
+		    android:id="@+id/dayView_ListA"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"  />
+		
+	</LinearLayout>
+	
+	<LinearLayout
+	    android:id="@+id/dayView_LayoutHost_ListB"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="5dp"
+	    android:orientation="vertical">
+	    
+	    
+	    <RelativeLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp" 
+	        android:background="@drawable/calendar_day_bg"
+	        android:layout_marginLeft="@dimen/activity_vertical_margin"
+	        android:layout_marginRight="@dimen/activity_vertical_margin"
+	        android:layout_marginBottom="5dp" >
+	       	
+	        <ImageView
+				android:id="@+id/dayView_ImageView_CreatedIcon"
+				android:layout_margin="1dp"
+				android:layout_marginLeft="5dp"
+			    android:layout_width="25dp"
+			    android:layout_height="25dp"
+			    android:src="@drawable/calendar_event_created"
+			    android:layout_centerVertical="true"
+			    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+	       	
+	        
+	       	<TextView
+			    android:id="@+id/dayView_LabelHeader_ListB"
+			    style="@style/dayViewLabel" 
+			    android:layout_centerVertical="true"
+			    android:layout_toRightOf="@id/dayView_ImageView_CreatedIcon"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" />
+		
+	    </RelativeLayout>
+	    
+		<ListView 
+		    android:id="@+id/dayView_ListB"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"  />
+	    
+	</LinearLayout>
+	
 </LinearLayout>    
     

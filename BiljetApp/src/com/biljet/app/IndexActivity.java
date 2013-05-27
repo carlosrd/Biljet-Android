@@ -1,22 +1,26 @@
 package com.biljet.app;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import android.widget.Toast;
 
-import com.biljet.adapters.ActivitiesHeader;
-import com.biljet.adapters.MenuOptionsAdapter;
+import com.biljet.types.EncryptedData;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 
-public class IndexActivity extends ActivitiesHeader {
+public class IndexActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,45 +29,32 @@ public class IndexActivity extends ActivitiesHeader {
 		
 		// ACTION BAR
 		// **************************************************************************************
-		//cabecera(false, R.drawable.header_menu, MenuActivity.class, "Menu Principal", true, R.drawable.perfil, MiPerfilActivity.class);
-		createHeaderView(R.drawable.imagen_menu,"Menu Principal", R.drawable.perfil,true);
-		setRightButtonAction(MyProfileActivity.class);
-		
-        
-        // GRID VIEW
-		// **************************************************************************************
-        // Acoplar el adaptador al GridView
-        
-		MenuOptionsAdapter adapter = new MenuOptionsAdapter(this);
-		GridView gridMenu = (GridView)findViewById(R.id.indexActivity_gridMenu);
-		
-		// Setear oyentes OnClick
-		gridMenu.setOnItemClickListener(new OnItemClickListener() {
-						public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-						//Acciones necesarias al hacer click
-							switch(position){
-								case 0: Intent upcomingEventsOption = new Intent(IndexActivity.this, UpcomingEventsActivity.class);
-										startActivity(upcomingEventsOption);
-										break;
-								case 1: Intent myEventsOption = new Intent(IndexActivity.this, MyEventsActivity.class);
-										startActivity(myEventsOption);
-										break;
-								case 2: Intent myFriendsOption = new Intent(IndexActivity.this, MyFriendsActivity.class);
-										startActivity(myFriendsOption);
-										break;
-								case 3: Intent calendarViewOption = new Intent(IndexActivity.this, CalendarViewActivity.class);
-										startActivity(calendarViewOption);
-										break;
-										
-								default: break;
 
-							}
-						}
-		});
-		
-		gridMenu.setAdapter(adapter);
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setHomeLogo(R.drawable.actionbar_logo);
+		actionBar.setTitle("Inicio");
+		actionBar.addAction(new IntentAction(this, createShareIntent(), R.drawable.actionbar_share_action));
+		actionBar.addAction(new IntentAction(this, new Intent(this, HelpActivity.class), R.drawable.actionbar_help_action));
+		actionBar.addAction(new IntentAction(this, new Intent(this, MyProfileActivity.class), R.drawable.actionbar_myprofile_action));
+
 	}	
 
+	public void onClickDiscover(View v){
+		Intent discover = new Intent(IndexActivity.this, UpcomingEventsActivity.class);
+		startActivity(discover);
+	}
+	
+	public void onClickMyEvents(View v){
+		Intent myEvents = new Intent(IndexActivity.this, MyEventsActivity.class);
+		startActivity(myEvents);
+	}
+	
+	public void onClickMyCalendar(View v){
+		Intent calendarView = new Intent(IndexActivity.this, CalendarViewActivity.class);
+		startActivity(calendarView);
+	}
+	
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		switch (keyCode) {
@@ -103,9 +94,44 @@ public class IndexActivity extends ActivitiesHeader {
 		alert.show();
 	}
 	
+	private String prepareUsername(){
+		
+		String[] params = null;
+	
+		try {
+			params = new EncryptedData(IndexActivity.this).decrypt();
+			return params[0];
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
+		
+		return "";
+	
+	}
+	
+    public static Intent createIntent(Context context) {
+        Intent i = new Intent(context, IndexActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return i;
+    }
+
+    private Intent createShareIntent() {
+    		
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, prepareUsername() + " te invita a unirte Biljet! Descargate nuestra APK desde el siguiente enlace: http://db.tt/k0odWEqh \nMás info: http://www.biljetapp.com");
+        return Intent.createChooser(intent, "Comparte BiljetApp por...");
+    }
+    
 	// TECLA SUBMENU / BOTON ···
 	// **************************************************************************************
-	
+/*	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -131,5 +157,5 @@ public class IndexActivity extends ActivitiesHeader {
 	    }
 	    return true;
 	}
-
+*/
 }

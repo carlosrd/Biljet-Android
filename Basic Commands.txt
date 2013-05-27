@@ -1,0 +1,148 @@
+===============================================================================
+ANDROID & GIT
+===============================================================================
+
+	1. ARCHIVOS NECESARIOS Y NO NECESARIOS EN GIT
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	> Cuando se sube un proyecto Android a Git, SOLO es necesario subir los 
+	siguientes archivos y carpetas (el resto los genera Eclipse automaticamente) 
+	que se encuentren en la raíz. 
+	
+	Nombre				Tipo				Ubicación
+	----------------------------------------------------------------------------
+	- assets			Carpeta				CaptureActivity
+	- src				Carpeta				Ambos
+	- libs				Carpeta				Ambos
+	- res				Carpeta				Ambos
+	- AndroidManifest		Archivo				Ambos
+	- proguard-project		Archivo				Biljet
+	- project.properties		Archivo				Ambos
+	- ant.properties		Archivo				CaptureActivity
+	- build				Archivo				CaptureActivity
+	- proguard-android-optimize	Archivo				CaptureActivity
+	
+	
+	> NUNCA se subirán los siguientes archivos o carpetas:
+	
+		Nombre			Tipo				Ubicación
+	----------------------------------------------------------------------------
+	- .metadata			Carpeta				Ambos
+	- .settings			Carpeta				Ambos
+	- bin				Carpeta				Ambos
+	- gen				Carpeta				Ambos
+	- .classpath			Archivo				Ambos
+	- .project			Archivo				Ambos
+	
+	> Comprobar cuando hagais "git add" que no se incluyen estos archivos en la 
+	subida y que los que subís, sean SOLO los modificados (esto ultimo es facil, 
+	porque Git se da cuenta de cuales son, pero comprobar con "git status" que 
+	se cumple los criterios anteriores)
+
+	> He añadido al gitignore los archivos y carpetas que no se deben subir, no
+	obstante comprobar con git status que no se incluyen
+	
+	2. IMPORTAR LOS PROYECTOS A ECLIPSE
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	Para evitar errores en Eclipse, vamos a tener SEPARADAS las carpetas del
+	repositorio y la del workspace de Eclipse. De hecho, la del workspace la vamos
+	a dejar vacía (solo contendra .metadata y nos da igual) y trabajaremos sobre la
+	carpeta del repo directamente.
+
+		1 - 	Iniciar el Git Bash y navegar hasta la carpeta  donde queremos 
+			descargar el proyecto del repo usando "cd"  
+
+		2 -	Una vez estemos sobre el directorio que queremos (recuerdo, este
+			directorio NO es el workspace de Eclipse, es otra) introducimos:
+
+			git clone https://github.com/Biljet/Biljet-Android.git
+
+		3 - 	Cuando este clonado, accedemos al repo con:
+			
+			cd "Biljet-Android"
+
+		4 -	Cambiamos a la rama "dev"
+
+			git checkout dev
+
+		5 -	En Eclipse, en el panel de proyectos:
+ 
+			Boton derecho > Import... > Android > Existing Android Code Into Workspace
+			
+		6 - 	Seleccionar como "Root directory" la carpeta donde hayais descargado 
+			los proyectos desde el repositorio (recuerdo una vez mas, que NO es la 
+			carpeta del workspace actual de Eclipse)
+		
+		7 - 	NO marcar la casilla "Copy projects into workspace": De esta manera, 
+			hacemos cambios directamente sobre los archivos descargados del repo. Si la 
+			marcamos despues habra que copiar el proyecto del workspace a la carpeta donde 
+			hemos descargado el repo y git dirá que TODOS o casi todos están modificados
+			cuando no lo están y nos trae más lios
+		
+		5 - 	Finish y dejarle un poco de tiempo para precompilar (saldrán errores que 
+			enseguida desaparecerán). El resultado final es los 2 proyectos importados
+			sin errores. (CaptureActivity contendrá "warnings"; ignorarlos) 
+			Si hay algun error en algun archivo o clase o del build-path, el proyecto
+			está mal importado porque no es necesario ajustarlo.
+	
+		6 -	Para empezar a hacer cambios en vuestra rama, hacer:
+			
+			git checkout -b nuevaRama 
+		
+	NOTA:
+		
+		* Sino borrais el workspace (pese a que este vacío, mantiene la config de los proyectos
+		"en el") ni la carpeta del repo, la siguiente vez que recupereis el proyecto, no hagais 
+		clone, sino:
+			
+			git pull origin rama		(rama = rama que quereis recuperar (hacer update))
+
+		y los ultimos cambios en esa rama se descargarán a la carpeta del repositorio. Refrescar en
+		Eclipse para reflejarlos (no es necesario volver a importar los proyectos). Volver a 
+		importarlos en caso de que encontreis muchos problemas
+	
+
+
+	3. COMANDOS BASICOS EN GIT
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	// BASICOS
+	// ------------------------------------------
+
+	- Clonar un repositorio (la primera vez nada mas)
+		git clone [url]
+
+	- Descargar ultimos cambios desde el repo	
+		git pull origin [rama]
+
+	- Añadir archivos al control de git (Asi si hay cambios en estos, git lo detectara) 
+		git add [ruta/archivos]
+
+	- Confirmar cambios (nuevos archivos añadidos)
+		git commit -m "[Texto del mensaje]"
+
+	- Confirmar cambios (archivos modificados o borrados
+		git commit -a -m "[Texto del mensaje]"
+
+	- Enviar cambios al servidor (repo) a la rama pasada por argumento
+		git push origin [rama]
+
+	- Comprobar estado del repo (archivos nuevos, borrados, modificados, sin controlar...)
+		git status
+
+	// RAMAS
+	// -------------------------------------------
+
+	- Cambiar rama (local) 
+		git checkout [rama]
+
+	- Crear rama y cambiar a dicha rama (Se convierte en remota cuando hagamos "push")
+		git checkout -b [rama]
+
+	- Borrar rama local
+		git branch -d [rama]
+
+	- Borrar rama remota (repo)
+		git push origin :[rama]	
+	

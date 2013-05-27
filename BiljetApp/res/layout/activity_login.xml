@@ -1,0 +1,100 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="@dimen/activity_horizontal_margin" >
+	    
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"   >
+	
+	    <!-- Biljet Logo -->
+	    <!-- **************************************************** -->
+	    <RelativeLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="200dp" >
+	        
+	            <ImageView
+			        android:id="@+id/logo_Biljet"
+			        android:layout_width="200dp"
+			        android:layout_height="200dp"
+			        android:layout_centerHorizontal="true"
+			        android:layout_centerVertical="true"
+			        android:src="@drawable/biljet_logo"
+			        android:contentDescription="@string/contentDescription_LogoMenu" />
+	    </RelativeLayout>
+		
+		<!-- Campo Texto Usuario -->
+	    <!-- **************************************************** -->
+	    
+	    <TextView
+	        android:id="@+id/login_Label_User"
+	        style="@style/formLabel"
+	        android:text="@string/login_Label_User" />
+	
+	    <EditText
+	        android:id="@+id/login_EditText_User"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="3dp"
+	        android:inputType="text" >
+	        <requestFocus />
+	    </EditText>
+	    
+		<!-- Campo Texto Pasword -->
+	    <!-- **************************************************** -->
+	    
+	    <TextView
+	        android:id="@+id/login_Label_Password"
+	        style="@style/formLabel"
+	        android:text="@string/login_Label_Password" />
+	
+	    <EditText
+	        android:id="@+id/login_EditText_Password"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:inputType="textPassword" />
+			
+		<!-- Checkbox: Recuerdame -->
+	    <!-- **************************************************** -->
+	   
+	    <CheckBox
+	        android:id="@+id/login_CheckBox_Remember"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Recordarme" />
+	    
+	    <!-- Botones -->
+	    <!-- **************************************************** -->
+
+	    <RelativeLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent" 
+	        android:layout_marginTop="10dp">
+	    
+	        <Button
+	            android:id="@+id/login_Button_Login"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignParentTop="true"
+				android:textColor="#FFFFFF"
+				android:textStyle="bold"
+	            android:text="@string/login_Button_Login" />
+
+	        <Button
+	            android:id="@+id/login_Button_SignUp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentTop="true"
+	            android:layout_marginRight="5dp"
+	            android:layout_toLeftOf="@+id/login_Button_Login"
+	            android:text="@string/login_Button_SignUp"
+	            android:textColor="#FFFFFF"
+	            android:textStyle="bold" />
+	
+	    </RelativeLayout>
+	
+	</LinearLayout>
+		
+</ScrollView>

@@ -2,209 +2,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <!-- Action Bar -->
-
-	<ViewStub
-		android:id="@+id/actionBar"
-		android:inflatedId="@+id/header"
-	    android:layout="@layout/header"
-	    android:layout_width="fill_parent"
-	    android:layout_height="60dip" />
+    
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
 	
-	<ScrollView 
-	    android:layout_width="fill_parent"
-    	android:layout_height="fill_parent">
-    	
-		<LinearLayout
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		    android:layout_marginLeft="5dp"
-		    android:orientation="vertical" >
-		    
-			<LinearLayout 
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:layout_marginLeft="10dp"
-			    android:layout_marginTop="10dp"
-			    android:background="@drawable/blue_gradient"
-			    android:orientation="horizontal" >	
-				
-				<!-- Imagen del amigo -->
-			    
-				<ImageView
-				    android:id="@+id/myProfile_Avatar"	    
-				    android:layout_width="wrap_content"
-			   		android:layout_height="wrap_content"
-			    	android:layout_margin="5dp"
-			    	android:layout_gravity="center_vertical"
-				    android:contentDescription="@string/contentDescription_Avatar" />
-				
-				<LinearLayout
-				    android:layout_width="fill_parent"
-				    android:layout_height="fill_parent"
-				    android:layout_marginLeft="5dp"
-				    android:orientation="vertical" >
-		    
-					<!-- Nombre del amigo -->
-					
-					<TextView
-					    android:id="@+id/myProfile_TxtName"
-					    android:layout_marginLeft="10dp"
-					    android:layout_width="wrap_content"
-					    android:layout_height="wrap_content" 
-					    android:textColor="#000033"
-					    android:typeface="serif"
-					    android:textSize="30sp"
-					    android:textAppearance="?android:attr/textAppearanceLarge"
-					    android:shadowColor="#F0F8FF"
-					    android:shadowRadius="3.5"
-					    android:shadowDx="1"
-					    android:shadowDy="2" />
-					
-					<!-- Ciudad -->
-					
-					<TextView
-						android:id="@+id/myProfile_TxtCiudad"
-						android:layout_width="wrap_content"
-					    android:layout_height="wrap_content"
-					    android:layout_marginLeft="10dp"
-					    android:textColor="#FFFFFF"
-						android:textStyle="italic"
-					    android:textSize="12sp" />
-				
-				</LinearLayout>
-			</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" 
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp">
+        
+   	    <RelativeLayout
+   	        android:layout_width="wrap_content"
+   	        android:layout_height="wrap_content" >
+
+   	        <ImageView
+   	            android:id="@+id/myProfile_ImageView_Avatar"
+   	            android:layout_width="@dimen/event_preview_image_width"
+   	            android:layout_height="@dimen/event_preview_image_height"
+   	            android:layout_centerVertical="true"
+   	            android:layout_centerHorizontal="true"
+				android:src="@drawable/no_image_profile"
+   	            android:contentDescription="@string/contentDescription_Icon" />
+		</RelativeLayout>
 		
+   	    <RelativeLayout
+   	        android:layout_width="fill_parent"
+   	        android:layout_height="fill_parent" 
+   	        android:layout_marginLeft="10dp">
 
-			<!-- Biografía -->
-			
-			<TextView
-				android:id="@+id/myProfile_LabelBio"
-				style="@style/EventTextLabel"
-				android:layout_marginTop="15dp"
-				android:text="@string/myProfile_LabelBio" />
-			
-			<TextView
-				android:id="@+id/myProfile_TxtBio"
-				style="@style/EventTextContent" />
+   	            <LinearLayout
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_centerVertical="true"
+			        android:orientation="vertical" >
+			        
+   	               	<TextView
+				        android:id="@+id/myProfile_Label_Username"
+				        style="@style/formLabel"
+				        android:text="@string/myProfile_Label_Username" />
+				
+				   	 <TextView
+				   	     android:id="@+id/myProfile_TextView_Username"
+				   	     android:layout_width="wrap_content"
+				   	     android:layout_height="wrap_content" />
+				   	 
+				   	 <TextView
+				        android:id="@+id/myProfile_Label_Email"
+				        style="@style/formLabel"
+				        android:text="@string/myProfile_Label_Email" />
+				
+				   	 <TextView
+				   	     android:id="@+id/myProfile_TextView_Email"
+				   	     android:layout_width="wrap_content"
+				   	     android:layout_height="wrap_content" />
+   	                
+			        </LinearLayout>
+		</RelativeLayout>
 
-		    <!-- Me puedes entontrar en:  -->
-		    
-		    <TextView
-				android:id="@+id/myProfile_LabelTwitter"
-				style="@style/EventTextLabel"
-				android:textStyle="italic"
-				android:layout_marginLeft="50dp"
-				android:layout_marginTop="10dp"
-				android:background="@drawable/green_gradient"
-				android:text="@string/myProfile_find_me"/>
-		    
-		    <LinearLayout
-			    android:layout_width="fill_parent"
-			    android:layout_height="fill_parent"
-			    android:layout_marginLeft="30dp"
-			    android:orientation="horizontal" >		    
-			    
-				<LinearLayout 
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="5dp"
-				    android:orientation="vertical" >
-					
-					<!-- Twitter -->
-					
-					<TextView
-						android:id="@+id/myProfile_LabelTwitter"
-						style="@style/EventTextLabel"
-						android:text="@string/myProfile_LabelTwitter" />
-					
-					<TextView
-						android:id="@+id/myProfile_TxtTwitter"
-						style="@style/EventTextContent" />
-				
-				</LinearLayout>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin">
+        
+     	<TextView
+	        android:id="@+id/myProfile_Label_Name"
+	        style="@style/formLabel"
+	        android:text="@string/myProfile_Label_Name" />
+	
+	   	<TextView
+  	    	android:id="@+id/myProfile_TextView_Name"
+  	     	android:layout_width="wrap_content"
+  	     	android:layout_height="wrap_content" />
+       
+		<TextView
+	        android:id="@+id/myProfile_Label_Surname"
+	        style="@style/formLabel"
+	        android:text="@string/myProfile_Label_Surname" />
+	
+	   	<TextView
+  	    	android:id="@+id/myProfile_TextView_Surname"
+  	     	android:layout_width="wrap_content"
+  	     	android:layout_height="wrap_content" /> 
+		
+		<TextView
+	        android:id="@+id/myProfile_Label_Facebook"
+	        style="@style/formLabel"
+	        android:text="@string/myProfile_Label_Facebook" />
+	
+	   	<TextView
+  	    	android:id="@+id/myProfile_TextView_Facebook"
+  	     	android:layout_width="wrap_content"
+  	     	android:layout_height="wrap_content" /> 
+		
+		<TextView
+	        android:id="@+id/myProfile_Label_Twitter"
+	        style="@style/formLabel"
+	        android:text="@string/myProfile_Label_Twitter" />
+	
+	   	<TextView
+  	    	android:id="@+id/myProfile_TextView_Twitter"
+  	     	android:layout_width="wrap_content"
+  	     	android:layout_height="wrap_content" /> 
+        
+	   	
+    </LinearLayout>
 
-				<LinearLayout 
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="5dp"
-				    android:orientation="vertical" >
-					<!-- Facebook -->
-					
-					<TextView
-						android:id="@+id/myProfile_LabelFacebook"
-						style="@style/EventTextLabel"
-						android:text="@string/myProfile_LabelFacebook" />
-					
-					<TextView
-						android:id="@+id/myProfile_TxtFacebook"
-						style="@style/EventTextContent" />
-					
-				</LinearLayout>
-				
-			</LinearLayout>
-			
-		    <LinearLayout 
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginLeft="5dp"
-				    android:layout_marginTop="10dp"
-				    android:orientation="vertical" >
-				
-				<!-- Ultima vez que entré -->
-				
-				<TextView
-					android:id="@+id/myProfile_LabelLastLogin"
-					style="@style/EventTextLabel"
-					android:textSize="14sp"
-					android:text="@string/myProfile_LabelLast_login" />
-				
-				<TextView
-					android:id="@+id/myProfile_TxtLastLogin"
-					style="@style/EventTextContent"
-					android:textSize="12sp"/>
-				
-			</LinearLayout>
-				
-			<!-- Eventos que sigo -->
-			
-			<TextView
-				android:id="@+id/myProfile_LabelEventsFollow"
-				style="@style/EventTextLabel"
-				android:text="@string/myProfile_LabelEvents_follow" />
-			
-			<Gallery
-			    android:id="@+id/pictures_events_follow"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content" />
-			
-			<!-- Eventos que organizo  -->
-			
-			<TextView
-				android:id="@+id/myProfile_LabelEventsOrganized"
-				style="@style/EventTextLabel"
-				android:text="@string/myProfile_LabelEvents_organized" />
-
-			<Gallery
-			    android:id="@+id/pictures_events_organized"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content" />
-			
-			<!-- Eventos a los que voy  -->
-			
-			<TextView
-				android:id="@+id/myProfile_LabelEventsSignup"
-				style="@style/EventTextLabel"
-				android:text="@string/myProfile_LabelEvents_signup" />
-			
-			<Gallery
-			    android:id="@+id/pictures_events_signup"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content" />
-
-		</LinearLayout>
-	</ScrollView>
 </LinearLayout>

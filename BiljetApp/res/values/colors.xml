@@ -2,4 +2,10 @@
 <resources>
     <!-- COLOR BACKGROUND FOR APP -->
     <color name ="background">#FFFFFF</color>
+    
+    <!-- OVERRIDED COLORS FOR ACTION BAR BACKGROUND -->
+    <color name="actionbar_title">#34495E</color>
+    <color name="actionbar_separator">#000000</color>
+    <color name="actionbar_background_start">#ECF0F1</color>
+    <color name="actionbar_background_end">#e1e3e4</color>
 </resources>
