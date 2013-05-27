@@ -49,7 +49,7 @@ This is the library that allows us to easily configure the appearance and action
 
 ## *ghost* folder
 Contains a relation of files such as Java classes, XML files, Android Activities and other files like drawables that have been removed from the final version of May 2013. This files are maintained because are already finished or it lays the groundwork for subsequent iterations of the project not reached (We'd need one more year to establish the social network for example). These are:
-- Implement friends section and all its functionality (biljet as social network)
+- Implement friends section and all its functionality (Biljet as social network)
 - Implement notification system
 - Implement preferences in the app (to change user data, connect with other social networks (Facebook / Twitter) and managing the way the user wanted to receive notifications
 
