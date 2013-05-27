@@ -10,12 +10,19 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="android:windowNoTitle">true</item> 
+        <item name="android:editTextStyle">@style/EditText_biljet</item>
+        <item name="android:buttonStyle">@style/Button_biljet</item>
+        <item name="android:spinnerStyle">@style/Spinner_biljet</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item> 
+        <item name="android:editTextStyle">@style/EditText_biljet</item>
+        <item name="android:buttonStyle">@style/Button_biljet</item>
+        <item name="android:spinnerStyle">@style/Spinner_biljet</item>
     </style>
     
     <!-- ACTION BAR STYLE (OVERRIDE)
@@ -27,6 +34,96 @@
         <item name="android:layout_marginRight">1px</item>
         <item name="android:layout_marginLeft">0px</item>
     </style>
+    
+    
+   <!-- ESTILO ETIQUETAS DE FORMULARIOS (LABEL FORMS)
+	 	 *********************************************************************************** -->      
+    
+    <style name="formLabel">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">18sp</item>
+    	<item name="android:textColor">#34495E</item>
+    	<item name="android:layout_marginBottom">2dp</item>
+    </style>
+    
+    <style name="headerLabel">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">22sp</item>
+    	<item name="android:textColor">#34495E</item>
+    	<item name="android:layout_marginBottom">2dp</item>
+    </style>
+    
+    <style name="dayViewLabel">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">18sp</item>
+    	<item name="android:textColor">#FFFFFF</item>
+    </style>
+    
+    <!-- ESTILO ETIQUETAS DEL MENU
+	 	 *********************************************************************************** -->      
+    
+    <style name="menuItem_titleOption">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">22sp</item>
+    	<item name="android:textColor">#FFFFFF</item>
+		<item name="android:layout_marginBottom">3dp</item>
+    </style> 
+    
+    <style name="menuItem_subtitleOption">
+	    <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:textSize">14sp</item>
+    	<item name="android:textColor">#e5e8ea</item>
+    	<item name="android:layout_marginBottom">2dp</item>
+    </style> 
+    
+    
+  <!-- ========================================================================================= 
+       Android Widgets
+       ========================================================================================= -->  
+    
+    
+    <!-- Estilo EditText del proyecto -->
+    <!-- ********************************************************************** -->
+    <style name="EditText_biljet" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/edit_text_biljet</item> 
+    </style>  
+    
+    <!-- Estilo EditText del proyecto -->
+    <!-- ********************************************************************** -->
+    <style name="Button_biljet" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button_biljet</item> 
+        <item name="android:textColor">#FFFFFF</item> 
+	    <item name="android:textStyle">bold</item>
+    </style>  
+    
+    <!-- Estilo EditText del proyecto -->
+    <!-- ********************************************************************** -->
+    <style name="Spinner_biljet" parent="@android:style/Widget.Spinner">
+        <item name="android:background">@drawable/spinner_biljet</item> 
+        <item name="android:textColor">#000000</item> 
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_height">48dp</item>
+	    <item name="android:layout_width">fill_parent</item>
+    </style>  
+    
+    
+    
+    
+  <!-- ========================================================================================= 
+       Deprecated Styles 
+       ========================================================================================= -->  
+    
+    
     
     <!-- ESTILO TEXTO HEADER SECCIONES
     	 *********************************************************************************** -->  
@@ -76,7 +173,7 @@
 
   	</style>
   	
-    
+
     <!-- ESTILO TEXTO EVENTO
     	 *********************************************************************************** -->      
     

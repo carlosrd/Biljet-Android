@@ -1,42 +1,80 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import javax.crypto.NoSuchPaddingException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
+import com.biljet.adapters.EventListAdapter;
+import com.biljet.adapters.SpinnerAdapter;
+import com.biljet.types.Category;
+import com.biljet.types.EncryptedData;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class MyEventsActivity extends Activity {
 
 	// ATRIBUTOS
  	// **************************************************************************************
-	   
-	final ArrayList<Event> sampleEventsToGo = getEventsToGo();
-	final ArrayList<Event> sampleEventsOrg = getEventsOrganized();
+	ActionBar actionBar;
+	ListView eventList;
 	
+	// Tarea en segundo plano: Conectar con la BD
+	DBConnection connector;							
+	boolean connectionAlive;  
+	
+	ArrayList<Event> eventsToGo; 					// Evento a los que se asiste
+	ArrayList<Event> eventsOrganized; 				// Eventos que organiza el propio usuario
+	
+	// Adaptadores para listas de eventos
+	EventListAdapter eventsToGoAdapter;		
+	EventListAdapter eventsOrganizedAdapter;
+	
+	// Opciones Spinner: Selector tipo de eventos (Asistir/Orgnizar)
 	final String[] opEventsSpinner = new String[] {"Eventos a los que asistirás:",
 											 	   "Eventos que organizas:" };
 	
-	final UpcomingEventsAdapter eventToGoAdapter = new UpcomingEventsAdapter(this,sampleEventsToGo);
-	final UpcomingEventsAdapter eventOrganizedAdapter = new UpcomingEventsAdapter(this,sampleEventsOrg);
-	
+	// Indica si el evento es asistir (false) o propio (true)
 	boolean isOwn = false;
 	
-	// OnCreate()
+	// Necesario en caso de fallo en la descarga del avatar del evento. Si falla, borramos el archivo
+	String imagePath;
+	
+	// CONSTRUCTORA
  	// **************************************************************************************
 	  
 	@Override
@@ -45,51 +83,68 @@ public class MyEventsActivity extends Activity {
         setContentView(R.layout.activity_my_events);
 
         // ACTION BAR
-     	// **************************************************************************************
-        
-        /*createHeaderView(R.drawable.header_back_button,"Mis Eventos", R.drawable.mas,true);
-		setBackButton(); fgd
-		setRightButtonAction(NewEventActivity.class);*/
-        
-		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+     	// **************************************************************************************       
+		actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("Mis Eventos");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.mas));
+		actionBar.addAction(new IntentWithFinishAction(this, new Intent(this, CalendarViewActivity.class), R.drawable.actionbar_calendar_action));
+		actionBar.addAction(new IntentAction(this, new Intent(this, NewEventActivity.class), R.drawable.actionbar_newevent_action));
 		
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
 		
+		// Inicializar el listView: Lo volveremos invisible durante las conexiones para no provocar errores
+		eventList = (ListView)findViewById(R.id.myEvents_List);
+		
+		Log.d("tag","\nComienzo seccion conexion DB");
+		eventsToGo = new ArrayList<Event>();
+		eventsOrganized = new ArrayList<Event>();
+		
+		connector = new DBConnection();
+		connectionAlive = true;
+		connector.execute();
+
 		// LIST VIEW
 		// **************************************************************************************
-
-		final ListView eventList = (ListView)findViewById(R.id.list_MyEvents);
-        
+	
+		eventsToGoAdapter = new EventListAdapter(this,eventsToGo);
+		eventsOrganizedAdapter = new EventListAdapter(this, eventsOrganized);
+		
 		// Setear oyentes OnClick
         
         eventList.setOnItemClickListener(new OnItemClickListener() {
 						public void onItemClick(AdapterView<?> a, View v, int eventId, long id) {
 						//Acciones necesarias al hacer click
-							
 							Intent eventIntent = new Intent(MyEventsActivity.this, EventViewActivity.class);
-					
-							Event e = sampleEventsToGo.get(eventId);
-							eventIntent.putExtra("event",e);
+							Event e;
+							
+							if (isOwn)
+								e = eventsOrganized.get(eventId);
+							else
+								e = eventsToGo.get(eventId);
+							
+							eventIntent.putExtra("EVENT", e);
 							eventIntent.putExtra("OWN?", isOwn);
+							eventIntent.putExtra("NO_TICKET", false);
+							if (!isOwn)
+								eventIntent.putExtra("SHOW_QR", true);
 							
 							startActivity(eventIntent);
+					
 										
 							}
 						});
         
-        eventList.setAdapter(eventToGoAdapter);
+        eventList.setAdapter(eventsToGoAdapter);
     	
         // SPINNER: TIPO Event (Asistir/Organizado)
      	// **************************************************************************************
 		
-		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, opEventsSpinner);
+		SpinnerAdapter spinnerAdapter = new SpinnerAdapter(MyEventsActivity.this, opEventsSpinner);
 		
-		final Spinner eventSpinner = (Spinner)findViewById(R.id.spinner_MyEvents);
-		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		
+		final Spinner eventSpinner = (Spinner)findViewById(R.id.myEvents_Spinner);
+		spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_biljet_view);
 		eventSpinner.setAdapter(spinnerAdapter);
 		
 		eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -98,12 +153,12 @@ public class MyEventsActivity extends Activity {
 													
 													switch(position){
 														// Events a los que asisto
-														case 0: eventList.setAdapter(eventToGoAdapter);
+														case 0: eventList.setAdapter(eventsToGoAdapter);
 																isOwn = false;
 																break;
 						
 														// Events que organizo
-														case 1: eventList.setAdapter(eventOrganizedAdapter);
+														case 1: eventList.setAdapter(eventsOrganizedAdapter);
 																isOwn = true;
 																break;
 													}
@@ -119,44 +174,526 @@ public class MyEventsActivity extends Activity {
 		
 	} // OnCreate()
 
-    private ArrayList<Event> getEventsToGo() {
+	@Override
+	protected void onRestart() {
+	    super.onRestart();  // Always call the superclass method first
 	    
-    	ArrayList<Event> sampleItems = new ArrayList<Event>();
-    
-    	Event Event1 = new Event("Cine Forum",1 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,30),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
-		Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event3 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
+	    // Activity being restarted from stopped state    
+	
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
+		Log.d("RESTART","\nComienzo seccion conexion DB");
+		eventsToGo.clear();
+		eventsOrganized.clear();
 		
-		sampleItems.add(Event1);
-	    sampleItems.add(Event2);
-	    sampleItems.add(Event3);
+		connector = new DBConnection();
+		connectionAlive = true;
+		connector.execute();
 
-	    return sampleItems;
 	}
-    
-    private ArrayList<Event> getEventsOrganized() {
-	    
-    	ArrayList<Event> sampleItems = new ArrayList<Event>();
-	    
-    	Event Event1 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
-		Event Event2 = new Event("Cine Forum",1 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),0 ,4,10, 3, 10, 5, "ONG", "Película: Navidad, en Madrid a las 21:00 ¿La has visto? Coméntala", 7);
-	    
-		sampleItems.add(Event1);
-		sampleItems.add(Event2);
+	
+	// METODOS PARA CONEXION DB
+ 	// **************************************************************************************
+	  
+	private String prepareUser(){
 		
-	    return sampleItems;
-    }
+		String[] params = null;
+	
+		try {
+			params = new EncryptedData(MyEventsActivity.this).decrypt();
+			return params[0];
+		} catch (InvalidKeyException e) {
+			Log.e("Error","Clave de cifrado no valida");
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("Error","El algoritmo no existe");
+		} catch (NoSuchPaddingException e) {
+			Log.e("Error","No hay padding");
+		} catch (IOException e) {
+			Log.e("Error","Entrada y salida");
+		}
 		
+		return "";
+	
+	}
+	
+	private boolean getEventsFromDB() {
+	    
+		// CONEXION CON DB
+		// **************************************************************************************
+		InputStream is = null;
+		String username = prepareUser();
+		
+		if (username.equals(""))
+			return false;
+		
+		try {
+			Log.d("tag","\nEntra en el try1");
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/user/u/"+username);
+			HttpResponse response = httpclient.execute(getRequest);
+			StatusLine responseStatus = response.getStatusLine();
+			int statusCode = responseStatus.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				is = entity.getContent();
+				}
+			}
+		catch(Exception e) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+						Toast.makeText(MyEventsActivity.this,"Error al conectar con el servidor!",Toast.LENGTH_LONG).show(); 
+				  }
+			});
+			return false;
+			// En esta captura de excepción podemos ver que hay un problema con la
+			// conexión e intentarlo más adelante.	
+		}
 
+		if (connector.isCancelled())
+			return false;
+		
+		// TRADUCCION DE LOS BYTES DESCARGADOS A STRING (JSON)
+		// **************************************************************************************
+
+		String result = "";
+
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+			StringBuilder sb = new StringBuilder();
+			sb.append(reader.readLine() + "\n");
+			String line="0";
+
+			while ((line = reader.readLine()) != null) 
+				sb.append(line + "\n");
+			
+			is.close();
+			result = sb.toString();
+			}
+		catch(Exception e) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(MyEventsActivity.this,"Error al obtener la cadena desde el buffer!",Toast.LENGTH_LONG).show(); 
+				  }
+			});	
+			return false;
+		} // catch
+
+		if (connector.isCancelled())
+			return false;
+		
+		// EXTRACCION DE LOS DATOS DEL JSON OBTENIDO
+		// **************************************************************************************
+		
+		String title, creatorId, _id, description, imageName, category, 
+			   address, city, place;
+		int postalCode, province, capacity;
+		double price, latitude, longitude;
+		long date;
+		
+		eventsToGo.clear();
+	
+		try {
+			Log.d("tag","\nEntra bucle JSON: Eventos a los que asiste");
+			JSONObject jsonObject = new JSONObject(result);
+			JSONArray jsonArray = jsonObject.getJSONArray("eventsToGo");
+			
+			for (int i = 0; i < jsonArray.length(); i++){
+				jsonObject = jsonArray.getJSONObject(i);
+
+				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+				// ************************************************************************
+				
+				title = jsonObject.getString("title");
+				creatorId = jsonObject.getString("creator");
+				_id = jsonObject.getString("_id");
+				description = jsonObject.getString("description");		
+				category = jsonObject.getString("category");
+
+				address = jsonObject.getString("address");
+				city = jsonObject.getString("city");
+				
+				// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
+				} catch (JSONException e){
+					postalCode = 0;
+				}
+				
+				// Provincia (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					province = jsonObject.getInt("province"); 
+				} catch (JSONException e){
+					province = 0;
+				}
+				
+				capacity = jsonObject.getInt("capacity"); 
+				date = jsonObject.getLong("finishAt");
+				price = jsonObject.getDouble("price");
+
+				
+				// CACHING IMAGENES EVENTOS
+				// ************************************************************************
+				
+				imageName = jsonObject.getString("imageName");
+				
+				String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/"+ imageName;
+				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+				
+				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
+				if(!imgFolder.exists())
+					imgFolder.mkdir();
+				
+				File imgFile = new File(imagePath);
+					
+				try {
+					// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+					if(!imgFile.exists())
+						saveImageFromURL(imageURL,imagePath);
+					
+				} catch(IOException e2) {
+						runOnUiThread(new Runnable() {
+							  public void run() {
+								  // Notificar error al guardar avatar
+								  Toast.makeText(MyEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+								  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+								  File fileToDelete = new File(imagePath);
+								  if (fileToDelete.exists())
+									  fileToDelete.delete();
+							  }
+						});
+
+				} // catch
+									
+				// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+				// ************************************************************************
+				
+				// Lugar (String => No lanza excepcion si es null)
+				// ---------
+				place = jsonObject.getString("place");
+				if (place.equals("null"))
+					place = "";		
+				
+				// Longitud
+				// -------------
+				try{
+					latitude = jsonObject.getDouble("latitude");;
+				} catch (JSONException e){
+					latitude = -1;
+				}
+				
+				// Latitud
+				// -------------
+				try{
+					longitude = jsonObject.getDouble("longitude"); 
+				} catch (JSONException e){
+					longitude = -1;
+				}
+
+				Event event = new Event(title,
+									    creatorId,
+									   _id,
+									   description,
+									   imagePath,
+									   new Category().getLabel(category),
+									   place,
+									   address,
+									   city,
+									   postalCode,
+									   province,
+									   longitude,
+									   latitude,
+									   date,
+									   (float)price,
+									   capacity,
+									   0,0,0);
+									
+				eventsToGo.add(event);
+
+				Log.d("eventToGo","\nAñadido "+ title +" al array");
+			
+			} //for
+			
+		} catch (JSONException e1) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(MyEventsActivity.this, "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
+				  }
+				});	
+			return false;
+		}
+	
+		if (connector.isCancelled())
+			return false;
+
+		eventsOrganized.clear();
+		
+		try {
+			Log.d("MyEvents","\nEntra bucle JSON: Eventos propios");
+			JSONObject jsonObject = new JSONObject(result);
+			JSONArray jsonArray = jsonObject.getJSONArray("eventsOrganized");
+			
+			for (int i = 0; i < jsonArray.length(); i++){
+				jsonObject = jsonArray.getJSONObject(i);
+				
+				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+				// ************************************************************************
+				
+				title = jsonObject.getString("title");
+				creatorId = jsonObject.getString("creator");
+				_id = jsonObject.getString("_id");
+				description = jsonObject.getString("description");		
+				category = jsonObject.getString("category");
+
+				address = jsonObject.getString("address");
+				city = jsonObject.getString("city");
+				
+				// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
+				} catch (JSONException e){
+					postalCode = 0;
+				}
+				
+				// Provincia (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					province = jsonObject.getInt("province"); 
+				} catch (JSONException e){
+					province = 0;
+				}
+				
+				capacity = jsonObject.getInt("capacity"); 
+				date = jsonObject.getLong("finishAt");
+				price = jsonObject.getDouble("price");
+
+				
+				// CACHING IMAGENES EVENTOS
+				// ************************************************************************
+				imageName = jsonObject.getString("imageName");
+				
+				String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
+				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+				
+				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
+				if(!imgFolder.exists())
+					imgFolder.mkdir();
+				
+				File imgFile = new File(imagePath);
+					
+				try {
+					// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+					if(!imgFile.exists())
+						saveImageFromURL(imageURL,imagePath);
+					
+				} catch(IOException e2) {
+						runOnUiThread(new Runnable() {
+							  public void run() {
+								  // Notificar error al guardar avatar
+								  Toast.makeText(MyEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+								  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+								  File fileToDelete = new File(imagePath);
+								  if (fileToDelete.exists())
+									  fileToDelete.delete();
+							  }
+						});
+
+				} // catch
+									
+				// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+				// ************************************************************************
+				
+				// Lugar (String => No lanza excepcion si es null)
+				// ---------
+				place = jsonObject.getString("place");
+				if (place.equals("null"))
+					place = "";	
+				
+				// Codigo postal (Numero => Lanza excepcion si es null)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
+				} catch (JSONException e){
+					postalCode = 0;
+				}
+				
+				// Longitud
+				// -------------
+				try{
+					latitude = jsonObject.getDouble("latitude");;
+				} catch (JSONException e){
+					latitude = -1;
+				}
+				
+				// Latitud
+				// -------------
+				try{
+					longitude = jsonObject.getDouble("longitude"); 
+				} catch (JSONException e){
+					longitude = -1;
+				}
+
+				Event event = new Event(title,
+									    creatorId,
+									   _id,
+									   description,
+									   imagePath,
+									   new Category().getLabel(category),
+									   place,
+									   address,
+									   city,
+									   postalCode,
+									   province,
+									   longitude,
+									   latitude,
+									   date,
+									   (float)price,
+									   capacity,
+									   0,0,0);
+									
+				eventsOrganized.add(event);
+
+				Log.d("eventOrganized","\nAñadido "+ title +" al array");
+			
+			} //for
+			
+		} catch (JSONException e1) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(MyEventsActivity.this, "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
+				  }
+				});	
+			return false;
+		}
+		
+		if (connector.isCancelled())
+			return false;
+		
+		return true;
+	}	
+	
+    private void saveImageFromURL(String imageURL,String destinationPath) throws IOException{
+    	
+		URL url = new URL(imageURL);
+		File imgFile = new File(destinationPath);
+		imgFile.createNewFile();
+		
+		InputStream input = null;
+		FileOutputStream output = null;
+		Log.d("SaveImage","Inicio try saveImage");
+		try {
+			
+		    input = url.openConnection().getInputStream();
+			Log.d("tag3","Conexion hecha!");
+		    output = new FileOutputStream(imgFile);
+
+			Log.d("SaveImage","Abierto output!");
+			
+		    int read;
+		    byte[] data = new byte[1024];
+		    Log.d("tag3","Inicio bucle saveImage");
+		    while ((read = input.read(data)) != -1)
+		        output.write(data, 0, read);
+		    
+			Log.d("SaveImage","Termina bucle saveImage");
+			
+		} finally {
+		    if (output != null)
+		        output.close();
+		    if (input != null)
+		        input.close();
+		}
+    	
+    }	
+	
+    /*  Se instancia con 3 tipos:
+	1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
+	2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
+	3º - Tipo de datos de SALIDA de doInBackground() y de ENTRADA en onPostExecute() => Datos para mostrar el fin de la tarea	
+	*/
+	private class DBConnection extends AsyncTask<Void,Integer,Boolean> {
+	
+		@Override
+		protected void onPreExecute() {
+			eventList.setVisibility(View.INVISIBLE);
+			actionBar.setProgressBarVisibility(View.VISIBLE);
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return getEventsFromDB();
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+		
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			eventList.setVisibility(View.VISIBLE);
+			connectionAlive = false;
+			if (result){
+				eventsToGoAdapter.notifyDataSetChanged();
+				eventsOrganizedAdapter.notifyDataSetChanged();
+			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			eventList.setVisibility(View.INVISIBLE);
+			connectionAlive = false;
+			Toast.makeText(getBaseContext(), "Conexión cancelada por el usuario!", Toast.LENGTH_LONG).show();
+		}
+	
+	
+	}
+	
+	
+	// ACCIONES ADICIONALES PARA ACTIONBAR
+ 	// **************************************************************************************
+ 		
+    private class IntentWithFinishAction extends AbstractAction {
+        private Context mContext;
+        private Intent mIntent;
+
+        public IntentWithFinishAction(Context context, Intent intent, int drawable) {
+            super(drawable);
+            mContext = context;
+            mIntent = intent;
+        }
+
+        @Override
+        public void performAction(View view) {
+            try {      
+               mContext.startActivity(mIntent); 
+               finish();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(mContext,
+                        mContext.getText(R.string.actionbar_activity_not_found),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+	
+	// BOTON MENU TELEFONO
+	// **************************************************************************************
+	
+	/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_events, menu);
         return true;
     }
     
+	
 	/**
 	 * Actions related to the menu options displayed when you press ··· or Config button on the device
-	 */
+	 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -167,6 +704,6 @@ public class MyEventsActivity extends Activity {
 	    }
 	    return true;
 	}
-
+	 */
 }
 

@@ -9,20 +9,22 @@
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
-
-	<!-- <ViewStub
-		android:id="@+id/actionBar"
-		android:inflatedId="@+id/header"
-	    android:layout="@layout/header"
-	    android:layout_width="fill_parent"
-	    android:layout_height="60dip" /> -->
-
+    
+    <View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:background="#BDC3C7" />
+    
 	<!-- Month Viewfinder -->
 	
 	<RelativeLayout 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:background="#F0F8FF" >
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_marginTop="10dp"
+	    android:layout_marginBottom="5dp"
+	    android:background="#FFFFFF" >
 	   
 	   <!-- Button Previous -->
 	   
@@ -32,32 +34,27 @@
 		    android:gravity="left">
 		    
 		    <Button
-		    	android:id="@+id/calendarView_ButtonPrevious"
+		    	android:id="@+id/calendarView_Button_Previous"
 		    	android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="@string/calendarView_ButtonPrevious"
-				android:gravity="center"
-		    	android:height="40dp"
-		    	android:width="40dp"
-				android:background="@drawable/blue_gradient"
-		    	android:textColor="#FFFFFF" 
-		    	android:textStyle="bold" />
+		    	android:text="@string/calendarView_Button_Previous" />
 		    
 		</LinearLayout>
 
 	   	<!-- Month Text -->
 	   	
 	    <TextView
-	        android:id="@+id/calendarView_LabelMonth"
+	        android:id="@+id/calendarView_Label_Month"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerVertical="true"
 	        android:layout_centerHorizontal="true"
-	        android:layout_toRightOf="@id/calendarView_ButtonPrevious"
-			android:text="@string/calendarView_MonthText"
+	        android:layout_toRightOf="@id/calendarView_Button_Previous"
+			android:text="@string/calendarView_Month_Text"
 			android:gravity="center_horizontal"
-	        android:textAppearance="?android:attr/textAppearanceLarge" 
-	        android:textColor="#0B173B" />
+	        android:textColor="#2C3E50"
+	        android:textSize="22sp"
+	        android:textStyle="bold" />
 	    
 	   	<!-- Button Next -->
 	    
@@ -65,44 +62,108 @@
    			android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:gravity="right"
-		    android:layout_toRightOf="@+id/calendarView_LabelMonth" >
+		    android:layout_toRightOf="@+id/calendarView_Label_Month" >
 		    
 		    <Button
-		    	android:id="@+id/calendarView_ButtonNext"
+		    	android:id="@+id/calendarView_Button_Next"
 		    	android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="@string/calendarView_ButtonNext"
-		    	android:gravity="center"
-		    	android:height="40dp"
-		    	android:width="40dp"
-				android:background="@drawable/blue_gradient"
-		    	android:textColor="#FFFFFF" 
-		    	android:textStyle="bold" />
+		    	android:text="@string/calendarView_Button_Next"
+		    	android:gravity="center" />
 		    
 	    </LinearLayout>
 	    
 	</RelativeLayout>
 	
-	<GridView
-	    android:id="@+id/calendarView_gridCalendarLabelDays"
+	<!-- Este Host sirve para ocultar de una sola vez el GridView y las etiqueetas de los dias -->
+	<LinearLayout 
+	    android:id="@+id/calendarView_HostLayout"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:numColumns="7"
-	    android:background="#F0F8FF"
-	    android:verticalSpacing="2dp"
-	    android:clickable="false" >
-	</GridView>
+	    android:orientation="vertical" >
+	    
+	    
+	<!-- ETIQUETAS DIAS: LUNES, MARTES, ... -->
+	<!-- ********************************************* -->
+	
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="5dp"
+	    android:layout_marginRight="10dp"
+	    android:orientation="horizontal">
+	    
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"	        
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Monday" />
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Tuesday" />
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Wednesday" />
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"	        
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Thursday" />	   
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"	        
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Friday" />	    
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"	        
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Saturday" />	  
+	    <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="center"	        
+	        style="@style/formLabel" 
+	        android:text="@string/calendarView_Label_Sunday" />	  	          	        	      	    	  "
+	</LinearLayout>
+	
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginTop="2dp"
+       android:layout_marginLeft="10dp"
+       android:layout_marginRight="10dp"
+       android:layout_marginBottom="3dp"
+	   android:background="@drawable/biljet_gradient" />
 	
 	<GridView
 	    android:id="@+id/calendarView_gridCalendar"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
+	    android:layout_marginLeft="5dp"
 	    android:numColumns="7" 
-	   	android:background="#F0F8FF"
-	    android:verticalSpacing="2dp"
-	    android:horizontalSpacing="2dp">
+	   	android:background="#FFFFFF"
+	   	android:stretchMode="columnWidth"
+	   	android:verticalSpacing="2dp"
+	   	android:horizontalSpacing="2dp">
 	</GridView>
 	
-	<!-- color de antes en el fondo -> android:background="#0B0B61" -->
-	
+		</LinearLayout>
 </LinearLayout>

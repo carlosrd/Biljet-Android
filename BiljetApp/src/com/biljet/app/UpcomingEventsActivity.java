@@ -1,26 +1,54 @@
 package com.biljet.app;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.biljet.adapters.UpcomingEventsAdapter;
-import com.biljet.types.Date;
+import com.biljet.adapters.EventListAdapter;
+import com.biljet.types.Category;
 import com.biljet.types.Event;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 public class UpcomingEventsActivity extends Activity {
 
-	final ArrayList<Event> itemsEvent = getEvents();;
+	ActionBar actionBar;
+	DBConnection connector;
+	ListView eventList;
+	EventListAdapter eventListAdapter;
+	boolean connectionAlive;
+	ArrayList<Event> itemsEvent;// = getEvents();
+	
+	// Necesario en caso de fallo en la descarga del avatar del evento. Si falla, borramos el archivo
+	String imagePath;			
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,21 +56,30 @@ public class UpcomingEventsActivity extends Activity {
      
         // ACTION BAR
      	// **************************************************************************************
-        /*createHeaderView(R.drawable.header_back_button,"Proximos Eventos", R.drawable.buscar,true);
-		setBackButton();*/
 		
-		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
-		actionBar.setTitle("Próximos Eventos");
+		actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle("Descubrir...");
 		actionBar.setHomeAction(new IntentAction(this, IndexActivity.createIntent(this), R.drawable.actionbar_logo));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.addAction(new IntentAction(this, new Intent(this, SearchActivity.class), R.drawable.buscar));
+		actionBar.addAction(new IntentAction(this, new Intent(this, SearchActivity.class), R.drawable.actionbar_search_action));
 		
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
 		
+		// Inicializar el listView: Lo volveremos invisible durante las conexiones para no provocar errores
+		eventList = (ListView)findViewById(R.id.list_Events);
+		
+		Log.d("tag","\nComienzo seccion conexion DB");
+		itemsEvent = new ArrayList<Event>();
+		
+		connector = new DBConnection();
+		connectionAlive = true;
+		connector.execute();
+
 		// LIST VIEW
 		// **************************************************************************************
-
-		UpcomingEventsAdapter adapter = new UpcomingEventsAdapter(this,itemsEvent);
-        ListView eventList = (ListView)findViewById(R.id.list_Events);
+		
+		eventListAdapter = new EventListAdapter(this,itemsEvent);
         
 		// Setear oyentes OnClick
         
@@ -51,52 +88,345 @@ public class UpcomingEventsActivity extends Activity {
 						//Acciones necesarias al hacer click
 							
 							Intent intentEvent = new Intent(UpcomingEventsActivity.this, EventViewActivity.class);
-							
-//							Bundle dataBundle = new Bundle();
-//							
-//							//En realidad creo que se le puede pasar el tipo Event usand (ya lo probaremos)
-//							dataBundle.putInt("IMAGE-URL", itemsEvent.get(idEvent).getImage());
-//							dataBundle.putString("NAME", itemsEvent.get(idEvent).getName());
-//							dataBundle.putString("EVENT_TYPE", itemsEvent.get(idEvent).getEventType());
-//							dataBundle.putString("SITE", itemsEvent.get(idEvent).getSite());
-//							dataBundle.putInt("PRICE", itemsEvent.get(idEvent).getPrice());
-//							dataBundle.putInt("CONFIRMED_PEOPLE", itemsEvent.get(idEvent).getConfirmedPeople());
-//							dataBundle.putInt("CAPACITY", itemsEvent.get(idEvent).getCapacity());
-//							dataBundle.putString("INFO", itemsEvent.get(idEvent).getEventInfo());
-//							
-//							intentEvent.putExtras(dataBundle);
-							
-							Event e= itemsEvent.get(idEvent);
-							intentEvent.putExtra("event",e);
+
+							Event e = itemsEvent.get(idEvent);
+							intentEvent.putExtra("EVENT",e);
 							intentEvent.putExtra("OWN?", false);
+							intentEvent.putExtra("NO_TICKET", true);
 							
 							startActivity(intentEvent);
 										
 							}
 						});
         
-        eventList.setAdapter(adapter);
+        eventList.setAdapter(eventListAdapter);
     }
 
-    private ArrayList<Event> getEvents() {
+	@Override
+	protected void onRestart() {
+	    super.onRestart();  // Always call the superclass method first
 	    
-    	ArrayList<Event> sampleEvents = new ArrayList<Event>();
-	     
-	    Event Event1 = new Event("Concierto ACDC",1 ,R.drawable.acdc_evento ,"Concierto", "Valladolid", new Date(8,12,2012,22,10),0,3,15, 40, 30, 200, "Empresa1 Conciertos", "Ya puede comprar las entradas ACDC. Los pioneros australianos del hard rock, se subirán de nuevo a los escenarios, este año presentarán su nueva gira mundial. La última vez que estuvieron de gira, fue hace 8 años. ¡Las entradas para la gira europea de AC/DC, están aquí disponibles! ¡Aproveche la oportunidad que le brindamos y oiga los éxitos legendarios de ACDC en concierto! Podrá oir el sonido inigualable de guitarra, que con el paso de los años no ha cambiado lo más mínimo. Los AC/DC siempre han sabido atraer a las masas. Las entradas para ver a los ACDC, le asegurarán una fantástica actuación en directo y podrá oir los éxitos “Back in Black”, “Highway to Hell” y “High Voltage” como también hits del último álbum “The Razor’s Edge” y “Ballbreaker”. Si nunca ha presenciado en directo a AC/DC, entonces no sabe lo que se pierde. Esta gira del grupo de rock duro, será seguramente, la última que ofrezcan, por eso tendrá que darse prisa, antes de que se agoten las entradas para los conciertos de AC/DC", 6);
-		Event Event2 = new Event("Jessie J en concierto",2 ,R.drawable.jessie_j_evento ,"Concierto", "Madrid", new Date(20,7,2013,20,30),0,2,45, 10, 40, 25, "Empresa2 Conciertos", "Concierto de Jessie J en Valladolid a las 20:30, ¿Lo has apuntado?", 5);
-		Event Event3 = new Event("Carrera Atlética",3 ,R.drawable.maraton_evento ,"Fiesta", "Sevilla", new Date(15,2,2013,19,45),0,0,0, 5, 10, 20, "Empresa", "La Carrera Atlética 10 K VIVA! Surge como una actividad en la que la participación de los atletas nace de los sentimientos más profundos como una manera de expresar libremente el bienestar que produce la actividad física sumando este elemento a un estilo y forma de vida saludable, en un espacio para compartir, disfrutar, gozar, aprender y llegar a una alegría plena en busca de la excelencia en el mantenimiento de una vida sana, en una carrera con altos estándares de calidad", 3);
-		Event Event4 = new Event("Cine Forum",4 ,R.drawable.cine_forum_evento ,"Cine", "Madrid", new Date(24,12,2012,21,20),2,0,0, 3, 10, 5, "ONG", "organiza un cine fórum sobre la conocida película de Luis García Berlanga “Bienvenido Mr. Marshall” en el Ensanche de Vallecas, a la salida del metro Valdecarros (Avenida del Ensanche s/n), uno de los terrenos barajados en la Comunidad de Madrid como posible ubicación de Eurovegas", 7);
-	    
-		sampleEvents.add(Event1);
-	    sampleEvents.add(Event2);
-	    sampleEvents.add(Event3);
-	    sampleEvents.add(Event4);
+	    // Activity being restarted from stopped state    
+	
+		// CONEXION CON DB EN SEGUNDO PLANO
+	   	// **************************************************************************************
+		Log.d("tag","\nComienzo seccion conexion DB");
+		itemsEvent = new ArrayList<Event>();
+		
+		connector = new DBConnection();
+		connectionAlive = true;
+		connector.execute();
 
+	}
+   
+	// BOTON "ATRAS"
+   	// **************************************************************************************
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_BACK:
+					if (connectionAlive)
+						connector.cancel(true);
+					else
+						finish();
+					break;
+			}
+
+			return true;
+	}
+
+	// AUXILIARES PARA CONEXION CON DB 
+   	// **************************************************************************************
+	
+    private boolean getEventsFromDB() {
 	    
-	     return sampleEvents;
+		// CONEXION CON DB
+	   	// **************************************************************************************		
+    	InputStream is = null;
+    	
+    	try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpGet getRequest = new HttpGet("http://www.biljetapp.com/api/event?limit=15");
+			HttpResponse response = httpclient.execute(getRequest);
+			StatusLine responseStatus = response.getStatusLine();
+			int statusCode = responseStatus.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				is = entity.getContent();
+				}
+			}
+		catch(Exception e) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(UpcomingEventsActivity.this,"Error al conectar con el servidor!",Toast.LENGTH_SHORT).show(); 
+				  }
+				});	
+			
+			return false;
+			// En esta captura de excepción podemos ver que hay un problema con la
+			// conexión e intentarlo más adelante.
+		}
+		
+		if (connector.isCancelled())
+			return false;
+					
+		String result = "";
+		
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"),8);
+			StringBuilder sb = new StringBuilder();
+			sb.append(reader.readLine() + "\n");
+			String line="0";
+			
+			while ((line = reader.readLine()) != null) 
+				sb.append(line + "\n");
+			
+			is.close();
+			result = sb.toString();
+			
+			}
+		catch(Exception e) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(UpcomingEventsActivity.this,"Error: No se ha podido completar la operacion!",Toast.LENGTH_SHORT).show(); 
+				  }
+				});	
+			return false;
+		}
+		
+		if (connector.isCancelled())
+			return false;
+		
+		
+		String title, creatorId, _id, description, imageName, category, 
+			   address, city, place;
+		int postalCode, province, capacity;
+		double price, latitude, longitude;
+		long date;
+			
+		itemsEvent.clear();
+		
+		try {
+			Log.d("ProxEventos","Entra bucle JSON");
+			JSONArray jsonArray = new JSONArray(result);
+			JSONObject jsonObject = null;
+			for(int i = 0; i < jsonArray.length(); i++){
+				jsonObject = jsonArray.getJSONObject(i);
+				
+				// DATOS JSON REQUERIDOS (NO lanzarán excepción; nunca seran "null")
+				// ************************************************************************
+				
+				title = jsonObject.getString("title");
+				creatorId = jsonObject.getString("creator");
+				_id = jsonObject.getString("_id");
+				description = jsonObject.getString("description");		
+				category = jsonObject.getString("category");
+
+				address = jsonObject.getString("address");
+				city = jsonObject.getString("city");
+				
+				// Codigo postal (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					postalCode = jsonObject.getInt("postalCode");
+				} catch (JSONException e){
+					postalCode = 0;
+				}
+				
+				// Provincia (Numero => Lanza excepcion si no se puede convertir)
+				// -------------
+				try{
+					province = jsonObject.getInt("province"); 
+				} catch (JSONException e){
+					province = 0;
+				}
+				
+				capacity = jsonObject.getInt("capacity"); 
+				date = jsonObject.getLong("finishAt");
+				price = jsonObject.getDouble("price");
+
+				// CACHING IMAGENES EVENTOS
+				// ************************************************************************
+				imageName = jsonObject.getString("imageName");
+				
+				String imageURL = "https://s3-eu-west-1.amazonaws.com/biljet/" + imageName;
+				imagePath = getFilesDir().getAbsolutePath()+"/eventsImage/"+imageName;
+				
+				File imgFolder = new File (getFilesDir().getAbsolutePath()+"/eventsImage");
+				if(!imgFolder.exists())
+					imgFolder.mkdir();
+				
+				File imgFile = new File(imagePath);
+					
+				try {
+					// Si la imagen a descargar no esta almacenada en el telefono, la descargamos y guardamos en "data"
+					if(!imgFile.exists())
+						saveImageFromURL(imageURL,imagePath);
+					
+				} catch(IOException e2) {
+						runOnUiThread(new Runnable() {
+							  public void run() {
+								  // Notificar error al guardar avatar
+								  //Toast.makeText(UpcomingEventsActivity.this, "Error: No se pudo guardar avatar para el evento:", Toast.LENGTH_SHORT).show();
+								  // Si se ha creado un archivo, borrarlo para que en la proxima conexion se vuelva a descargar
+								  File fileToDelete = new File(imagePath);
+								  if (fileToDelete.exists())
+									  fileToDelete.delete();
+							  }
+						});
+
+				} // catch
+									
+				// DATOS JSON NO REQUERIDOS (Pueden ser "null" => Lanzarán excepción)
+				// ************************************************************************
+
+				// Lugar (String => No lanza excepcion si es null)
+				// ---------
+				place = jsonObject.getString("place");
+				if (place.equals("null"))
+					place = "";		
+				
+				// Longitud
+				// -------------
+				try{
+					latitude = jsonObject.getDouble("latitude");;
+				} catch (JSONException e){
+					latitude = -1;
+				}
+				
+				// Latitud
+				// -------------
+				try{
+					longitude = jsonObject.getDouble("longitude"); 
+				} catch (JSONException e){
+					longitude = -1;
+				}
+
+				Event event = new Event(title,
+									    creatorId,
+									   _id,
+									   description,
+									   imagePath,
+									   new Category().getLabel(category),
+									   place,	
+									   address,
+									   city,	
+									   postalCode,
+									   province,
+									   longitude,
+									   latitude,
+									   date,
+									   (float)price,
+									   capacity,
+									   0,0,0);
+									
+				itemsEvent.add(event);
+				
+				Log.d("UpcomingEvents","\nAñadido el evento "+ title +" al array");
+				
+			} // for
+			
+		} catch (JSONException e1) {
+			runOnUiThread(new Runnable() {
+				  public void run() {
+					  Toast.makeText(getBaseContext(), "Error: No se pudieron leer los datos recibidos!", Toast.LENGTH_SHORT).show();
+				  }
+				});	
+			
+			return false;
+		}
+
+		
+		if (connector.isCancelled())
+			return false;
+		
+		return true;
+    }
+    
+    private void saveImageFromURL(String imageURL,String destinationPath) throws IOException{
+    	
+		URL url = new URL(imageURL);
+		File imgFile = new File(destinationPath);
+		imgFile.createNewFile();
+		InputStream input = null;
+		FileOutputStream output = null;
+		Log.d("tag3","Inicio try saveImage");
+		try {
+			
+		    input = url.openConnection().getInputStream();
+			Log.d("tag3","Conexion hecha!");
+		    output = new FileOutputStream(imgFile);
+
+			Log.d("tag3","Abierto output!");
+			
+		    int read;
+		    byte[] data = new byte[1024];
+		    Log.d("tag3","Inicio bucle saveImage");
+		    while ((read = input.read(data)) != -1)
+		        output.write(data, 0, read);
+		    
+			Log.d("tag3","Termina bucle saveImage");
+			
+		} finally {
+		    if (output != null)
+		        output.close();
+		    if (input != null)
+		        input.close();
+		}
+    	
+    }
+	
+    // CONEXION CON DB EN SEGUNDO PLANO
+   	// **************************************************************************************
+	
+    /*  Se instancia con 3 tipos:
+    		1º - Tipo de datos de ENTRADA para doInBackground() => Datos de entrada de la tarea en segundo plano 
+    		2º - Tipo de datos de ENTRADA para onProgressUpdate() y de ENTRADA para publishProgress() => Datos para mostrar el progreso
+    		3º - Tipo de datos de SALIDA de doInBackground() y de ENTRADA en onPostExecute() => Datos para mostrar el fin de la tarea	
+    */
+    private class DBConnection extends AsyncTask<Void,Integer,Boolean> {
+
+	    @Override
+	    protected void onPreExecute() {
+			actionBar.setProgressBarVisibility(View.VISIBLE);
+			eventList.setVisibility(View.INVISIBLE);
 	    }
-    
-    
+	 
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			getEventsFromDB();
+			return true;
+		}
+		
+    	@Override
+	    protected void onProgressUpdate(Integer... values) {
+	
+	    }
+    	
+	    @Override
+	    protected void onPostExecute(Boolean result) {
+			actionBar.setProgressBarVisibility(View.INVISIBLE);
+			connectionAlive = false;
+			eventList.setVisibility(View.VISIBLE);
+			eventListAdapter.notifyDataSetChanged();
+			
+	    }
+	 
+	    @Override
+	    protected void onCancelled() {
+	    	actionBar.setProgressBarVisibility(View.INVISIBLE);
+	    	connectionAlive = false;
+	    	Toast.makeText(getBaseContext(), "Conexión cancelada por el usuario!", Toast.LENGTH_LONG).show();
+	    }
+
+
+    }
+     
+	// TECLA MENU ó ···
+	// **************************************************************************************
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.upcoming_events, menu);
@@ -105,7 +435,7 @@ public class UpcomingEventsActivity extends Activity {
 
 	/**
 	 * Actions related to the menu options displayed when you press ··· or Config button on the device
-	 */
+	 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -115,6 +445,6 @@ public class UpcomingEventsActivity extends Activity {
 	        	break;
 	    }
 	    return true;
-	}
+	}*/
 
 }

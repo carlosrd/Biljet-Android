@@ -4,10 +4,31 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- Etiquetas necesarias para el funcionamiento de Google Maps API v2 -->
+    <!-- =========================================================== -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
     <!-- Fijar permisos de la app -->
     <!-- =========================================================== -->
-    <uses-permission android:name="android.permission.CAMERA" >
-    </uses-permission>
+
+
+    <!-- Permisos necesarios para los mapas -->
+    <permission
+        android:name="com.biljet.app.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.biljet.app.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- Permisos para el lector de QR -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Permisos para acceder a Internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Fijar recursos accedidos por la app -->
     <!-- =========================================================== -->
@@ -32,6 +53,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <!-- API Key para GMaps -->
+        <!-- DEBUG VALUE = AIzaSyA9njTlWFjGTGu46AO-tm5tO9oiS5Mwo24 -->
+        <!-- RELEASE VALUE = AIzaSyByFGH_Ly70NXOmUt7iCmqFepPmh84ygaE  (Alias: biljet) -->
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyByFGH_Ly70NXOmUt7iCmqFepPmh84ygaE" />
 
         <!-- Activity + informacion para el intent SCAN del lector de QR -->
         <!-- =========================================================== -->
@@ -60,48 +89,53 @@
         <!-- =========================================================== -->
 
         <activity
-            android:name="com.biljet.app.MyFriendsActivity"
-            android:label="@string/title_activity_my_friends" >
-        </activity>
-        <activity
-            android:name="com.biljet.app.FriendViewActivity"
-            android:label="@string/title_activity_friend_view" >
-        </activity>
-        <activity
             android:name="com.biljet.app.MyProfileActivity"
-            android:label="@string/title_activity_my_profile" >
+            android:label="@string/title_activity_my_profile"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.UpcomingEventsActivity"
-            android:label="@string/title_activity_upcoming_events" >
+            android:label="@string/title_activity_upcoming_events"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.EventViewActivity"
-            android:label="@string/title_activity_event_view" >
+            android:label="@string/title_activity_event_view"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.MyEventsActivity"
-            android:label="@string/title_activity_my_events" >
+            android:label="@string/title_activity_my_events"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.NewEventActivity"
-            android:label="@string/title_activity_new_event" >
+            android:label="@string/title_activity_new_event"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.CalendarViewActivity"
-            android:label="@string/title_activity_calendar_view" >
+            android:label="@string/title_activity_calendar_view"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_search"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.DayViewActivity"
-            android:label="@string/title_activity_day_view" >
+            android:label="@string/title_activity_day_view"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.biljet.app.IndexActivity"
-            android:label="@string/title_activity_index" >
+            android:label="@string/title_activity_index"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.LoginActivity"
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -109,8 +143,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.biljet.app.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:name="com.biljet.app.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.QRViewActivity"
+            android:label="@string/title_activity_qrview" 
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.biljet.app.QRResultsActivity"
+            android:label="@string/title_activity_qrresults" 
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

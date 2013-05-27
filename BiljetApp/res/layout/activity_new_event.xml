@@ -3,278 +3,589 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-	android:background="#F0F8FF"
+	android:background="#FFFFFF"
     android:scrollbars="vertical" >
     
     <!-- Action Bar -->
     <com.markupartist.android.widget.ActionBar
 	    android:id="@+id/actionbar"
 	    style="@style/ActionBar" />
-
-	<!-- <ViewStub
-		android:id="@+id/actionBar"
-		android:inflatedId="@+id/header"
-	    android:layout="@layout/header"
-	    android:layout_width="fill_parent"
-	    android:layout_height="60dip" /> -->
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
 	
 	<!-- inicia el ScrollView -->
     <ScrollView android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-       
-        <LinearLayout android:orientation="vertical"
-            android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_horizontal_margin">
+        
+      <LinearLayout android:orientation="vertical"
+        	android:layout_width="fill_parent" 
             android:layout_height="wrap_content">   
             
+            <!-- > Datos basicos del evento -->
+            <!-- ******************************************************* -->
+
+            <TextView
+                android:text="@string/newEvent_LabelHeader_BasicData"
+                style="@style/headerLabel" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+           
+           <!-- __________________ Linea divisoria ______________ -->
+
+    	    <View
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="3dp"
+    	        android:layout_marginBottom="5dp"
+    	        android:background="@drawable/biljet_gradient" />
+            
+            
+            <!-- Nombre del evento -->
+            <!-- ******************************************************* -->
+            
             <TextView 
-                android:text="@string/newEvent_LabelName"  
+                android:text="@string/newEvent_Label_Title" 
+                style="@style/formLabel" 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
             
             <EditText 
-                android:id="@+id/newEvent_EditName"
+                android:id="@+id/newEvent_EditText_Title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Introduzca el nombre del evento"/>
+                android:inputType="textCapWords"
+                android:layout_marginBottom="3dp" />
+            	<requestFocus />
       	        
-            <!-- Tipo evento-->	        
+            <!-- Spinner: Tipo del evento -->
+            <!-- ******************************************************* -->       
             <TextView 
-                android:text="@string/newEvent_LabelEventType" 
+                android:text="@string/newEvent_Label_Category" 
+                style="@style/formLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
          
              <Spinner
-				android:id="@+id/newEvent_SpinnerEventType"
+				android:id="@+id/newEvent_Spinner_Category"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" >
+				android:layout_height="48dp"
+				android:layout_marginBottom="3dp"
+				android:prompt="@string/newEvent_Spinner_Prompt_Category"  >
 			</Spinner>
 			
-             <!--  Fin tipo evento -->             
-            
-            <TextView 
-                android:text="@string/newEvent_LabelSite" 
+			<!-- Precio + Aforo -->
+            <!-- ******************************************************* -->  
+             
+		    <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+		           		
+              		<TextView 
+              		    android:id="@+id/newEvent_Label_Price"
+		                android:text="@string/newEvent_Label_Price" 
+		                style="@style/formLabel"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                 />
+
+   		            <TextView 
+              		    android:id="@+id/newEvent_Label_Capacity"
+		                android:text="@string/newEvent_Label_Capacity" 
+		                style="@style/formLabel"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                 />		
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+		           		
+   	            <EditText 
+	                android:id="@+id/newEvent_EditText_Price"
+					android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:inputType="numberDecimal"
+	                android:layout_marginRight="3dp" />
+		                 
+
+   		        <EditText 
+               		android:id="@+id/newEvent_EditText_Capacity"
+					android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+                	android:inputType="number" />	
+                	
+		    </LinearLayout>
+            		    
+			<!-- Info del evento -->
+            <!-- ******************************************************* -->  
+			<TextView 
+                android:text="@string/newEvent_Label_Description" 
+                style="@style/formLabel"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />      
-            <EditText
-                android:id="@+id/newEvent_EditSite" 
+                android:layout_height="wrap_content" />
+			   
+            <EditText 
+                android:id="@+id/newEvent_EditText_Description"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Lugar del acontecimiento" />
+                android:singleLine="false" 
+                android:lines="3"     
+                android:gravity="top"       	
+                android:hint="@string/newEvent_Hint_Description"
+            	android:inputType="textCapSentences|textMultiLine" />
             
-            <TextView 
-                android:text="@string/newEvent_LabelDate" 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />    
-   
+            <!-- > Separador: Donde sera? -->
+            <!-- ******************************************************* -->
+
+            <TextView
+                android:text="@string/newEvent_Label_Duration"
+                style="@style/headerLabel" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" />
+           
+           <!-- __________________ Linea divisoria ______________ -->
+
+    	    <View
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="3dp"
+    	        android:layout_marginBottom="5dp"
+    	        android:background="@drawable/biljet_gradient" />
+            
+			
+            
+            <!-- Duración del evento -->
+            <!-- ******************************************************* -->   
+            <TextView
+                android:id="@+id/newEvent_Label_infoDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="8dp"
+                android:text="@string/newEvent_Label_infoDuration" />
             
             <LinearLayout 
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    android:orientation="horizontal">    
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+   		        
+   		        <TextView 
+	                android:text="@string/newEvent_Label_DaysDuration"
+	                style="@style/formLabel" 
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1" />
+   		        
+   		        <TextView 
+	                android:text="@string/newEvent_Label_HoursDuration" 
+	                style="@style/formLabel"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1" />
+		            
+		     	<TextView 
+	                android:text="@string/newEvent_Label_MinutesDuration" 
+	                style="@style/formLabel"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"  />
+            </LinearLayout>
 		    
-			    <EditText 
-			        android:id="@+id/newEvent_EditDate"	   
-			        android:inputType="date"     
-			        android:layout_weight="1"        
+            <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+   		        
+	            <EditText 
+	                android:id="@+id/newEvent_EditText_DaysDuration"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1" 
+	                android:layout_marginRight="3dp"
+	                android:inputType="number"
+	                android:text="@string/zero" /> 
+	                         
+	            <EditText 
+	                android:id="@+id/newEvent_EditText_HoursDuration"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1" 
+	                android:layout_marginRight="3dp"
+	                android:inputType="number"
+	                android:text="@string/zero" />     
+ 
+	             <EditText 
+	                android:id="@+id/newEvent_EditText_MinutesDuration"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1" 
+	                android:inputType="number"
+	                android:text="@string/zero" />  
+	                    
+            </LinearLayout>	
+            
+            
+			 
+            
+            
+            	   
+   			<!-- > Separador: Cuando sera? -->
+            <!-- ******************************************************* -->
+             
+            <TextView
+                android:text="@string/newEvent_LabelHeader_When"
+                style="@style/headerLabel" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" />
+           
+           <!-- __________________ Linea divisoria ______________ -->
+
+    	    <View
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="3dp"
+    	        android:layout_marginBottom="5dp"
+    	        android:background="@drawable/biljet_gradient" />
+            
+            <!-- Fecha -->
+            <!-- ******************************************************* -->  
+            <TextView 
+                android:text="@string/newEvent_Label_Date"
+                style="@style/formLabel" 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />      
+            
+            <LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:orientation="horizontal"
+			    android:layout_marginBottom="3dp">
+		    
+			    <EditText
+			        android:id="@+id/newEvent_EditText_Date"
 			        android:layout_width="0dp"
 			        android:layout_height="wrap_content"
+			        android:layout_weight="60"
 			        android:clickable="false"
-			        android:cursorVisible="false" 
-	        		android:focusable="false" 
-	        		android:focusableInTouchMode="false" />
+			        android:cursorVisible="false"
+			        android:focusable="false"
+			        android:focusableInTouchMode="false"
+			        android:inputType="date" />
 			    
-			    <Button
-			        android:id="@+id/newEvent_ButtonSetDate"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:text="@string/newEvent_ButtonSetDate"
-			        android:onClick="setDate"
-			        android:background="@drawable/blue_gradient"
-		    		android:textColor="#FFFFFF" 
-		    		android:textStyle="bold"
-		    		android:layout_marginLeft="5dp" />
-			    
+                <Button
+                    android:id="@+id/newEvent_Button_SetDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+					android:layout_weight="40"
+					android:text="@string/newEvent_Button_SetDate" />
+    
 			</LinearLayout>
-         
+			
+            <!-- Hora -->
+            <!-- ******************************************************* -->  
             <TextView 
-                android:text="@string/newEvent_LabelTime" 
+                android:text="@string/newEvent_Label_Time" 
+                style="@style/formLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
             
 			<LinearLayout 
 			    android:layout_width="match_parent"
 			    android:layout_height="match_parent"
-			    android:orientation="horizontal">    
+			    android:orientation="horizontal"
+			    android:layout_marginBottom="3dp">    
 			    
 			    <EditText 
-			        android:id="@+id/newEvent_EditTime"	        
-			        android:layout_weight="1"        
+			        android:id="@+id/newEvent_EditText_Time"	        
+			        android:layout_weight="60"        
 			        android:layout_width="0dp"
 			        android:layout_height="wrap_content"
 			        android:clickable="false"
 		        	android:cursorVisible="false" 
         			android:focusable="false" 
         			android:focusableInTouchMode="false"
-			        android:hint="@string/newEvent_LabelTime" />
+        			android:inputType="time" />
 			    
 			    <Button
-			        android:id="@+id/newEvent_ButtonSetTime"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:text="@string/newEvent_ButtonSetTime"
-			        android:onClick="setTime" 
-			        android:background="@drawable/blue_gradient"
-		    		android:textColor="#FFFFFF" 
-		    		android:textStyle="bold"
-		    		android:layout_marginLeft="5dp"/>
+			        android:id="@+id/newEvent_Button_SetTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+					android:layout_weight="40"
+			        android:text="@string/newEvent_Button_SetTime"
+			        android:onClick="setTime" />
 				    
 			</LinearLayout>	            
             
+			
+			
+			
+			
+			
+			<!-- > Separador: Donde sera? -->
+            <!-- ******************************************************* -->
+
+            <TextView
+                android:text="@string/newEvent_LabelHeader_Where"
+                style="@style/headerLabel" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" />
+           
+           <!-- __________________ Linea divisoria ______________ -->
+
+    	    <View
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="3dp"
+    	        android:layout_marginBottom="5dp"
+    	        android:background="@drawable/biljet_gradient" />
+            
+			
+			
+			<!-- Lugar del evento -->
+            <!-- ******************************************************* -->
             <TextView 
-                android:text="@string/newEvent_LabelPrice" 
+                android:text="@string/newEvent_Label_Site" 
+                style="@style/formLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
             
-            <EditText 
-                android:id="@+id/newEvent_EditPrice"
+            <TextView
+                android:id="@+id/newEvent_Label_infoSite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="8dp"
+                android:text="@string/newEvent_Label_infoSite" />
+            
+            <EditText
+                android:id="@+id/newEvent_EditText_Site" 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint="Precio en euros" />
-            
-           <!-- Duración del evento -->
+                android:inputType="textCapWords"
+                android:hint="@string/newEvent_Hint_Site"
+                android:layout_marginBottom="3dp" />
+           
+            <!-- Dirección -->
+            <!-- ******************************************************* -->      
             <TextView 
-                android:text="@string/newEvent_LabelLength"
-                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" /> 
+                android:text="@string/newEvent_Label_Address" 
+                style="@style/formLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
             
-			<LinearLayout 
+            <TextView
+                android:id="@+id/newEvent_Label_infoAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="8dp"
+                android:text="@string/newEvent_Label_infoAddress" />
+            
+            <LinearLayout 
 			    android:layout_width="fill_parent"
-			    android:layout_height="match_parent"
-			    android:orientation="horizontal"> 	 
-			    
-			     	<TextView 
-		                android:text="@string/newEvent_LabelLengthDays" 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content" />
-			     	
-		            <EditText 
-		                android:id="@+id/newEvent_EditLengthDays"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:inputType="number"
-		                android:text="0"
-		                android:hint="0"
-		                /> 
-		                         
-		            <TextView 
-		                android:text="@string/newEvent_LabelLengthHours" 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content" />
-		            
-		            <EditText 
-		                android:id="@+id/newEvent_EditLengthHours"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:inputType="number"
-		                android:text="0"
-		                android:hint="0"/>     
-		                     
-		             <TextView 
-		                android:text="@string/newEvent_LabelLengthMinutes" 
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content" />
-		             
-		             <EditText 
-		                android:id="@+id/newEvent_EditLengthMinutes"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:inputType="number"
-		                android:text="0"
-		                android:hint="0"/>          
-		                       
-			</LinearLayout>	            
-				            
-			<!--  Fin duracion -->
-            <TextView 
-                android:text="@string/newEvent_LabelCapacity" 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <EditText 
-                android:id="@+id/newEvent_EditCapacity"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"                
-                android:hint="Aforo" />
-            
-           		<!-- Image for new event  -->
-           		
-				 <ImageView 
-			        android:id="@+id/newEvent_Image" 
-			        android:src="@drawable/logo_evento" 
-			        android:layout_width="200dp"
-			        android:layout_height="200dp"
-			        android:layout_weight="1"
-			        android:layout_gravity="center">        
-			    </ImageView>
-			         
-			    <Button	
-			        android:id="@+id/newEvent_ButtonChangeImage"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"  
-			        android:layout_marginTop="10dp"
-			        android:layout_weight="0"
-			        android:text="Change Image"
-			        android:layout_gravity="center"
-			        android:background="@drawable/blue_gradient"
-		    		android:textColor="#FFFFFF" 
-		    		android:textStyle="bold" >        
-			    </Button>
-			    
-				<TextView 
-	                android:text="@string/newEvent_LabelInfo" 
-	                android:layout_width="fill_parent"
-	                android:layout_height="wrap_content" />
-				   
-	            <EditText 
-	                android:id="@+id/newEvent_EditInfo"
-	                android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal">
+   		        
+                <Spinner
+	           		android:id="@+id/newEvent_Spinner_AddressType"
+	           		android:layout_weight="35"
+	           		android:layout_width="0dp"
+	           		android:layout_height="48dp"
+	           		android:prompt="@string/newEvent_Spinner_Prompt_AddressType"  />
+                
+	            <EditText
+	                android:id="@+id/newEvent_EditText_Address" 
+	                android:layout_width="0dp"
 	                android:layout_height="wrap_content"
-	                android:layout_marginBottom="10dp"
-	                android:singleLine="false" 
-	                android:lines="3"       
-	                android:gravity="top"     	
-	            	android:inputType="text|textMultiLine"
-	                android:hint="Información del evento"/>    	   
+	                android:layout_weight="65"
+	                android:inputType="textCapWords"
+	                android:hint="@string/newEvent_Hint_Address"
+	                android:layout_marginBottom="3dp"
+	                android:layout_marginLeft="3dp" />
 	            
-	             <LinearLayout 
-			        android:layout_width="fill_parent"
-			        android:layout_height="wrap_content">  
-				    
-				    
-					<Button
-				        android:id="@+id/newEvent_ButtonCreateEvent"
-				        android:layout_width="fill_parent"
-				        android:layout_height="wrap_content"
-				        android:text="@string/newEvent_ButtonCreateEvent"
-				        android:onClick="buttonCreateNewEvent" 
-				        android:layout_weight="2"
-				        android:background="@drawable/blue_gradient"
-		    			android:textColor="#FFFFFF" 
-		    			android:textStyle="bold" />
-					
-				    <Button
-				        android:id="@+id/newEvent_ButtonCancelEvent"
-				        android:layout_width="fill_parent"
-				        android:layout_height="wrap_content"
-				        android:text="@string/newEvent_ButtonCancelEvent"
-				        android:onClick="alertCancelNewEvent"
-				        android:layout_weight="2"
-				        android:background="@drawable/blue_gradient"
-		    			android:textColor="#FFFFFF" 
-		    			android:textStyle="bold" />
-				    
-				</LinearLayout>			             
+            </LinearLayout>
+            		
+			<!-- Ciudad -->
+            <!-- ******************************************************* --> 
+            
+            <TextView 
+         		android:text="@string/newEvent_Label_City" 
+           		style="@style/formLabel"
+              	android:layout_width="fill_parent"
+              	android:layout_height="wrap_content" />
+
+          	<EditText
+	            android:id="@+id/newEvent_EditText_City" 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:inputType="textCapWords"
+	            android:layout_marginBottom="3dp" />
+            
+            <!-- Cod Postal -->
+            <!-- ******************************************************* --> 
+
+            <TextView 
+           		android:text="@string/newEvent_Label_PostalCode" 
+            	style="@style/formLabel"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" />
+
+	    	<EditText
+               	android:id="@+id/newEvent_EditText_PostalCode" 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:inputType="number"
+	            android:layout_marginBottom="3dp" />
+    	            
+    	    <!-- Provincia -->
+            <!-- ******************************************************* --> 
+	    	
+            <TextView 
+           		android:text="@string/newEvent_Label_Province" 
+	            style="@style/formLabel"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" />  
+	            
+	    	<Spinner
+           		android:id="@+id/newEvent_Spinner_Province"
+           		android:layout_width="fill_parent"
+           		android:layout_height="48dp"
+           		android:prompt="@string/newEvent_Spinner_Prompt_Province" />
+	    	
+	    	
+			<!-- > Separador: Imagen -->
+            <!-- ******************************************************* -->
+
+            <TextView
+                android:text="@string/newEvent_LabelHeader_Image"
+                style="@style/headerLabel" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" />
+           
+           <!-- __________________ Linea divisoria ______________ -->
+
+    	    <View
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="3dp"
+    	        android:layout_marginBottom="5dp"
+    	        android:background="@drawable/biljet_gradient" />
+            
+			
+	    	
+	    	<!-- Imagen del evento -->
+            <!-- ******************************************************* -->  
+           	
+           	<TextView
+                android:id="@+id/newEvent_Label_infoImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             	android:layout_marginBottom="10dp"
+                android:text="@string/newEvent_Label_infoImage" />
+           	
+           	<LinearLayout
+           	    android:layout_width="fill_parent"
+           	    android:layout_height="wrap_content"
+           	    android:layout_marginBottom="8dp"
+           	    android:orientation="horizontal">
+           	    
+           	    <RelativeLayout
+           	        android:layout_width="0dp"
+           	        android:layout_height="wrap_content"
+           	        android:layout_weight="50"	>
+           	        	 	
+			        <ImageView 
+				        android:id="@+id/newEvent_Image" 
+				        android:src="@drawable/eventdefault"
+				        android:contentDescription="@string/contentDescription_ImageEvent"
+				        android:layout_width="@dimen/event_preview_image_width"
+				        android:layout_height="@dimen/event_preview_image_width"   
+				        android:layout_centerInParent="true" >        
+			    	</ImageView>
+			    	
+		        </RelativeLayout>
+		    	
+		    	<RelativeLayout
+           	        android:layout_width="0dp"
+           	        android:layout_height="@dimen/event_preview_image_width"
+           	        android:layout_weight="50"	>
+           	        	 
+			    	<Button	
+				        android:id="@+id/newEvent_Button_OpenGallery"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"  
+				        android:text="@string/newEvent_Button_OpenGallery"
+				        android:layout_centerInParent="true" >        
+			    	</Button>
+			    	
+           	    </RelativeLayout>
+           	    
+           	</LinearLayout>
+
+	
+	
+            
+         
+				            
+			<!-- > Separador: Confirmar -->
+            <!-- ******************************************************* -->
+
+            <TextView
+                android:text="@string/newEvent_LabelHeader_Confirm"
+                style="@style/headerLabel" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" />
+           
+           <!-- __________________ Linea divisoria ______________ -->
+
+    	    <View
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="3dp"
+    	        android:layout_marginBottom="5dp"
+    	        android:background="@drawable/biljet_gradient" />
+            
+			
+            
+
+
+            
+            <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal">  
+			    
+			    
+				<Button
+			        android:id="@+id/newEvent_Button_CreateEvent"
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:layout_marginRight="2dp"
+			        android:text="@string/newEvent_Button_CreateEvent"
+			        android:onClick="buttonCreateNewEvent" />
+				
+			    <Button
+			        android:id="@+id/newEvent_Button_CancelEvent"
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:layout_marginLeft="2dp"
+			        android:text="@string/newEvent_Button_CancelEvent"
+			        android:onClick="alertCancelNewEvent" />
+			    
+			</LinearLayout>			             
         </LinearLayout>        	         
     </ScrollView>	
 </LinearLayout>

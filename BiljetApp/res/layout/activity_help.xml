@@ -1,0 +1,685 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+	android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <!-- Action Bar -->
+    
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar" />
+	<View
+       android:layout_width="fill_parent"
+       android:layout_height="3dp"
+       android:layout_marginBottom="5dp"
+       android:background="#BDC3C7" />
+	
+	<!-- ScrollView Host -->
+	<ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:background="@android:color/transparent"
+        android:padding="@dimen/activity_horizontal_margin" >
+   	
+	    <!-- Main Layout Host -->
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical">
+	        
+       		<!-- LABEL HEADER: Ayuda -->
+		    <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="40dp" 
+		        android:background="@drawable/calendar_day_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_ImageView_HowTo"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/help_pencil"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<TextView
+				    style="@style/dayViewLabel" 
+				    android:layout_centerVertical="true"
+				    android:layout_toRightOf="@id/help_ImageView_HowTo"
+				    android:layout_marginLeft="5dp"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="¿Cómo funciona...?" />
+			
+		    </RelativeLayout>
+		    
+       		<TextView
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="Aqui te detallamos como funcionan las diferentes secciones y acciones incluidas en ellas" /> 
+	       	 
+       		<TextView
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="5dp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="Las siguientes acciones corresponden al menu principal y en el caso de Compartir, tambien para vista detallada de evento" /> 
+	       	    
+       	    <TextView
+	            android:layout_marginTop="8dp"
+	            android:text="@string/help_LabelHeader_Actions"
+	            style="@style/headerLabel" 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+       	    
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_Index_Action1"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_myprofile_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_Index_Action1">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Mi perfil" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Muestra tus datos de perfil y de cuenta Biljet" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
+	        
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="15dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_Index_Action2"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_share_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_Index_Action2">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Compartir..." />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Te permite compartir esta app (Menu principal) o un evento (en vista de evento detallada)" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
+	        
+	        
+	        <!-- LABEL HEADER: Descubrir -->
+		    <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="40dp" 
+		        android:background="@drawable/calendar_day_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_ImageView_Discover"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/index_discover"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<TextView
+				    style="@style/dayViewLabel" 
+				    android:layout_centerVertical="true"
+				    android:layout_toRightOf="@id/help_ImageView_Discover"
+				    android:layout_marginLeft="5dp"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/help_LabelHeader_Discover" />
+			
+		    </RelativeLayout>
+	        
+	        <TextView
+	            android:textSize="14sp"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="@string/help_Discover_Info" />
+
+	        <TextView
+	            android:layout_marginTop="8dp"
+	            android:text="@string/help_LabelHeader_Actions"
+	            style="@style/headerLabel" 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	        
+	        <!-- Acciones Descubrir -->
+	        
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_Discover_Action1"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_search_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_Discover_Action1">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Buscar" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Lanza un buscador en el que localizar eventos por titulo" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
+	        
+	       	<RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_Discover_Action2"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_filter_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_Discover_Action2">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Filtrar" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Permite buscar eventos por Título, Provincia, Categoría o combinaciones de ellos." /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout> 
+	         
+	        <!-- LABEL HEADER: Mis Eventos -->
+		    <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="40dp" 
+		        android:background="@drawable/calendar_day_bg"
+		        android:layout_marginTop="15dp"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_ImageView_MyEvents"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/index_my_events"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<TextView
+				    style="@style/dayViewLabel" 
+				    android:layout_centerVertical="true"
+				    android:layout_toRightOf="@id/help_ImageView_MyEvents"
+				    android:layout_marginLeft="5dp"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Mis Eventos" />
+			
+		    </RelativeLayout>
+	        
+	        <TextView
+	            android:textSize="14sp"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="@string/help_MyEvents_Info" />
+	        <TextView
+	            android:textSize="14sp"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="> Eventos que asistes: Visualizar el código QR que te dará acceso al evento." />
+	        <TextView
+	            android:textSize="14sp"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="> Eventos que organizas: Acceder al lector de QR para leer la lista de invitados a tu evento" />
+	        	        
+	        <TextView
+	            android:layout_marginTop="8dp"
+	            android:text="@string/help_LabelHeader_Actions"
+	            style="@style/headerLabel" 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	        
+	        <!-- Acciones Mis Eventos -->
+	        
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_MyEvents_Action1"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_newevent_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_MyEvents_Action1">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Crear nuevo evento" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Lanza un formulario para crear un nuevo evento" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+		       	
+		       	
+			</RelativeLayout>
+	        
+	       	<RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_MyEvents_Action2"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_calendar_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_MyEvents_Action2">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Vista calendario" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Cambia a vista de tus eventos en calendario" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+		       	
+		       	
+			</RelativeLayout> 
+	        
+	        
+	        <!-- LABEL HEADER: Calendario -->
+		    <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="40dp" 
+		        android:background="@drawable/calendar_day_bg"
+		        android:layout_marginTop="15dp"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_ImageView_MyCalendar"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/index_my_calendar"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<TextView
+				    style="@style/dayViewLabel" 
+				    android:layout_centerVertical="true"
+				    android:layout_toRightOf="@id/help_ImageView_MyCalendar"
+				    android:layout_marginLeft="5dp"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Mi Calendario" />
+			
+		    </RelativeLayout>
+	        
+	        <TextView
+	            android:textSize="14sp"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="@string/help_MyCalendar_Info" />
+	        
+	        <LinearLayout 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginTop="2dp"
+	            android:layout_marginBottom="2dp">
+            	
+            	<ImageView
+					android:id="@+id/help_MyCalendar_ToGoIcon"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/calendar_event_to_go"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+	       	    
+            	<RelativeLayout 
+            	    android:layout_width="match_parent"
+            	    android:layout_height="match_parent">
+            	    <TextView
+			            android:textSize="14sp"
+			    		android:layout_width="wrap_content"
+			    		android:layout_height="wrap_content"
+			    		android:layout_centerVertical="true"
+			    		android:text="Eventos que asistes" />
+            	</RelativeLayout>
+
+	        </LinearLayout>
+ 		    
+ 		    <LinearLayout 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginTop="2dp"
+	            android:layout_marginBottom="2dp">
+            	
+            	<ImageView
+					android:id="@+id/help_MyCalendar_CreatedIcon"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/calendar_event_created"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+	       	    
+            	<RelativeLayout 
+            	    android:layout_width="match_parent"
+            	    android:layout_height="match_parent">
+            	    <TextView
+			            android:textSize="14sp"
+			    		android:layout_width="wrap_content"
+			    		android:layout_height="wrap_content"
+			    		android:layout_centerVertical="true"
+			    		android:text="Eventos que has creado y organizas" />
+            	</RelativeLayout>
+
+	        </LinearLayout>
+	    
+	        <TextView
+	            android:textSize="14sp"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="* Si coincidieran eventos que organizas y asistes el mismo día, Biljet da prioridad a ser un buen anfitrión y por ello aparecerá el icono rojo" />
+	        	        
+	        <TextView
+	            android:layout_marginTop="8dp"
+	            android:text="@string/help_LabelHeader_Actions"
+	            style="@style/headerLabel" 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	        
+	        <!-- Acciones Mis Calendario -->
+	       <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_MyCalendar_Action2"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_listview_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_MyCalendar_Action2">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Cambiar a vista de lista" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Cambia a vista de tus eventos en solo 2 listas (asistes y organizas)" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
+			
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_MyCalendar_Action1"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_gotodate_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_MyCalendar_Action1">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Ir a fecha..." />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Lanza un formulario para seleccionar una fecha e ir directamente a ella en lugar de navegar mes por mes" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
+	        
+	        <RelativeLayout 
+		        android:layout_width="fill_parent"
+		        android:clickable="false"
+		        android:layout_height="wrap_content" 
+		        android:background="@drawable/help_action_bg"
+		        android:layout_marginBottom="5dp" >
+		       	
+		       	<ImageView
+					android:id="@+id/help_MyCalendar_Action3"
+					android:layout_margin="1dp"
+					android:layout_marginLeft="5dp"
+				    android:layout_width="25dp"
+				    android:layout_height="25dp"
+				    android:src="@drawable/actionbar_newevent_action"
+				    android:layout_centerVertical="true"
+				    android:contentDescription="@string/contentDescription_ImageCalendarItem"/>
+		       	
+		       	<LinearLayout 
+		       	    android:layout_width="fill_parent"
+		       	    android:layout_height="match_parent"
+		       	    android:orientation="vertical"
+		       	    android:layout_toRightOf="@id/help_MyCalendar_Action3">
+			       	
+			       	<TextView
+					    style="@style/formLabel" 
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="Crear nuevo evento" />
+				
+			       	<TextView
+					    android:layout_centerVertical="true"
+					    android:layout_marginLeft="5dp"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="En la vista detallada de un día, lanza un formulario para crear un evento en la fecha seleccionada" /> 
+			       	    
+			       	    
+		       	</LinearLayout>
+			</RelativeLayout>
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	    </LinearLayout>
+   	</ScrollView>
+</LinearLayout>

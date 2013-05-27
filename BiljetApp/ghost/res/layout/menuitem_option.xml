@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:clickable="true"
+    android:paddingBottom="10dp"
+    android:orientation="horizontal"
+    android:background="@drawable/button_biljet">
+
+    <ImageView
+        android:id="@+id/menuItem_Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/contentDescription_Icon"/>
+
+    
+    <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="5dp"
+	    android:orientation="vertical" >
+	    
+        <TextView
+	        android:id="@+id/menuItem_Title"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textSize="18sp"
+	        android:textColor="#FFFFFF" />
+        
+        <TextView
+	        android:id="@+id/menuItem_Subtitle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="10sp"
+	       	android:textColor="#e5e8ea"/>
+        
+    </LinearLayout> 
+
+	
+</LinearLayout>
